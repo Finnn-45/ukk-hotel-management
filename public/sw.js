@@ -1,10 +1,11 @@
-const CACHE_NAME = 'hotel-reservation-v1';
-const urlsToCache = [
+const CACHE_NAME = 'hotel-reservation-v2';
+const DYNAMIC_CACHE = 'hotel-reservation-dynamic-v1';
+
+const STATIC_ASSETS = [
     '/',
     '/css/app.css',
     '/js/app.js',
-    '/images/icon-192x192.png',
-    '/images/icon-512x512.png',
+    '/manifest.json',
 ];
 
 self.addEventListener('install', (event) => {
@@ -12,8 +13,9 @@ self.addEventListener('install', (event) => {
         caches.open(CACHE_NAME)
             .then((cache) => {
                 console.log('Opened cache');
-                return cache.addAll(urlsToCache);
+                return cache.addAll(STATIC_ASSETS);
             })
+            .then(() => self.skipWaiting())
     );
 });
 

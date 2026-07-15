@@ -49,7 +49,7 @@
                 @php
                     $statusColors = [
                         'pending' => ['bg' => '#FEF3C7', 'text' => '#D97706'],
-                        'confirmed' => ['bg' => '#DBEAFE', 'text' => '#1D4ED8'],
+                        'confirmed' => ['bg' => '#E0F2FE', 'text' => '#0369A1'],
                         'checked_in' => ['bg' => '#DCFCE7', 'text' => '#16A34A'],
                         'checked_out' => ['bg' => '#F3F4F6', 'text' => '#6B7280'],
                         'completed' => ['bg' => '#DCFCE7', 'text' => '#16A34A'],
@@ -118,6 +118,11 @@
                             {{-- Actions --}}
                             <div class="d-flex gap-2 mt-3 pt-3 border-top" style="border-color:var(--border) !important;">
                                 @if(in_array($booking->status, ['pending', 'confirmed']))
+                                    @if(!$booking->payment || $booking->payment->payment_status !== 'paid')
+                                        <button id="payButton-{{ $booking->id }}" class="btn-se btn-se-primary flex-grow-1" style="padding:8px 14px;font-size:0.78rem;">
+                                            <i class="bi bi-credit-card"></i> Bayar Sekarang
+                                        </button>
+                                    @endif
                                     <form action="{{ route('customer.booking.cancel', $booking) }}" method="POST" onsubmit="return confirm('Yakin ingin membatalkan booking ini?')" class="flex-grow-1">
                                         @csrf
                                         <button type="submit" class="btn-se btn-se-outline w-100" style="color:#EF4444;border-color:#FEE2E2;padding:8px 14px;font-size:0.78rem;">
@@ -177,3 +182,66 @@
     @endif
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    @if(isset($bookings) && $bookings->count() > 0)
+    @foreach($bookings as $b)
+        @if(in_array($b->status, ['pending', 'confirmed']) && (!$b->payment || $b->payment->payment_status !== 'paid'))
+        document.getElementById('payButton-{{ $b->id }}')?.addEventListener('click', function() {
+            const bookingId = {{ $b->id }};
+            const amount = {{ $b->total_price }};
+            const payBtn = document.getElementById('payButton-{{ $b->id }}');
+            
+            payBtn.disabled = true;
+            payBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Memuat...';
+            
+            fetch(`/payment/midtrans/${bookingId}/token`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json().then(data => ({ response, data })))
+            .then(({ response, data }) => {
+                if (response.ok && data.token) {
+                    if (typeof window.snap !== 'undefined') {
+                        window.snap.pay(data.token, {
+                            onSuccess: function(result) {
+                                window.location.href = '/payment/midtrans/success?order_id=' + result.order_id + '&status_code=200';
+                            },
+                            onPending: function(result) {
+                                window.location.href = '/payment/midtrans/pending?order_id=' + result.order_id;
+                            },
+                            onError: function(result) {
+                                window.location.href = '/payment/midtrans/error';
+                            },
+                            onClose: function() {
+                                payBtn.disabled = false;
+                                payBtn.innerHTML = '<i class="bi bi-credit-card"></i> Bayar Sekarang';
+                            }
+                        });
+                    } else {
+                        alert('Midtrans SDK belum dimuat. Silakan refresh halaman.');
+                        payBtn.disabled = false;
+                        payBtn.innerHTML = '<i class="bi bi-credit-card"></i> Bayar Sekarang';
+                    }
+                } else {
+                    alert(data.message || 'Gagal memuat pembayaran. Silakan coba lagi.');
+                    payBtn.disabled = false;
+                    payBtn.innerHTML = '<i class="bi bi-credit-card"></i> Bayar Sekarang';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan koneksi. Silakan coba lagi.');
+                payBtn.disabled = false;
+                payBtn.innerHTML = '<i class="bi bi-credit-card"></i> Bayar Sekarang';
+            });
+        });
+        @endif
+    @endforeach
+    @endif
+</script>
+@endpush

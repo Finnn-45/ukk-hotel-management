@@ -122,6 +122,53 @@
 
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <span>Gallery</span>
+                <span class="badge bg-primary">{{ $galleries->count() }}</span>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    @forelse($galleries as $gallery)
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <img src="{{ asset('storage/' . $gallery->image) }}" class="card-img-top" style="height:180px;object-fit:cover;">
+                                <div class="card-body p-2">
+                                    <h6 class="card-title small">{{ $gallery->title ?? 'Tanpa judul' }}</h6>
+                                    <span class="badge bg-{{ $gallery->is_active ? 'success' : 'secondary' }}">{{ $gallery->is_active ? 'Aktif' : 'Nonaktif' }}</span>
+                                    <form action="{{ route('admin.landing-page.gallery.destroy', $gallery) }}" method="POST" onsubmit="return confirm('Hapus gallery ini?')" class="mt-2">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-sm btn-danger w-100"><i class="bi bi-trash"></i></button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="col-12 text-center py-4 text-muted">Belum ada gallery</div>
+                    @endforelse
+                </div>
+                <form action="{{ route('admin.landing-page.gallery.store') }}" method="POST" enctype="multipart/form-data" class="mt-3">
+                    @csrf
+                    <h6>Tambah Gallery</h6>
+                    <div class="row g-2">
+                        <div class="col-md-4">
+                            <input type="text" name="title" class="form-control form-control-sm" placeholder="Judul">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="file" name="image" class="form-control form-control-sm" required accept="image/*">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="number" name="order" class="form-control form-control-sm" placeholder="Order">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-sm btn-success w-100"><i class="bi bi-plus"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
                 <span>Testimonials</span>
                 <span class="badge bg-primary">{{ $testimonials->count() }}</span>
             </div>
@@ -170,6 +217,5 @@
                 </form>
             </div>
         </div>
-    </div>
 </div>
 @endsection

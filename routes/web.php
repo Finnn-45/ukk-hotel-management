@@ -104,6 +104,23 @@ Route::prefix('admin')->middleware('admin.auth')->group(function () {
     Route::delete('/landing-page/gallery/{gallery}', [\App\Http\Controllers\Admin\LandingPageController::class, 'destroyGallery'])->name('admin.landing-page.gallery.destroy');
     Route::post('/landing-page/testimonial', [\App\Http\Controllers\Admin\LandingPageController::class, 'storeTestimonial'])->name('admin.landing-page.testimonial.store');
     Route::delete('/landing-page/testimonial/{testimonial}', [\App\Http\Controllers\Admin\LandingPageController::class, 'destroyTestimonial'])->name('admin.landing-page.testimonial.destroy');
+
+    // Manual payments approval
+    Route::post('/payments/{payment}/approve', [AdminController::class, 'approvePayment'])->name('admin.payments.approve');
+    Route::post('/payments/{payment}/reject', [AdminController::class, 'rejectPayment'])->name('admin.payments.reject');
+
+    // Guest services management
+    Route::get('/services', [\App\Http\Controllers\Admin\AdminServiceRequestController::class, 'index'])->name('admin.services.index');
+    Route::post('/services/{serviceRequest}/status', [\App\Http\Controllers\Admin\AdminServiceRequestController::class, 'updateStatus'])->name('admin.services.status');
+
+    // Reviews moderation
+    Route::get('/reviews', [AdminController::class, 'reviewsIndex'])->name('admin.reviews.index');
+    Route::post('/reviews/{review}/approve', [AdminController::class, 'approveReview'])->name('admin.reviews.approve');
+    Route::delete('/reviews/{review}', [AdminController::class, 'destroyReview'])->name('admin.reviews.destroy');
+
+    // Promos CRUD management
+    Route::resource('/promos', \App\Http\Controllers\Admin\PromoController::class, ['as' => 'admin']);
+
 });
 
 // ==============================
@@ -113,7 +130,7 @@ Route::get('/login', [CustomerAuthController::class, 'showLoginForm'])->name('cu
 Route::post('/login', [CustomerAuthController::class, 'login']);
 Route::get('/register', [CustomerAuthController::class, 'showRegisterForm'])->name('customer.register');
 Route::post('/register', [CustomerAuthController::class, 'register']);
-Route::get('/email/verify/{id}', [CustomerAuthController::class, 'verifyEmail'])->name('verification.verify');
+Route::get('/email/verify/{id}/{hash}', [CustomerAuthController::class, 'verifyEmail'])->middleware(['signed'])->name('verification.verify');
 Route::get('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
 Route::post('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::get('/reset-password/{token}', [App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForm'])->name('password.reset');
@@ -133,11 +150,20 @@ Route::get('/kamar/{room}', [CustomerController::class, 'roomDetail'])->name('cu
 Route::get('/galeri', [App\Http\Controllers\CustomerController::class, 'gallery'])->name('customer.gallery');
 Route::get('/kontak', [App\Http\Controllers\CustomerController::class, 'contact'])->name('customer.contact');
 
-// Midtrans Payment Flow
-Route::get('/payment/midtrans/success', [MidtransController::class, 'paymentSuccess'])->name('payment.midtrans.success');
-Route::get('/payment/midtrans/pending', [MidtransController::class, 'paymentPending'])->name('payment.midtrans.pending');
-Route::get('/payment/midtrans/error', [MidtransController::class, 'paymentError'])->name('payment.midtrans.error');
-Route::get('/payment/midtrans/{booking}/token', [MidtransController::class, 'getSnapToken'])->name('payment.midtrans.token');
+// Restaurant Menu (bisa diakses tanpa login - hanya liat menu)
+Route::get('/restaurant/menu', [App\Http\Controllers\CustomerRestaurantController::class, 'menu'])->name('customer.restaurant.menu');
+
+// Midtrans Payment Flow (require auth)
+Route::middleware('auth')->group(function () {
+    Route::get('/payment/midtrans/success', [MidtransController::class, 'paymentSuccess'])->name('payment.midtrans.success');
+    Route::get('/payment/midtrans/pending', [MidtransController::class, 'paymentPending'])->name('payment.midtrans.pending');
+    Route::get('/payment/midtrans/error', [MidtransController::class, 'paymentError'])->name('payment.midtrans.error');
+    Route::get('/payment/midtrans/{booking}/token', [MidtransController::class, 'getSnapToken'])->name('payment.midtrans.token');
+    Route::get('/payment/midtrans/restaurant/{order}/token', [MidtransController::class, 'getRestaurantSnapToken'])->name('payment.midtrans.restaurant.token');
+    Route::get('/payment/midtrans/restaurant/success', [MidtransController::class, 'restaurantPaymentSuccess'])->name('payment.midtrans.restaurant.success');
+    Route::get('/payment/midtrans/restaurant/pending', [MidtransController::class, 'restaurantPaymentPending'])->name('payment.midtrans.restaurant.pending');
+    Route::get('/payment/midtrans/restaurant/error', [MidtransController::class, 'restaurantPaymentError'])->name('payment.midtrans.restaurant.error');
+});
 
 Route::middleware('auth')->group(function () {
     Route::post('/booking', [CustomerController::class, 'booking'])->name('customer.booking');
@@ -153,10 +179,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/notifications', [CustomerController::class, 'notifications'])->name('customer.notifications');
     Route::get('/reviews', [CustomerController::class, 'reviews'])->name('customer.reviews');
     
-    // Restaurant Ordering
-    Route::get('/restaurant/menu', [App\Http\Controllers\CustomerRestaurantController::class, 'menu'])->name('customer.restaurant.menu');
+    // Restaurant Ordering (hanya yang butuh login)
     Route::post('/restaurant/order', [App\Http\Controllers\CustomerRestaurantController::class, 'placeOrder'])->name('customer.restaurant.order.place');
     Route::get('/restaurant/order/{order}/confirmation', [App\Http\Controllers\CustomerRestaurantController::class, 'orderConfirmation'])->name('customer.restaurant.order.confirmation');
     Route::get('/restaurant/orders', [App\Http\Controllers\CustomerRestaurantController::class, 'myOrders'])->name('customer.restaurant.orders');
     Route::get('/restaurant/order/{order}', [App\Http\Controllers\CustomerRestaurantController::class, 'orderDetail'])->name('customer.restaurant.order.detail');
+
+    // Promo apply
+    Route::post('/promo/apply', [CustomerController::class, 'applyPromo'])->name('customer.promo.apply');
+
+    // Manual Payment Proof uploads
+    Route::post('/booking/{booking}/upload-proof', [CustomerController::class, 'uploadPaymentProof'])->name('customer.payment.upload');
+    Route::post('/restaurant/order/{order}/upload-proof', [App\Http\Controllers\CustomerRestaurantController::class, 'uploadRestaurantPaymentProof'])->name('customer.restaurant.payment.upload');
+
+    // Hotel Services
+    Route::get('/layanan', [\App\Http\Controllers\HotelServiceController::class, 'index'])->name('customer.services.index');
+    Route::post('/layanan', [\App\Http\Controllers\HotelServiceController::class, 'store'])->name('customer.services.store');
+    Route::get('/layanan/riwayat', [\App\Http\Controllers\HotelServiceController::class, 'history'])->name('customer.services.history');
 });

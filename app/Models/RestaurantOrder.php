@@ -28,5 +28,10 @@ class RestaurantOrder extends Model
         return $this->hasMany(RestaurantOrderDetail::class);
     }
 
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
+
 
 }

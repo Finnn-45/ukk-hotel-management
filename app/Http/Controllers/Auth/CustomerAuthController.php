@@ -24,17 +24,15 @@ class CustomerAuthController extends Controller
             'password' => 'required',
         ]);
 
-        // Validasi captcha hanya jika production atau menggunakan key asli
-        if (
-            app()->environment('production') ||
-            (
-                config('captcha.secret') &&
-                !str_contains(config('captcha.secret'), 'your_') &&
-                !str_contains(config('captcha.secret'), '6LdCvEUt')
-            )
-        ) {
+        // Validasi captcha hanya wajib di production
+        if (app()->environment('production')) {
             $validator->addRules([
                 'g-recaptcha-response' => 'required|captcha',
+            ]);
+        } else {
+            // Di development/local, captcha tetap dicek jika diisi
+            $validator->addRules([
+                'g-recaptcha-response' => 'sometimes|captcha',
             ]);
         }
 
@@ -51,13 +49,12 @@ class CustomerAuthController extends Controller
 
             $user = Auth::user();
 
-            // Email verification disabled for development
-            // if (!$user->hasVerifiedEmail()) {
-            //     Auth::logout();
-            //     return back()->withErrors([
-            //         'email' => 'Silakan verifikasi email Anda terlebih dahulu.'
-            //     ]);
-            // }
+            if (!$user->hasVerifiedEmail()) {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Silakan verifikasi email Anda terlebih dahulu sebelum login. Cek email Anda untuk link verifikasi.'
+                ])->withInput();
+            }
 
             $request->session()->regenerate();
 
@@ -82,17 +79,15 @@ class CustomerAuthController extends Controller
             'password' => 'required|string|min:6|confirmed',
         ]);
 
-        // Validasi captcha hanya jika production atau memakai key asli
-        if (
-            app()->environment('production') ||
-            (
-                config('captcha.secret') &&
-                !str_contains(config('captcha.secret'), 'your_') &&
-                !str_contains(config('captcha.secret'), '6LdCvEUt')
-            )
-        ) {
+        // Validasi captcha hanya wajib di production
+        if (app()->environment('production')) {
             $validator->addRules([
                 'g-recaptcha-response' => 'required|captcha',
+            ]);
+        } else {
+            // Di development/local, captcha tetap dicek jika diisi
+            $validator->addRules([
+                'g-recaptcha-response' => 'sometimes|captcha',
             ]);
         }
 
@@ -116,21 +111,27 @@ class CustomerAuthController extends Controller
             );
     }
 
-    public function verifyEmail(Request $request)
+    public function verifyEmail(Request $request, $id, $hash)
     {
-        $user = User::findOrFail($request->route('id'));
+        $user = User::findOrFail($id);
+
+        if (!hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+            return redirect()->route('customer.login')
+                ->with('error', 'Link verifikasi tidak valid.');
+        }
 
         if ($user->hasVerifiedEmail()) {
-            return redirect('/')
-                ->with('success', 'Email sudah diverifikasi.');
+            return redirect()->route('customer.login')
+                ->with('success', 'Email sudah diverifikasi. Silakan login.');
         }
 
         if ($user->markEmailAsVerified()) {
-            return redirect('/')
-                ->with('success', 'Email berhasil diverifikasi!');
+            event(new \Illuminate\Auth\Events\Verified($user));
+            return redirect()->route('customer.login')
+                ->with('success', 'Email berhasil diverifikasi! Silakan login.');
         }
 
-        return redirect('/')
+        return redirect()->route('customer.login')
             ->with('error', 'Verifikasi email gagal.');
     }
 

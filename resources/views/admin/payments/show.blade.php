@@ -15,8 +15,8 @@
             <div class="card-body">
                 <table class="table table-borderless">
                     <tr><td><strong>Booking ID</strong></td><td>#{{ $payment->booking_id }}</td></tr>
-                    <tr><td><strong>Guest</strong></td><td>{{ $payment->booking->guest->full_name }}</td></tr>
-                    <tr><td><strong>Kamar</strong></td><td>{{ $payment->booking->room->room_number }} ({{ $payment->booking->room->roomType->name }})</td></tr>
+                    <tr><td><strong>Guest</strong></td><td>{{ $payment->booking?->guest?->full_name ?? '-' }}</td></tr>
+                    <tr><td><strong>Kamar</strong></td><td>{{ $payment->booking?->room?->room_number ?? '-' }} ({{ $payment->booking?->room?->roomType?->name ?? '-' }})</td></tr>
                     <tr><td><strong>Metode</strong></td><td>{{ ucfirst(str_replace('_', ' ', $payment->payment_method)) }}</td></tr>
                     <tr><td><strong>Jumlah</strong></td><td>Rp {{ number_format($payment->amount, 0, ',', '.') }}</td></tr>
                     <tr><td><strong>Status</strong></td>

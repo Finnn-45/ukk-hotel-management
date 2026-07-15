@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Review extends Model
 {
     protected $fillable = [
-        'booking_id', 'user_id', 'room_id', 'rating', 'review', 'is_approved'
+        'booking_id', 'user_id', 'room_id', 'restaurant_order_id', 'review_type', 'rating', 'review', 'is_approved'
     ];
 
     protected $casts = [
@@ -27,6 +27,11 @@ class Review extends Model
     public function room()
     {
         return $this->belongsTo(Room::class);
+    }
+
+    public function restaurantOrder()
+    {
+        return $this->belongsTo(RestaurantOrder::class, 'restaurant_order_id');
     }
 
     public function scopeApproved($query)

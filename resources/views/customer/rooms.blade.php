@@ -4,17 +4,6 @@
 
 @push('styles')
 <style>
-    /* ─── Search Header ─── */
-    .se-search-header {
-        background: #fff;
-        border-bottom: 1px solid var(--border);
-        padding: 16px 0;
-        position: sticky;
-        top: var(--nav-height);
-        z-index: 50;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-    }
-
     /* ─── Filter Sidebar ─── */
     .se-filter-card {
         background: #fff;
@@ -60,7 +49,7 @@
     }
     .se-filter-section .form-control:focus, .se-filter-section .form-select:focus {
         border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+        box-shadow: 0 0 0 3px rgba(2,132,199,0.1);
     }
     .btn-filter-apply {
         background: var(--primary-gradient);
@@ -74,7 +63,7 @@
         transition: all 0.2s;
         font-family: var(--font-alt);
     }
-    .btn-filter-apply:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(37,99,235,0.3); }
+    .btn-filter-apply:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(2,132,199,0.3); }
     .btn-filter-reset {
         background: var(--bg);
         color: var(--text-muted);
@@ -115,7 +104,7 @@
         font-weight: 500;
         font-family: var(--font-alt);
     }
-    .se-sort-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+    .se-sort-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(2,132,199,0.1); }
 
     /* ─── Hotel Card ─── */
     .se-hotel-list-card {
@@ -138,6 +127,7 @@
         max-width: 260px;
         position: relative;
         overflow: hidden;
+        min-height: 220px;
     }
     .se-hotel-list-img img {
         width: 100%;
@@ -235,15 +225,17 @@
     }
 
     .se-hotel-list-price {
-        flex: 0 0 200px;
-        max-width: 200px;
+        flex: 0 0 220px;
+        max-width: 220px;
         padding: 20px;
         border-left: 1px solid var(--border);
         display: flex;
         flex-direction: column;
         align-items: flex-end;
-        justify-content: space-between;
+        justify-content: center;
+        gap: 12px;
         background: #FAFBFC;
+        text-align: right;
     }
     .se-hotel-list-tag {
         font-size: 0.7rem;
@@ -288,11 +280,11 @@
         text-decoration: none;
         display: block;
         font-family: var(--font-alt);
-        box-shadow: 0 4px 14px rgba(37,99,235,0.25);
+        box-shadow: 0 4px 14px rgba(2,132,199,0.25);
     }
     .btn-se-hotel-book:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(37,99,235,0.35);
+        box-shadow: 0 6px 20px rgba(2,132,199,0.35);
         color: #fff;
     }
 
@@ -310,8 +302,19 @@
         .se-search-header { position: static !important; box-shadow: none !important; }
     }
     @media (max-width: 768px) {
-        .se-hotel-list-card { flex-direction: column; }
-        .se-hotel-list-img { flex: none; max-width: 100%; height: 200px; }
+        .se-hotel-list-card { 
+            flex-direction: column; 
+            margin-bottom: 20px;
+        }
+        .se-hotel-list-img { 
+            flex: none; 
+            max-width: 100%; 
+            height: 220px; 
+            min-height: 220px;
+        }
+        .se-hotel-list-info { 
+            padding: 16px; 
+        }
         .se-hotel-list-price {
             flex: none;
             max-width: 100%;
@@ -319,10 +322,42 @@
             border-top: 1px solid var(--border);
             flex-direction: row;
             align-items: center;
+            justify-content: space-between;
             padding: 16px 20px;
+            gap: 12px;
         }
         .se-hotel-list-price-group { text-align: left; }
         .se-hotel-list-tag { display: none; }
+        .btn-se-hotel-book {
+            width: auto;
+            padding: 10px 20px;
+            white-space: nowrap;
+        }
+        .se-hotel-list-price-main {
+            font-size: 1.25rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .se-hotel-list-img { 
+            height: 180px; 
+            min-height: 180px;
+        }
+        .se-hotel-list-info { 
+            padding: 12px; 
+        }
+        .se-hotel-list-price {
+            padding: 12px 16px;
+            flex-wrap: wrap;
+        }
+        .se-hotel-list-price-group {
+            flex: 1;
+            min-width: 0;
+        }
+        .btn-se-hotel-book {
+            width: 100%;
+            justify-content: center;
+        }
     }
 
     /* Mobile filter toggle */
@@ -346,45 +381,8 @@
 @endpush
 
 @section('content')
-{{-- ─── TOP SEARCH BAR ─── --}}
-<div class="se-search-header">
-    <div class="container">
-        <form action="{{ route('rooms.index') }}" method="GET">
-            <div class="row g-2 align-items-center">
-                <div class="col-md-3">
-                    <select name="room_type" class="form-select" style="border-radius:12px;border:1.5px solid var(--border);font-family:var(--font-alt);font-size:0.85rem;">
-                        <option value="">🏨 Semua Tipe</option>
-                        @foreach($roomTypes as $type)
-                            <option value="{{ $type->id }}" {{ request('room_type') == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <input type="number" name="min_price" class="form-control" placeholder="💰 Harga Min" value="{{ request('min_price') }}" min="0" style="border-radius:12px;border:1.5px solid var(--border);font-family:var(--font-alt);font-size:0.85rem;">
-                </div>
-                <div class="col-md-2">
-                    <input type="number" name="max_price" class="form-control" placeholder="💰 Harga Max" value="{{ request('max_price') }}" min="0" style="border-radius:12px;border:1.5px solid var(--border);font-family:var(--font-alt);font-size:0.85rem;">
-                </div>
-                <div class="col-md-2">
-                    <input type="number" name="floor" class="form-control" placeholder="🏢 Lantai" value="{{ request('floor') }}" min="1" style="border-radius:12px;border:1.5px solid var(--border);font-family:var(--font-alt);font-size:0.85rem;">
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn-se btn-se-primary w-100 py-2" style="font-size:0.85rem;">
-                        <i class="bi bi-search me-1"></i> Cari
-                    </button>
-                </div>
-                @if(request()->hasAny(['room_type', 'min_price', 'max_price', 'floor']))
-                    <div class="col-md-1">
-                        <a href="{{ route('rooms.index') }}" class="btn btn-outline-secondary rounded-3 w-100 py-2" style="border-radius:12px;"><i class="bi bi-x-lg"></i></a>
-                    </div>
-                @endif
-            </div>
-        </form>
-    </div>
-</div>
-
 {{-- ─── MAIN CONTENT ─── --}}
-<div class="container py-4">
+<div class="container py-4 mt-3">
     <div class="row g-4">
         {{-- Sidebar Filters (Desktop) --}}
         <div class="col-lg-3 d-none d-lg-block">

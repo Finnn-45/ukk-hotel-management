@@ -14,7 +14,17 @@ class CustomerRestaurantController extends Controller
     {
         $categories = RestaurantMenu::select('category')->distinct()->pluck('category');
         $menus = RestaurantMenu::where('is_available', true)->get();
-        return view('customer.restaurant.menu', compact('menus', 'categories'));
+        
+        // Hanya tamu dengan reservasi aktif yang boleh memesan restoran.
+        $hasBookedRoom = false;
+        if (auth()->check()) {
+            $guest = \App\Models\Guest::where('user_id', auth()->id())->first();
+            if ($guest && $guest->bookings()->whereIn('status', ['confirmed', 'checked_in'])->exists()) {
+                $hasBookedRoom = true;
+            }
+        }
+        
+        return view('customer.restaurant.menu', compact('menus', 'categories', 'hasBookedRoom'));
     }
 
     public function placeOrder(Request $request)
@@ -24,10 +34,28 @@ class CustomerRestaurantController extends Controller
             'items.*.menu_id' => 'required|exists:restaurant_menus,id',
             'items.*.quantity' => 'required|integer|min:1',
             'notes' => 'nullable|string|max:500',
-            'table_number' => 'required|string|max:20',
+            'order_type' => 'required|in:dine_in,takeaway,delivery',
+            'table_number' => 'nullable|string|max:20',
+            'delivery_address' => 'nullable|required_if:order_type,delivery|string|max:500',
+            'delivery_city_id' => 'nullable|required_if:order_type,delivery|string|max:20',
+            'delivery_province_id' => 'nullable|required_if:order_type,delivery|string|max:20',
+            'delivery_postal_code' => 'nullable|required_if:order_type,delivery|string|max:10',
+            'shipping_courier' => 'nullable|required_if:order_type,delivery|string|max:20',
+            'shipping_service' => 'nullable|required_if:order_type,delivery|string|max:50',
+            'shipping_cost' => 'nullable|required_if:order_type,delivery|numeric|min:0',
+            'estimated_delivery' => 'nullable|required_if:order_type,delivery|string|max:50',
         ]);
 
         $user = Auth::user();
+        
+        // Cegah bypass dari request manual: wajib memiliki reservasi aktif.
+        $guest = \App\Models\Guest::where('user_id', $user->id)->first();
+        $hasBookedRoom = $guest && $guest->bookings()->whereIn('status', ['confirmed', 'checked_in'])->exists();
+        
+        if (!$hasBookedRoom) {
+            return redirect()->back()->with('error', 'Anda harus melakukan booking kamar terlebih dahulu sebelum dapat memesan makanan restoran.');
+        }
+        
         $guest = \App\Models\Guest::firstOrCreate(
             ['user_id' => $user->id],
             [
@@ -44,6 +72,10 @@ class CustomerRestaurantController extends Controller
             $total += $menu->price * $item['quantity'];
         }
 
+        // Add shipping cost for delivery orders
+        $shippingCost = $request->shipping_cost ?? 0;
+        $total += $shippingCost;
+
         // Create order
         $order = RestaurantOrder::create([
             'guest_id' => $guest->id,
@@ -52,8 +84,16 @@ class CustomerRestaurantController extends Controller
             'total_amount' => $total,
             'status' => 'pending',
             'notes' => $request->notes,
-            'order_type' => 'dine_in',
-            'table_number' => $request->table_number,
+            'order_type' => $request->order_type,
+            'table_number' => $request->order_type === 'dine_in' ? $request->table_number : null,
+            'delivery_address' => $request->order_type === 'delivery' ? $request->delivery_address : null,
+            'delivery_city_id' => $request->delivery_city_id,
+            'delivery_province_id' => $request->delivery_province_id,
+            'delivery_postal_code' => $request->delivery_postal_code,
+            'shipping_courier' => $request->shipping_courier,
+            'shipping_service' => $request->shipping_service,
+            'shipping_cost' => $shippingCost,
+            'estimated_delivery' => $request->estimated_delivery,
         ]);
 
         // Create order details
@@ -98,10 +138,10 @@ class CustomerRestaurantController extends Controller
     public function orderDetail(RestaurantOrder $order)
     {
         $user = Auth::user();
-        $guest = \App\Models\Guest::where('user_id', $user->id)->firstOrFail();
+        $guest = \App\Models\Guest::where('user_id', $user->id)->first();
 
-        if ($order->guest_id !== $guest->id) {
-            abort(403);
+        if (!$guest || $order->guest_id !== $guest->id) {
+            abort(403, 'Anda tidak memiliki akses ke pesanan ini');
         }
 
         $order->load(['details.menu']);

@@ -25,13 +25,15 @@ class AdminAuthController extends Controller
             'password' => 'required',
         ]);
 
-        // Only validate captcha in production with real keys
-        if (app()->environment('production') || 
-            (config('captcha.secret') && 
-             !str_contains(config('captcha.secret'), 'your_') && 
-             !str_contains(config('captcha.secret'), '6LdCvEUt'))) {
+        // Validasi captcha hanya wajib di production
+        if (app()->environment('production')) {
             $validator->addRules([
                 'g-recaptcha-response' => 'required|captcha',
+            ]);
+        } else {
+            // Di development/local, captcha tetap dicek jika diisi
+            $validator->addRules([
+                'g-recaptcha-response' => 'sometimes|captcha',
             ]);
         }
 
@@ -51,12 +53,6 @@ class AdminAuthController extends Controller
                 Auth::logout();
                 return back()->withErrors(['email' => 'Akses ditolak. Anda bukan admin/staff.']);
             }
-
-            // Email verification disabled for development
-            // if (!$user->hasVerifiedEmail()) {
-            //     Auth::logout();
-            //     return back()->withErrors(['email' => 'Silakan verifikasi email Anda terlebih dahulu.']);
-            // }
 
             $request->session()->regenerate();
 

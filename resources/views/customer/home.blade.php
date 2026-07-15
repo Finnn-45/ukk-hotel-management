@@ -1,162 +1,132 @@
 @extends('customer.layouts.app')
 
-@section('title', 'StayEase - Hotel & Restaurant Booking Premium')
+@section('title', 'StayEase — Discover Your Perfect Stay')
 
 @push('styles')
 <style>
+    /* ════════════════════════════════════════
+       HOME — Nordic Minimalist Luxury
+       ════════════════════════════════════════ */
+
     /* ─── HERO ─── */
     .se-hero {
         position: relative;
-        background: linear-gradient(135deg, #0F172A 0%, #1E3A5F 40%, #2563EB 100%);
-        min-height: 600px;
+        background: linear-gradient(135deg, #0F172A 0%, #1E3A5F 50%, #1D4ED8 100%);
+        min-height: 580px;
         display: flex;
         align-items: center;
         overflow: hidden;
-        padding: 40px 0 80px;
+        padding: 56px 0 96px;
     }
     .se-hero::before {
         content: '';
         position: absolute;
         inset: 0;
         background: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&q=80') center/cover;
-        opacity: 0.15;
+        opacity: 0.08;
         z-index: 0;
     }
-    .se-hero-pattern {
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-    }
-    .se-hero-pattern::before {
+    .se-hero::after {
         content: '';
         position: absolute;
-        top: -50%;
-        right: -20%;
-        width: 600px;
-        height: 600px;
+        top: -200px;
+        right: -100px;
+        width: 500px;
+        height: 500px;
         background: radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%);
         border-radius: 50%;
-    }
-    .se-hero-pattern::after {
-        content: '';
-        position: absolute;
-        bottom: -30%;
-        left: -10%;
-        width: 400px;
-        height: 400px;
-        background: radial-gradient(circle, rgba(251,191,36,0.1) 0%, transparent 70%);
-        border-radius: 50%;
+        z-index: 0;
     }
     .se-hero-content { position: relative; z-index: 2; }
 
+    .se-hero-subtitle {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: var(--radius-full);
+        padding: 6px 16px;
+        color: rgba(255,255,255,0.7);
+        font-size: 0.8rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        margin-bottom: 24px;
+    }
+    .se-hero-subtitle i { color: #F59E0B; }
+
     .se-hero h1 {
-        font-size: 3rem;
-        font-weight: 900;
+        font-size: 3.2rem;
+        font-weight: 800;
         color: #fff;
-        line-height: 1.1;
-        letter-spacing: -1px;
-        margin-bottom: 16px;
+        line-height: 1.12;
+        letter-spacing: -1.5px;
+        margin-bottom: 20px;
     }
     .se-hero h1 .highlight {
-        background: linear-gradient(135deg, #60A5FA, #FBBF24);
+        background: linear-gradient(135deg, #60A5FA 0%, #F59E0B 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
     }
-    .se-hero p {
-        color: rgba(255,255,255,0.7);
-        font-size: 1.05rem;
+    .se-hero-desc {
+        color: rgba(255,255,255,0.55);
+        font-size: 1rem;
         line-height: 1.7;
-        max-width: 520px;
+        max-width: 480px;
         margin-bottom: 32px;
     }
 
-    /* Floating Search Card */
-    .se-floating-search {
-        position: relative;
-        z-index: 3;
-        margin-top: -60px;
-    }
-    .se-search-card {
-        background: rgba(255,255,255,0.95);
-        backdrop-filter: blur(25px);
-        -webkit-backdrop-filter: blur(25px);
-        border: 1px solid rgba(255,255,255,0.5);
-        border-radius: 24px;
-        padding: 24px;
-        box-shadow: 0 25px 60px rgba(0,0,0,0.15);
-    }
-    .se-search-tabs {
-        display: flex;
-        gap: 4px;
-        margin-bottom: 20px;
-        background: var(--bg);
-        border-radius: 14px;
-        padding: 4px;
-    }
-    .se-search-tab {
-        flex: 1;
-        padding: 10px 20px;
-        text-align: center;
-        border-radius: 12px;
-        font-family: var(--font-alt);
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: var(--text-muted);
-        cursor: pointer;
-        border: none;
-        background: transparent;
-        transition: all 0.3s ease;
-        display: flex;
+    .se-hero-cta {
+        display: inline-flex;
         align-items: center;
-        justify-content: center;
-        gap: 8px;
-    }
-    .se-search-tab i { font-size: 1rem; }
-    .se-search-tab.active {
+        gap: 10px;
         background: #fff;
         color: var(--primary);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-    }
-    .se-search-tab:hover:not(.active) { color: var(--text); }
-
-    .se-search-form .form-control, .se-search-form .form-select {
-        border: 1.5px solid var(--border);
-        border-radius: 14px;
-        padding: 12px 16px;
-        font-size: 0.9rem;
-        font-family: var(--font-alt);
-        transition: all 0.2s;
-    }
-    .se-search-form .form-control:focus, .se-search-form .form-select:focus {
-        border-color: var(--primary);
-        box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
-    }
-    .se-search-form .input-group-text {
-        border: 1.5px solid var(--border);
-        border-radius: 14px 0 0 14px;
-        background: var(--bg);
-        color: var(--text-muted);
-        font-size: 0.85rem;
-    }
-    .se-search-form .btn-search-hero {
-        background: var(--primary-gradient);
-        color: #fff;
         border: none;
-        border-radius: 14px;
-        padding: 12px 32px;
-        font-family: var(--font-alt);
+        border-radius: var(--radius-sm);
+        padding: 14px 32px;
         font-weight: 700;
         font-size: 0.95rem;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 16px rgba(37,99,235,0.35);
-        height: 100%;
-        white-space: nowrap;
+        text-decoration: none;
+        transition: all var(--transition);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     }
-    .se-search-form .btn-search-hero:hover {
+    .se-hero-cta:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(37,99,235,0.45);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        color: var(--primary);
     }
+    .se-hero-cta i { transition: transform var(--transition); }
+    .se-hero-cta:hover i { transform: translateX(4px); }
+
+    /* Hero Image */
+    .se-hero-image {
+        position: relative;
+    }
+    .se-hero-image img {
+        width: 100%;
+        height: 420px;
+        object-fit: cover;
+        border-radius: var(--radius);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .se-hero-image-badge {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        background: rgba(255,255,255,0.95);
+        backdrop-filter: blur(10px);
+        border-radius: var(--radius-sm);
+        padding: 12px 18px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    .se-hero-image-badge i { color: var(--primary); font-size: 1.25rem; }
+    .se-hero-image-badge .label { font-size: 0.75rem; font-weight: 700; color: var(--text); }
+    .se-hero-image-badge .sub { font-size: 0.68rem; color: var(--text-muted); }
 
     /* Hero Stats */
     .se-hero-stats {
@@ -166,36 +136,90 @@
     }
     .se-hero-stat h3 {
         color: #fff;
-        font-size: 1.8rem;
-        font-weight: 900;
+        font-size: 1.6rem;
+        font-weight: 800;
         margin-bottom: 2px;
+        letter-spacing: -0.5px;
     }
     .se-hero-stat p {
-        color: rgba(255,255,255,0.5);
-        font-size: 0.8rem;
+        color: rgba(255,255,255,0.4);
+        font-size: 0.78rem;
         font-weight: 500;
         margin: 0;
-        letter-spacing: 0.3px;
     }
 
-    /* ─── FEATURED SECTION ─── */
-    .se-featured { padding: 80px 0; }
-    .se-featured-header {
+    /* ─── FLOATING SEARCH ─── */
+    .se-floating-search {
+        position: relative;
+        z-index: 3;
+        margin-top: -56px;
+    }
+    .se-search-card {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 28px 32px;
+        box-shadow: var(--shadow-lg);
+    }
+    .se-search-card label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+        display: block;
+    }
+    .se-search-card .form-control,
+    .se-search-card .form-select {
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 11px 16px;
+        font-size: 0.9rem;
+        font-family: var(--font);
+        transition: all var(--transition);
+        color: var(--text);
+        background-color: #fff;
+    }
+    .se-search-card .form-control:focus,
+    .se-search-card .form-select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(37,99,235,0.08);
+    }
+    .se-search-card .btn-search {
+        background: var(--primary-gradient);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-sm);
+        padding: 12px 32px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        transition: all var(--transition);
+        box-shadow: 0 2px 12px rgba(37,99,235,0.3);
+        height: 100%;
+        white-space: nowrap;
         display: flex;
-        align-items: baseline;
+        align-items: center;
+        gap: 8px;
+    }
+    .se-search-card .btn-search:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(37,99,235,0.4);
+    }
+
+    /* ─── SECTION SPACING ─── */
+    .se-section {
+        padding: 80px 0;
+    }
+    .se-section-header {
+        display: flex;
+        align-items: flex-end;
         justify-content: space-between;
-        margin-bottom: 28px;
+        margin-bottom: 32px;
         flex-wrap: wrap;
         gap: 12px;
     }
-    .se-featured-header h2 {
-        font-weight: 800;
-        font-size: 1.6rem;
-        color: var(--text);
-    }
-    .se-featured-header h2 span { color: var(--primary); }
-    .se-featured-header a {
-        font-family: var(--font-alt);
+    .se-section-header .se-link {
         font-size: 0.85rem;
         font-weight: 600;
         color: var(--primary);
@@ -203,24 +227,24 @@
         display: flex;
         align-items: center;
         gap: 6px;
-        transition: gap 0.2s;
+        transition: gap var(--transition);
     }
-    .se-featured-header a:hover { gap: 10px; }
+    .se-section-header .se-link:hover { gap: 10px; }
 
-    /* Hotel Card Premium */
+    /* ─── HOTEL CARD ─── */
     .se-hotel-card {
         background: #fff;
         border: 1px solid var(--border);
         border-radius: var(--radius);
         overflow: hidden;
-        transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+        transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
         height: 100%;
         display: flex;
         flex-direction: column;
     }
     .se-hotel-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-md);
         border-color: transparent;
     }
     .se-hotel-card-img {
@@ -233,32 +257,31 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.6s ease;
+        transition: transform 0.5s ease;
     }
-    .se-hotel-card:hover .se-hotel-card-img img { transform: scale(1.08); }
+    .se-hotel-card:hover .se-hotel-card-img img { transform: scale(1.06); }
     .se-hotel-card-badge {
         position: absolute;
         top: 12px;
         left: 12px;
-        background: rgba(255,255,255,0.9);
-        backdrop-filter: blur(10px);
+        background: rgba(255,255,255,0.92);
+        backdrop-filter: blur(8px);
         color: var(--text);
         padding: 4px 12px;
-        border-radius: 50px;
+        border-radius: var(--radius-full);
         font-size: 0.7rem;
-        font-weight: 700;
-        font-family: var(--font-alt);
+        font-weight: 600;
     }
-    .se-hotel-card-price-float {
+    .se-hotel-card-price {
         position: absolute;
         bottom: 12px;
         right: 12px;
         background: rgba(255,255,255,0.95);
-        backdrop-filter: blur(10px);
-        padding: 6px 14px;
-        border-radius: 12px;
+        backdrop-filter: blur(8px);
+        padding: 5px 14px;
+        border-radius: var(--radius-sm);
         font-weight: 800;
-        font-size: 0.9rem;
+        font-size: 0.88rem;
         color: var(--primary);
     }
     .se-hotel-card-body {
@@ -278,33 +301,30 @@
         overflow: hidden;
     }
     .se-hotel-card-sub {
-        font-family: var(--font-alt);
         font-size: 0.78rem;
         color: var(--text-muted);
-        margin-bottom: 8px;
+        margin-bottom: 10px;
     }
     .se-hotel-card-rating {
         display: flex;
         align-items: center;
         gap: 6px;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
     }
     .se-hotel-card-rating .score {
         background: var(--primary-gradient);
         color: #fff;
-        font-weight: 800;
-        font-size: 0.75rem;
+        font-weight: 700;
+        font-size: 0.72rem;
         padding: 3px 8px;
-        border-radius: 8px;
+        border-radius: var(--radius-xs);
     }
     .se-hotel-card-rating .label {
-        font-family: var(--font-alt);
         font-size: 0.78rem;
         font-weight: 600;
         color: var(--text);
     }
     .se-hotel-card-rating .count {
-        font-family: var(--font-alt);
         font-size: 0.72rem;
         color: var(--text-muted);
     }
@@ -317,9 +337,8 @@
     .se-hotel-card-amenities span {
         background: var(--bg);
         border: 1px solid var(--border);
-        border-radius: 8px;
+        border-radius: var(--radius-xs);
         padding: 3px 10px;
-        font-family: var(--font-alt);
         font-size: 0.68rem;
         color: var(--text-muted);
         display: flex;
@@ -327,22 +346,120 @@
         gap: 4px;
     }
 
-    /* ─── RESTAURANT TEASER ─── */
-    .se-resto-teaser {
-        background: #fff;
-        padding: 80px 0;
+    /* ─── ROOM TYPE CHIPS ─── */
+    .se-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 32px;
     }
+    .se-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 20px;
+        border-radius: var(--radius-full);
+        border: 1.5px solid var(--border);
+        background: #fff;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: all var(--transition);
+        cursor: pointer;
+    }
+    .se-chip:hover, .se-chip.active {
+        border-color: var(--primary);
+        color: var(--primary);
+        background: var(--primary-light);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(37,99,235,0.12);
+    }
+    .se-chip i { font-size: 0.9rem; }
+
+    /* ─── FEATURED BANNER ─── */
+    .se-featured-banner {
+        background: linear-gradient(135deg, #0F172A 0%, #1E3A5F 100%);
+        border-radius: var(--radius);
+        padding: 48px;
+        position: relative;
+        overflow: hidden;
+    }
+    .se-featured-banner::before {
+        content: '';
+        position: absolute;
+        top: -40%;
+        right: -15%;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(37,99,235,0.2) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+    .se-featured-banner::after {
+        content: '';
+        position: absolute;
+        bottom: -30%;
+        left: -10%;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(245,158,11,0.1) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+    .se-featured-banner > * { position: relative; z-index: 1; }
+    .se-featured-banner h2 {
+        font-weight: 800;
+        font-size: 2rem;
+        color: #fff;
+        margin-bottom: 12px;
+        letter-spacing: -0.5px;
+    }
+    .se-featured-banner p {
+        color: rgba(255,255,255,0.5);
+        font-size: 0.95rem;
+        max-width: 420px;
+        margin-bottom: 24px;
+        line-height: 1.7;
+    }
+    .se-featured-banner .btn-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #fff;
+        color: var(--primary);
+        border: none;
+        border-radius: var(--radius-sm);
+        padding: 12px 28px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        text-decoration: none;
+        transition: all var(--transition);
+    }
+    .se-featured-banner .btn-cta:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        color: var(--primary);
+    }
+    .se-featured-banner-img img {
+        width: 100%;
+        height: 280px;
+        object-fit: cover;
+        border-radius: var(--radius-sm);
+        box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+
+    /* ─── RESTAURANT CARD ─── */
     .se-resto-card {
         background: #fff;
         border: 1px solid var(--border);
         border-radius: var(--radius);
         overflow: hidden;
-        transition: all 0.4s ease;
+        transition: all 0.3s ease;
         height: 100%;
     }
     .se-resto-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-md);
+        border-color: transparent;
     }
     .se-resto-card-img {
         height: 180px;
@@ -352,64 +469,57 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.6s;
+        transition: transform 0.5s ease;
     }
-    .se-resto-card:hover .se-resto-card-img img { transform: scale(1.08); }
+    .se-resto-card:hover .se-resto-card-img img { transform: scale(1.06); }
     .se-resto-card-body { padding: 18px; }
-    .se-resto-card-body h5 { font-weight: 700; font-size: 1rem; }
+    .se-resto-card-body h5 { font-weight: 700; font-size: 1rem; color: var(--text); margin-bottom: 4px; }
     .se-resto-card-body .meta {
-        font-family: var(--font-alt);
         font-size: 0.78rem;
         color: var(--text-muted);
         display: flex;
         align-items: center;
         gap: 4px;
-        margin-bottom: 6px;
+        margin-bottom: 8px;
     }
 
-    /* ─── APP DOWNLOAD ─── */
-    .se-app-download {
-        background: linear-gradient(135deg, #0F172A 0%, #1E3A5F 100%);
+    /* ─── FACILITIES ─── */
+    .se-facility {
+        text-align: center;
+        padding: 28px 16px;
+        border: 1px solid var(--border);
         border-radius: var(--radius);
-        padding: 60px;
-        position: relative;
-        overflow: hidden;
+        background: #fff;
+        transition: all var(--transition);
     }
-    .se-app-download::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -20%;
-        width: 500px;
-        height: 500px;
-        background: radial-gradient(circle, rgba(37,99,235,0.2) 0%, transparent 70%);
-        border-radius: 50%;
+    .se-facility:hover {
+        border-color: var(--primary);
+        background: var(--primary-light);
+        transform: translateY(-4px);
+        box-shadow: var(--shadow);
     }
-    .se-app-download h2 {
-        font-weight: 800;
-        font-size: 2rem;
-        color: #fff;
-        margin-bottom: 12px;
-    }
-    .se-app-download p { color: rgba(255,255,255,0.6); font-size: 0.95rem; }
-    .se-app-btns { display: flex; gap: 12px; flex-wrap: wrap; }
-    .se-app-btn {
+    .se-facility-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: var(--radius-sm);
+        background: var(--primary-light);
         display: flex;
         align-items: center;
-        gap: 10px;
-        background: rgba(255,255,255,0.1);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255,255,255,0.15);
-        border-radius: 16px;
-        padding: 14px 24px;
-        color: #fff;
-        text-decoration: none;
-        transition: all 0.3s;
+        justify-content: center;
+        margin: 0 auto 12px;
+        font-size: 1.4rem;
+        color: var(--primary);
+        transition: all var(--transition);
     }
-    .se-app-btn:hover { background: rgba(255,255,255,0.2); color: #fff; transform: translateY(-2px); }
-    .se-app-btn i { font-size: 1.5rem; }
-    .se-app-btn small { font-size: 0.65rem; opacity: 0.7; display: block; }
-    .se-app-btn strong { font-size: 0.95rem; }
+    .se-facility:hover .se-facility-icon {
+        background: var(--primary);
+        color: #fff;
+    }
+    .se-facility-name {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: var(--text);
+    }
 
     /* ─── TESTIMONIALS ─── */
     .se-testi-card {
@@ -418,19 +528,19 @@
         border-radius: var(--radius);
         padding: 28px;
         height: 100%;
-        transition: all 0.3s;
+        transition: all var(--transition);
     }
     .se-testi-card:hover {
         box-shadow: var(--shadow);
         transform: translateY(-4px);
     }
-    .se-testi-card .stars { color: var(--accent); font-size: 0.9rem; margin-bottom: 12px; }
-    .se-testi-card p {
-        font-style: italic;
-        color: var(--text);
+    .se-testi-card .stars { color: #F59E0B; font-size: 0.85rem; margin-bottom: 16px; }
+    .se-testi-card .quote {
         font-size: 0.9rem;
-        line-height: 1.7;
-        margin-bottom: 16px;
+        color: var(--text-secondary);
+        line-height: 1.75;
+        margin-bottom: 20px;
+        font-style: italic;
     }
     .se-testi-card .user {
         display: flex;
@@ -448,23 +558,70 @@
         color: #fff;
         font-weight: 700;
         font-size: 0.8rem;
+        flex-shrink: 0;
     }
-    .se-testi-card .user .name { font-weight: 700; font-size: 0.85rem; }
-    .se-testi-card .user .pos { font-family: var(--font-alt); font-size: 0.72rem; color: var(--text-muted); }
+    .se-testi-card .user .name { font-weight: 700; font-size: 0.85rem; color: var(--text); }
+    .se-testi-card .user .pos { font-size: 0.72rem; color: var(--text-muted); }
+
+    /* ─── NEWSLETTER ─── */
+    .se-newsletter {
+        background: var(--primary-light);
+        border-radius: var(--radius);
+        padding: 48px;
+        text-align: center;
+    }
+    .se-newsletter h3 {
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: var(--text);
+        margin-bottom: 8px;
+    }
+    .se-newsletter p {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+        margin-bottom: 24px;
+    }
+    .se-newsletter .input-group {
+        max-width: 480px;
+        margin: 0 auto;
+    }
+    .se-newsletter .form-control {
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+        padding: 14px 20px;
+        font-size: 0.9rem;
+        border-right: none;
+    }
+    .se-newsletter .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: none;
+    }
+    .se-newsletter .btn-sub {
+        background: var(--primary-gradient);
+        color: #fff;
+        border: none;
+        border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        padding: 14px 28px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        transition: all var(--transition);
+    }
+    .se-newsletter .btn-sub:hover {
+        box-shadow: 0 4px 16px rgba(37,99,235,0.3);
+    }
 
     /* ─── BRANDS ─── */
     .se-brands {
-        padding: 60px 0;
+        padding: 48px 0;
         text-align: center;
     }
     .se-brands p {
-        font-family: var(--font-alt);
-        font-size: 0.78rem;
+        font-size: 0.72rem;
         font-weight: 600;
         color: var(--text-muted);
         letter-spacing: 2px;
         text-transform: uppercase;
-        margin-bottom: 24px;
+        margin-bottom: 20px;
     }
     .se-brands-logos {
         display: flex;
@@ -474,77 +631,180 @@
         flex-wrap: wrap;
     }
     .se-brands-logos span {
-        font-family: var(--font-alt);
-        font-size: 0.85rem;
+        font-size: 0.82rem;
         font-weight: 700;
-        color: #94A3B8;
-        letter-spacing: 1px;
+        color: #CBD5E1;
+        letter-spacing: 0.5px;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 991.98px) {
+        .se-hero { min-height: auto; padding: 32px 0 80px; }
+        .se-hero h1 { font-size: 2.2rem; }
+        .se-hero-desc { font-size: 0.9rem; }
+        .se-featured-banner { padding: 32px; }
+        .se-featured-banner h2 { font-size: 1.5rem; }
     }
 
     @media (max-width: 768px) {
-        .se-hero { min-height: auto; padding: 30px 0 60px; }
-        .se-hero h1 { font-size: 2rem; }
-        .se-hero p { font-size: 0.9rem; }
-        .se-hero-stats { gap: 20px; flex-wrap: wrap; }
-        .se-hero-stat h3 { font-size: 1.3rem; }
-        .se-floating-search { margin-top: -30px; }
-        .se-search-card { padding: 16px; border-radius: 16px; }
-        .se-search-tab { font-size: 0.75rem; padding: 8px 12px; }
-        .se-search-tab span { display: none; }
-        .se-app-download { padding: 30px; }
-        .se-app-download h2 { font-size: 1.3rem; }
-        .se-featured { padding: 40px 0; }
-        .se-resto-teaser { padding: 40px 0; }
+        .se-hero { 
+            padding: 24px 0 80px; 
+            min-height: auto;
+        }
+        .se-hero h1 { 
+            font-size: clamp(1.6rem, 6vw, 2.2rem);
+            margin-bottom: 16px;
+        }
+        .se-hero-desc { 
+            font-size: 0.88rem; 
+            max-width: 100%;
+            margin-bottom: 24px;
+        }
+        .se-hero-stats { 
+            gap: 20px; 
+            flex-wrap: wrap; 
+            margin-top: 24px;
+            padding: 16px;
+            background: rgba(255,255,255,0.05);
+            border-radius: var(--radius-sm);
+            backdrop-filter: blur(10px);
+        }
+        .se-hero-stat h3 { font-size: 1.1rem; }
+        .se-hero-stat p { font-size: 0.72rem; }
+        .se-floating-search { margin-top: -40px; }
+        .se-search-card { 
+            padding: 20px; 
+            border-radius: var(--radius-sm);
+        }
+        .se-section { padding: 40px 0; }
+        .se-section-header { margin-bottom: 20px; }
+        .se-featured-banner { 
+            padding: 24px; 
+            border-radius: var(--radius-sm);
+            text-align: center;
+        }
+        .se-featured-banner h2 { 
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+        }
+        .se-featured-banner p {
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+        .se-featured-banner-img {
+            margin-top: 24px;
+        }
+        .se-newsletter { 
+            padding: 32px 20px; 
+        }
+        .se-chips {
+            gap: 6px;
+            margin-bottom: 24px;
+        }
+        .se-chip {
+            padding: 6px 14px;
+            font-size: 0.75rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .se-hero { 
+            padding: 20px 0 60px; 
+        }
+        .se-hero h1 { 
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+        .se-hero-desc { 
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+        .se-hero-stats { 
+            gap: 16px; 
+            padding: 12px;
+        }
+        .se-hero-stat h3 { font-size: 1rem; }
+        .se-hero-stat p { font-size: 0.7rem; }
+        .se-floating-search { margin-top: -32px; }
+        .se-search-card { 
+            padding: 16px;
+        }
+        .se-section { padding: 32px 0; }
+        .se-section-header { 
+            margin-bottom: 16px;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .se-featured-banner { 
+            padding: 20px; 
+        }
+        .se-featured-banner h2 { 
+            font-size: 1.15rem;
+            margin-bottom: 10px;
+        }
+        .se-featured-banner p {
+            font-size: 0.82rem;
+            margin-bottom: 16px;
+        }
+        .se-newsletter { 
+            padding: 24px 16px; 
+        }
+        .se-newsletter h3 {
+            font-size: 1.2rem;
+        }
     }
 </style>
 @endpush
 
 @section('content')
-{{-- ─── HERO ─── --}}
+
+{{-- ─── HERO SECTION ─── --}}
 <section class="se-hero">
-    <div class="se-hero-pattern"></div>
     <div class="container se-hero-content">
         <div class="row align-items-center">
-            <div class="col-lg-7">
-                <p class="mb-2" style="color:rgba(255,255,255,0.6);font-size:0.85rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;">
-                    <i class="bi bi-stars me-1" style="color:var(--accent);"></i> Premium Hotel & Restaurant Booking
-                </p>
+            <div class="col-lg-6 fade-in">
+                <div class="se-hero-subtitle">
+                    <i class="bi bi-star-fill"></i>
+                    Premium Hotel & Restaurant Booking
+                </div>
                 <h1>
-                    Tempat <span class="highlight">Menginap</span><br>
-                    & Bersantap Terbaik<br>
-                    di Indonesia
+                    Discover Your<br>
+                    <span class="highlight">Perfect Stay</span><br>
+                    in Indonesia
                 </h1>
-                <p>Temukan hotel mewah, restoran terbaik, dan pengalaman tak terlupakan. Booking mudah, harga transparan, layanan 24/7.</p>
+                <p class="se-hero-desc">
+                    Find luxury hotels, world-class restaurants, and unforgettable experiences.
+                    Easy booking, transparent pricing, 24/7 support.
+                </p>
+                <a href="{{ route('rooms.index') }}" class="se-hero-cta">
+                    Explore Rooms <i class="bi bi-arrow-right"></i>
+                </a>
 
-                {{-- Stats --}}
                 <div class="se-hero-stats">
                     <div class="se-hero-stat">
                         <h3>10K+</h3>
-                        <p>Kamar Tersedia</p>
+                        <p>Rooms Available</p>
                     </div>
                     <div class="se-hero-stat">
                         <h3>50K+</h3>
-                        <p>Tamu Puas</p>
+                        <p>Happy Guests</p>
                     </div>
                     <div class="se-hero-stat">
                         <h3>4.8</h3>
-                        <p>Rating Pengguna</p>
+                        <p>User Rating</p>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-5 d-none d-lg-block">
-                <div class="position-relative">
-                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80"
-                         class="rounded-4 shadow-lg"
-                         alt="Premium Hotel"
-                         style="width:100%;height:400px;object-fit:cover;border-radius:24px !important;">
-                    <div class="position-absolute bottom-0 start-0 end-0 p-4" style="background:linear-gradient(transparent, rgba(0,0,0,0.6));border-radius:0 0 24px 24px;">
-                        <div class="d-flex align-items-center gap-2 text-white">
-                            <i class="bi bi-shield-check fs-4"></i>
-                            <div>
-                                <strong style="font-size:0.85rem;">Terpercaya & Aman</strong>
-                                <span style="font-size:0.72rem;display:block;opacity:0.7;">Booking terjamin</span>
-                            </div>
+            <div class="col-lg-6 d-none d-lg-block fade-in fade-in-d2">
+                <div class="se-hero-image">
+                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80"
+                         alt="Luxury Hotel Pool View"
+                         loading="eager">
+                    <div class="se-hero-image-badge">
+                        <i class="bi bi-shield-check"></i>
+                        <div>
+                            <div class="label">Trusted & Secure</div>
+                            <div class="sub">Verified bookings</div>
                         </div>
                     </div>
                 </div>
@@ -556,93 +816,41 @@
 {{-- ─── FLOATING SEARCH CARD ─── --}}
 <section class="se-floating-search">
     <div class="container">
-        <div class="se-search-card">
-            {{-- Tabs --}}
-            <div class="se-search-tabs" role="tablist">
-                <button class="se-search-tab active" data-tab="hotel" role="tab">
-                    <i class="bi bi-building"></i> <span>Cari Hotel</span>
-                </button>
-                <button class="se-search-tab" data-tab="restaurant" role="tab">
-                    <i class="bi bi-cup-hot"></i> <span>Cari Restoran</span>
-                </button>
-            </div>
-
-            {{-- Hotel Search Form --}}
-            <div class="se-search-form" id="searchHotel" style="display:block;">
-                <form action="{{ route('rooms.index') }}" method="GET">
-                    <div class="row g-3 align-items-end">
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold small">Tipe Kamar</label>
-                            <select name="room_type" class="form-select">
-                                <option value="">Semua Tipe</option>
-                                @foreach($roomTypes ?? [] as $type)
-                                    <option value="{{ $type->id }}">{{ $type->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-semibold small">Check In</label>
-                            <input type="date" class="form-control" name="check_in" min="{{ date('Y-m-d') }}">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-semibold small">Check Out</label>
-                            <input type="date" class="form-control" name="check_out" min="{{ date('Y-m-d', strtotime('+1 day')) }}">
-                        </div>
-                        <div class="col-md-2">
-                            <button type="submit" class="btn-search-hero w-100">
-                                <i class="bi bi-search me-1"></i> Cari
-                            </button>
-                        </div>
+        <div class="se-search-card fade-in fade-in-d1">
+            <form action="{{ route('rooms.index') }}" method="GET">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-3">
+                        <label>Room Type</label>
+                        <select name="room_type" class="form-select">
+                            <option value="">All Types</option>
+                            @foreach($roomTypes ?? [] as $type)
+                                <option value="{{ $type->id }}">{{ $type->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
-                </form>
-            </div>
-
-            {{-- Restaurant Search Form --}}
-            <div class="se-search-form" id="searchRestaurant" style="display:none;">
-                <form action="{{ route('customer.restaurant.menu') }}" method="GET">
-                    <div class="row g-3 align-items-end">
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold small">Restaurant</label>
-                            <input type="text" class="form-control" placeholder="Nama restoran atau menu..." name="search">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label fw-semibold small">Tanggal</label>
-                            <input type="date" class="form-control" name="date" min="{{ date('Y-m-d') }}">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label fw-semibold small">Jam</label>
-                            <select class="form-select" name="time">
-                                <option>12:00</option>
-                                <option>13:00</option>
-                                <option>18:00</option>
-                                <option>19:00</option>
-                                <option>20:00</option>
-                            </select>
-                        </div>
-                        <div class="col-md-1">
-                            <label class="form-label fw-semibold small">Tamu</label>
-                            <select class="form-select" name="guests">
-                                @for($i=1;$i<=10;$i++)
-                                    <option value="{{ $i }}">{{ $i }}</option>
-                                @endfor
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <button type="submit" class="btn-search-hero w-100">
-                                <i class="bi bi-search me-1"></i> Cari
-                            </button>
-                        </div>
+                    <div class="col-md-3">
+                        <label>Check In</label>
+                        <input type="date" class="form-control" name="check_in" min="{{ date('Y-m-d') }}">
                     </div>
-                </form>
-            </div>
+                    <div class="col-md-3">
+                        <label>Check Out</label>
+                        <input type="date" class="form-control" name="check_out" min="{{ date('Y-m-d', strtotime('+1 day')) }}">
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn-search w-100">
+                            <i class="bi bi-search"></i> Search Rooms
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </section>
 
-{{-- ─── BRANDS / TRUST ─── --}}
+{{-- ─── TRUSTED BRANDS ─── --}}
 <section class="se-brands">
     <div class="container">
-        <p>Dipercaya oleh hotel dan restoran terbaik</p>
+        <p>Trusted by the finest hotels and restaurants</p>
         <div class="se-brands-logos">
             <span>🏨 Grand Hotel</span>
             <span>🍽️ Le Restaurant</span>
@@ -654,14 +862,31 @@
     </div>
 </section>
 
-{{-- ─── ROOM TYPES / CATEGORIES ─── --}}
+{{-- ─── ROOM CATEGORIES ─── --}}
 @if(isset($roomTypes) && $roomTypes->count() > 0)
-<section class="se-featured" style="padding-top:0;">
+<section class="se-section" style="padding-top:0;" id="room-categories">
     <div class="container">
-        <div class="se-featured-header">
-            <h2>Jelajahi <span>Tipe Kamar</span></h2>
-            <a href="{{ route('rooms.index') }}">Lihat Semua Hotel <i class="bi bi-arrow-right"></i></a>
+        <div class="se-section-header">
+            <div>
+                <h2 class="se-section-title">Explore <span class="highlight">Room Types</span></h2>
+                <p class="se-section-subtitle mb-0">Find the perfect room that matches your comfort and style preferences.</p>
+            </div>
+            <a href="{{ route('rooms.index') }}" class="se-link">View All <i class="bi bi-arrow-right"></i></a>
         </div>
+
+        {{-- Category Chips --}}
+        <div class="se-chips">
+            <a href="{{ route('rooms.index') }}" class="se-chip active">
+                <i class="bi bi-grid"></i> All Rooms
+            </a>
+            @foreach($roomTypes->take(6) as $type)
+                <a href="{{ route('rooms.index', ['room_type' => $type->id]) }}" class="se-chip">
+                    <i class="bi bi-door-open"></i> {{ $type->name }}
+                </a>
+            @endforeach
+        </div>
+
+        {{-- Room Type Cards --}}
         <div class="row g-3">
             @foreach($roomTypes->take(4) as $type)
                 @php
@@ -677,18 +902,18 @@
                         <div class="se-hotel-card">
                             <div class="se-hotel-card-img">
                                 <img src="{{ $imgs[$loop->index % count($imgs)] }}" alt="{{ $type->name }}" loading="lazy">
-                                <span class="se-hotel-card-badge"><i class="bi bi-door-open me-1"></i>{{ $type->rooms_count ?? 0 }} kamar</span>
-                                <span class="se-hotel-card-price-float">Rp {{ number_format($type->price, 0, ',', '.') }}</span>
+                                <span class="se-hotel-card-badge"><i class="bi bi-door-open me-1"></i>{{ $type->rooms_count ?? 0 }} rooms</span>
+                                <span class="se-hotel-card-price">Rp {{ number_format($type->price, 0, ',', '.') }}</span>
                             </div>
                             <div class="se-hotel-card-body">
                                 <div class="se-hotel-card-title">{{ $type->name }}</div>
                                 <div class="se-hotel-card-sub">
-                                    <i class="bi bi-people me-1"></i>Max {{ $type->max_guests }} tamu
+                                    <i class="bi bi-people me-1"></i>Max {{ $type->max_guests }} guests
                                 </div>
                                 <div class="se-hotel-card-rating">
                                     <span class="score">{{ number_format(4.5 + ($loop->index * 0.1), 1) }}</span>
-                                    <span class="label">Sangat Baik</span>
-                                    <span class="count">({{ 80 + ($loop->index * 30) }} ulasan)</span>
+                                    <span class="label">Excellent</span>
+                                    <span class="count">({{ 80 + ($loop->index * 30) }} reviews)</span>
                                 </div>
                                 <div class="se-hotel-card-amenities">
                                     <span><i class="bi bi-wifi"></i>WiFi</span>
@@ -705,13 +930,16 @@
 </section>
 @endif
 
-{{-- ─── FEATURED HOTELS ─── --}}
+{{-- ─── POPULAR HOTELS ─── --}}
 @if(isset($rooms) && $rooms->count() > 0)
-<section class="se-featured">
+<section class="se-section">
     <div class="container">
-        <div class="se-featured-header">
-            <h2>Hotel <span>Premium</span></h2>
-            <a href="{{ route('rooms.index') }}">Lihat Semua <i class="bi bi-arrow-right"></i></a>
+        <div class="se-section-header">
+            <div>
+                <h2 class="se-section-title">Popular <span class="highlight">Hotels</span></h2>
+                <p class="se-section-subtitle mb-0">Handpicked premium rooms for an exceptional stay experience.</p>
+            </div>
+            <a href="{{ route('rooms.index') }}" class="se-link">View All <i class="bi bi-arrow-right"></i></a>
         </div>
         <div class="row g-3">
             @foreach($rooms->take(4) as $room)
@@ -724,8 +952,8 @@
                     ];
                     $scores = [8.5, 8.7, 8.9, 9.0, 9.1, 9.2];
                     $score = $scores[$room->id % count($scores)];
-                    $labels = [9.0 => 'Luar Biasa', 8.5 => 'Sangat Baik', 8.0 => 'Baik'];
-                    $label = 'Baik';
+                    $labels = [9.0 => 'Outstanding', 8.5 => 'Excellent', 8.0 => 'Very Good'];
+                    $label = 'Good';
                     foreach($labels as $t => $l) { if($score >= $t) { $label = $l; break; } }
                     $rc = ($room->id * 37 + 120) % 400 + 80;
                 @endphp
@@ -734,16 +962,16 @@
                         <div class="se-hotel-card">
                             <div class="se-hotel-card-img">
                                 <img src="{{ $imgs[$room->id % count($imgs)] }}" alt="{{ $room->room_number }}" loading="lazy">
-                                <span class="se-hotel-card-badge"><i class="bi bi-check-circle-fill text-success me-1"></i>Tersedia</span>
-                                <span class="se-hotel-card-price-float">Rp {{ number_format($room->roomType->price, 0, ',', '.') }}</span>
+                                <span class="se-hotel-card-badge"><i class="bi bi-check-circle-fill text-success me-1"></i>Available</span>
+                                <span class="se-hotel-card-price">Rp {{ number_format($room->roomType->price, 0, ',', '.') }}</span>
                             </div>
                             <div class="se-hotel-card-body">
                                 <div class="se-hotel-card-title">{{ $room->room_number }} - {{ $room->roomType->name }}</div>
-                                <div class="se-hotel-card-sub"><i class="bi bi-building me-1"></i>Lantai {{ $room->floor }} · Max {{ $room->roomType->max_guests }} tamu</div>
+                                <div class="se-hotel-card-sub"><i class="bi bi-building me-1"></i>Floor {{ $room->floor }} · Max {{ $room->roomType->max_guests }} guests</div>
                                 <div class="se-hotel-card-rating">
                                     <span class="score">{{ number_format($score, 1) }}</span>
                                     <span class="label">{{ $label }}</span>
-                                    <span class="count">({{ $rc }} ulasan)</span>
+                                    <span class="count">({{ $rc }} reviews)</span>
                                 </div>
                                 <div class="se-hotel-card-amenities">
                                     <span><i class="bi bi-wifi"></i>WiFi</span>
@@ -761,20 +989,50 @@
 </section>
 @endif
 
-{{-- ─── RESTAURANT TEASER ─── --}}
-<section class="se-resto-teaser">
+{{-- ─── FEATURED HOTEL BANNER ─── --}}
+<section class="se-section" style="padding-top:0;">
     <div class="container">
-        <div class="se-featured-header">
-            <h2>Restoran <span>Terbaik</span></h2>
-            <a href="{{ route('customer.restaurant.menu') }}">Lihat Menu <i class="bi bi-arrow-right"></i></a>
+        <div class="se-featured-banner">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <span class="se-badge se-badge-primary" style="background:rgba(255,255,255,0.1);color:#60A5FA;margin-bottom:16px;">
+                        <i class="bi bi-stars"></i> Featured Property
+                    </span>
+                    <h2>Experience Luxury<br>Like Never Before</h2>
+                    <p>Immerse yourself in unparalleled comfort with our premium suites. World-class amenities, breathtaking views, and personalized service await.</p>
+                    <a href="{{ route('rooms.index') }}" class="btn-cta">
+                        Book Now <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="col-lg-6 mt-4 mt-lg-0">
+                    <div class="se-featured-banner-img">
+                        <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80"
+                             alt="Luxury Hotel Suite"
+                             loading="lazy">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{-- ─── RESTAURANT RECOMMENDATIONS ─── --}}
+<section class="se-section" style="padding-top:0;">
+    <div class="container">
+        <div class="se-section-header">
+            <div>
+                <h2 class="se-section-title">Restaurant <span class="highlight">Picks</span></h2>
+                <p class="se-section-subtitle mb-0">Savor exquisite cuisines from our handpicked restaurants.</p>
+            </div>
+            <a href="{{ route('customer.restaurant.menu') }}" class="se-link">See Menu <i class="bi bi-arrow-right"></i></a>
         </div>
         <div class="row g-3">
             @php
                 $restos = [
-                    ['name' => 'Fine Dining Room', 'cuisine' => 'Internasional', 'rating' => 4.8, 'img' => 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80'],
-                    ['name' => 'Traditional Nusantara', 'cuisine' => 'Indonesia', 'rating' => 4.7, 'img' => 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80'],
+                    ['name' => 'Fine Dining Room', 'cuisine' => 'International', 'rating' => 4.8, 'img' => 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80'],
+                    ['name' => 'Traditional Nusantara', 'cuisine' => 'Indonesian', 'rating' => 4.7, 'img' => 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80'],
                     ['name' => 'Rooftop Lounge', 'cuisine' => 'Fusion', 'rating' => 4.9, 'img' => 'https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=600&q=80'],
-                    ['name' => 'Cafe & Bakery', 'cuisine' => 'French', 'rating' => 4.6, 'img' => 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=80'],
+                    ['name' => 'Café & Bakery', 'cuisine' => 'French', 'rating' => 4.6, 'img' => 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=80'],
                 ];
             @endphp
             @foreach($restos as $resto)
@@ -785,11 +1043,11 @@
                                 <img src="{{ $resto['img'] }}" alt="{{ $resto['name'] }}" loading="lazy">
                             </div>
                             <div class="se-resto-card-body">
-                                <h5 class="mb-1 text-dark">{{ $resto['name'] }}</h5>
+                                <h5>{{ $resto['name'] }}</h5>
                                 <div class="meta"><i class="bi bi-bookmark"></i> {{ $resto['cuisine'] }}</div>
                                 <div class="d-flex align-items-center gap-2">
                                     <span class="se-badge se-badge-primary"><i class="bi bi-star-fill me-1"></i>{{ $resto['rating'] }}</span>
-                                    <small class="text-muted">Buka 10:00-22:00</small>
+                                    <small class="text-muted" style="font-size:0.72rem;">Open 10:00 - 22:00</small>
                                 </div>
                             </div>
                         </div>
@@ -800,12 +1058,49 @@
     </div>
 </section>
 
+{{-- ─── HOTEL FACILITIES ─── --}}
+<section class="se-section" style="padding-top:0;" id="about">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2 class="se-section-title">Hotel <span class="highlight">Facilities</span></h2>
+            <p class="se-section-subtitle mx-auto">Everything you need for a comfortable and memorable stay.</p>
+        </div>
+        <div class="row g-3">
+            @php
+                $facilities = [
+                    ['icon' => 'bi-wifi', 'name' => 'High-Speed WiFi'],
+                    ['icon' => 'bi-water', 'name' => 'Swimming Pool'],
+                    ['icon' => 'bi-heart-pulse', 'name' => 'Spa & Wellness'],
+                    ['icon' => 'bi-bicycle', 'name' => 'Fitness Center'],
+                    ['icon' => 'bi-cup-hot', 'name' => 'Restaurant & Bar'],
+                    ['icon' => 'bi-p-circle', 'name' => 'Free Parking'],
+                    ['icon' => 'bi-shield-check', 'name' => '24/7 Security'],
+                    ['icon' => 'bi-headset', 'name' => 'Concierge'],
+                ];
+            @endphp
+            @foreach($facilities as $fac)
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="se-facility">
+                        <div class="se-facility-icon">
+                            <i class="bi {{ $fac['icon'] }}"></i>
+                        </div>
+                        <div class="se-facility-name">{{ $fac['name'] }}</div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+
 {{-- ─── TESTIMONIALS ─── --}}
 @if(isset($testimonials) && $testimonials->count() > 0)
-<section class="se-featured" style="padding-top:0;">
+<section class="se-section" style="padding-top:0;">
     <div class="container">
-        <div class="se-featured-header">
-            <h2>Apa Kata <span>Mereka</span></h2>
+        <div class="se-section-header">
+            <div>
+                <h2 class="se-section-title">What Our <span class="highlight">Guests Say</span></h2>
+                <p class="se-section-subtitle mb-0">Real experiences from real guests who loved their stay.</p>
+            </div>
         </div>
         <div class="row g-3">
             @foreach($testimonials as $t)
@@ -816,12 +1111,12 @@
                                 @if($i<=$t->rating)<i class="bi bi-star-fill"></i>@else<i class="bi bi-star"></i>@endif
                             @endfor
                         </div>
-                        <p>"{{ $t->message }}"</p>
+                        <p class="quote">"{{ $t->message }}"</p>
                         <div class="user">
                             <div class="avatar">{{ strtoupper(substr($t->name, 0, 2)) }}</div>
                             <div>
                                 <div class="name">{{ $t->name }}</div>
-                                <div class="pos">{{ $t->position ?? 'Tamu' }}</div>
+                                <div class="pos">{{ $t->position ?? 'Guest' }}</div>
                             </div>
                         </div>
                     </div>
@@ -832,69 +1127,18 @@
 </section>
 @endif
 
-{{-- ─── APP DOWNLOAD ─── --}}
-<section style="padding:60px 0;">
-    <div class="container">
-        <div class="se-app-download">
-            <div class="row align-items-center">
-                <div class="col-lg-7">
-                    <h2>Download Aplikasi StayEase</h2>
-                    <p>Booking hotel & restoran jadi lebih mudah dengan aplikasi mobile kami. Dapatkan penawaran eksklusif!</p>
-                    <div class="se-app-btns">
-                        <a href="#" class="se-app-btn">
-                            <i class="bi bi-google-play"></i>
-                            <div>
-                                <small>Download di</small>
-                                <strong>Google Play</strong>
-                            </div>
-                        </a>
-                        <a href="#" class="se-app-btn">
-                            <i class="bi bi-apple"></i>
-                            <div>
-                                <small>Download di</small>
-                                <strong>App Store</strong>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-5 d-none d-lg-flex justify-content-center">
-                    <div class="text-center">
-                        <i class="bi bi-phone display-1 text-white" style="opacity:0.3;"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
 {{-- ─── NEWSLETTER ─── --}}
-<section style="padding:0 0 60px;">
+<section class="se-section" style="padding-top:0;">
     <div class="container">
-        <div class="row justify-content-center text-center">
-            <div class="col-lg-6">
-                <h3 class="fw-bold mb-2">Dapatkan Penawaran Terbaik</h3>
-                <p class="text-muted mb-4" style="font-family:var(--font-alt);font-size:0.9rem;">Langganan newsletter kami untuk info promo dan diskon spesial.</p>
-                <form class="d-flex gap-2">
-                    <input type="email" class="form-control rounded-3 py-3" placeholder="Masukkan email Anda..." style="border:1.5px solid var(--border);">
-                    <button type="submit" class="btn-se btn-se-primary px-4" style="flex-shrink:0;">Langganan</button>
-                </form>
-            </div>
+        <div class="se-newsletter">
+            <h3>Get the Best Deals</h3>
+            <p>Subscribe to our newsletter for exclusive offers and special discounts.</p>
+            <form class="input-group" onsubmit="event.preventDefault();">
+                <input type="email" class="form-control" placeholder="Enter your email address...">
+                <button type="submit" class="btn-sub">Subscribe</button>
+            </form>
         </div>
     </div>
 </section>
 
-@push('scripts')
-<script>
-    // Search tabs
-    document.querySelectorAll('.se-search-tab').forEach(tab => {
-        tab.addEventListener('click', function() {
-            document.querySelectorAll('.se-search-tab').forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            const tabName = this.dataset.tab;
-            document.getElementById('searchHotel').style.display = tabName === 'hotel' ? 'block' : 'none';
-            document.getElementById('searchRestaurant').style.display = tabName === 'restaurant' ? 'block' : 'none';
-        });
-    });
-</script>
-@endpush
 @endsection

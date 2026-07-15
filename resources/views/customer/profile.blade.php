@@ -16,11 +16,11 @@
             <div class="se-card-lg p-4 p-md-5">
                 {{-- Header --}}
                 <div class="text-center mb-4">
-                    <div class="se-avatar" style="width:80px;height:80px;font-size:1.5rem;margin:0 auto 16px;">
+                    <div class="se-avatar" style="width:72px;height:72px;font-size:1.35rem;margin:0 auto 14px;">
                         {{ strtoupper(substr($user->name, 0, 2)) }}
                     </div>
-                    <h4 class="fw-bold mb-1">{{ $user->name }}</h4>
-                    <p class="text-muted small" style="font-family:var(--font-alt);">{{ $user->email }}</p>
+                    <h4 class="fw-bold mb-1" style="font-size:1.25rem;">{{ $user->name }}</h4>
+                    <p class="text-muted small mb-0" style="font-family:var(--font-alt);font-size:0.85rem;">{{ $user->email }}</p>
                 </div>
 
                 <form action="{{ route('customer.profile.update') }}" method="POST">

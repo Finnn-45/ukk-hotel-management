@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>@yield('title', 'StayEase - Hotel & Restaurant Booking')</title>
-    
+    <title>@yield('title', 'StayEase - Premium Hotel & Restaurant Booking')</title>
+    <meta name="description" content="StayEase — Discover luxury hotels, fine dining, and unforgettable experiences. Book easily with transparent pricing and 24/7 support.">
+
     {{-- Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
     {{-- Bootstrap + Icons --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
+
     {{-- PWA --}}
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#2563EB">
@@ -21,44 +22,65 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <style>
+        /* ════════════════════════════════════════
+           DESIGN SYSTEM — Nordic Minimalist
+           ════════════════════════════════════════ */
         :root {
+            /* Colors */
             --primary: #2563EB;
             --primary-dark: #1D4ED8;
-            --primary-light: #DBEAFE;
-            --primary-glow: rgba(37,99,235,0.12);
+            --primary-light: #EFF6FF;
+            --primary-glow: rgba(37,99,235,0.08);
             --primary-gradient: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
-            --accent: #FBBF24;
-            --accent-light: #FEF3C7;
-            --success: #22C55E;
+            --accent: #F59E0B;
+            --accent-light: #FFFBEB;
+            --success: #16A34A;
             --danger: #EF4444;
+
+            /* Surfaces */
             --bg: #F8FAFC;
             --bg-card: #FFFFFF;
             --text: #0F172A;
-            --text-muted: #64748B;
-            --border: #E2E8F0;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-            --shadow: 0 4px 20px rgba(0,0,0,0.08);
-            --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
-            --radius: 20px;
+            --text-secondary: #475569;
+            --text-muted: #94A3B8;
+            --border: #E5E7EB;
+
+            /* Shadows */
+            --shadow-xs: 0 1px 2px rgba(15,23,42,0.03);
+            --shadow-sm: 0 1px 3px rgba(15,23,42,0.04), 0 1px 2px rgba(15,23,42,0.02);
+            --shadow: 0 4px 16px rgba(15,23,42,0.06);
+            --shadow-md: 0 8px 30px rgba(15,23,42,0.08);
+            --shadow-lg: 0 20px 60px rgba(15,23,42,0.10);
+
+            /* Radii */
+            --radius: 16px;
             --radius-sm: 12px;
             --radius-xs: 8px;
-            --font: 'Poppins', sans-serif;
-            --font-alt: 'Inter', sans-serif;
-            --nav-height: 68px;
+            --radius-full: 50px;
+
+            /* Typography */
+            --font: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-alt: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+
+            /* Layout */
+            --nav-height: 72px;
+            --transition: 0.25s ease;
         }
 
         * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        
+
         body {
             font-family: var(--font);
             background: var(--bg);
             color: var(--text);
             padding-top: var(--nav-height);
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.6;
         }
 
-        /* ─── Glassmorphism Navbar ─── */
+        /* ─── NAVBAR ─── */
         .navbar-stayease {
             position: fixed;
             top: 0;
@@ -66,15 +88,15 @@
             right: 0;
             height: var(--nav-height);
             z-index: 1030;
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid rgba(226,232,240,0.6);
-            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border-bottom: 1px solid var(--border);
+            transition: all var(--transition);
         }
         .navbar-stayease.scrolled {
-            background: rgba(255,255,255,0.95);
-            box-shadow: 0 4px 30px rgba(0,0,0,0.08);
+            background: rgba(255,255,255,0.98);
+            box-shadow: var(--shadow-sm);
         }
         .navbar-stayease .container {
             height: 100%;
@@ -91,58 +113,72 @@
             flex-shrink: 0;
         }
         .se-logo-icon {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             background: var(--primary-gradient);
-            border-radius: 10px;
+            border-radius: var(--radius-sm);
             display: flex;
             align-items: center;
             justify-content: center;
             color: #fff;
-            font-weight: 900;
-            font-size: 1rem;
-            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
-            transition: transform 0.3s ease;
-        }
-        .se-logo:hover .se-logo-icon { transform: scale(1.05) rotate(-3deg); }
-        .se-logo-text {
             font-weight: 800;
-            font-size: 1.15rem;
+            font-size: 0.95rem;
+            letter-spacing: -0.5px;
+            transition: transform var(--transition);
+        }
+        .se-logo:hover .se-logo-icon { transform: scale(1.05); }
+        .se-logo-text {
+            font-weight: 700;
+            font-size: 1.2rem;
             color: var(--text);
             letter-spacing: -0.5px;
         }
         .se-logo-text span { color: var(--primary); }
 
-        /* Desktop Nav */
+        /* Desktop Nav Links */
         .se-nav-links {
             display: flex;
             align-items: center;
             gap: 4px;
-            margin-left: 32px;
+            margin-left: 40px;
         }
         .se-nav-link {
-            font-family: var(--font-alt);
-            font-size: 0.85rem;
+            font-size: 0.875rem;
             font-weight: 500;
-            color: var(--text-muted);
+            color: var(--text-secondary);
             text-decoration: none;
             padding: 8px 16px;
             border-radius: var(--radius-xs);
-            transition: all 0.2s ease;
+            transition: all var(--transition);
             position: relative;
+            white-space: nowrap;
         }
-        .se-nav-link:hover { color: var(--primary); background: var(--primary-glow); }
+        .se-nav-link:hover {
+            color: var(--primary);
+            background: var(--primary-glow);
+        }
         .se-nav-link.active {
             color: var(--primary);
             font-weight: 600;
             background: var(--primary-glow);
+        }
+        .se-nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 2.5px;
+            background: var(--primary);
+            border-radius: 2px;
         }
 
         /* Right actions */
         .se-nav-right {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
             margin-left: auto;
         }
         .se-icon-btn {
@@ -154,69 +190,39 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-muted);
-            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-size: 1.15rem;
             cursor: pointer;
             text-decoration: none;
-            transition: all 0.2s ease;
+            transition: all var(--transition);
             position: relative;
         }
-        .se-icon-btn:hover { background: var(--primary-glow); color: var(--primary); }
+        .se-icon-btn:hover {
+            background: var(--primary-glow);
+            color: var(--primary);
+            transform: translateY(-1px);
+        }
         .se-icon-btn .badge-dot {
             position: absolute;
-            top: 6px;
-            right: 6px;
-            width: 8px;
-            height: 8px;
+            top: 8px;
+            right: 8px;
+            width: 7px;
+            height: 7px;
             background: var(--danger);
             border-radius: 50%;
             border: 2px solid #fff;
         }
-
-        .se-btn-primary {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--primary-gradient);
-            color: #fff;
-            border: none;
-            border-radius: 50px;
-            padding: 10px 22px;
-            font-family: var(--font-alt);
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 14px rgba(37,99,235,0.3);
-            cursor: pointer;
+        .se-nav-divider {
+            width: 1px;
+            height: 24px;
+            background: var(--border);
+            margin: 0 8px;
         }
-        .se-btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37,99,235,0.4);
-            color: #fff;
-        }
-        .se-btn-outline {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: transparent;
-            color: var(--text);
-            border: 1.5px solid var(--border);
-            border-radius: 50px;
-            padding: 10px 20px;
-            font-family: var(--font-alt);
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-        .se-btn-outline:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-glow); }
 
         /* Avatar */
         .se-avatar {
-            width: 38px;
-            height: 38px;
+            width: 36px;
+            height: 36px;
             background: var(--primary-gradient);
             border-radius: 50%;
             display: flex;
@@ -229,23 +235,26 @@
             flex-shrink: 0;
             border: 2px solid #fff;
             box-shadow: 0 2px 8px rgba(37,99,235,0.2);
-            transition: transform 0.2s;
+            transition: all var(--transition);
         }
-        .se-avatar:hover { transform: scale(1.05); }
+        .se-avatar:hover {
+            transform: scale(1.08);
+            box-shadow: 0 4px 16px rgba(37,99,235,0.3);
+        }
+
+        /* Dropdown */
         .navbar-stayease .dropdown-menu {
             border: 1px solid var(--border);
-            border-radius: 16px;
+            border-radius: var(--radius);
             padding: 8px;
             box-shadow: var(--shadow-lg);
             min-width: 220px;
-            border: none;
             background: rgba(255,255,255,0.98);
             backdrop-filter: blur(20px);
         }
         .navbar-stayease .dropdown-item {
-            border-radius: 10px;
+            border-radius: var(--radius-xs);
             padding: 10px 14px;
-            font-family: var(--font-alt);
             font-size: 0.85rem;
             font-weight: 500;
             color: var(--text);
@@ -257,8 +266,47 @@
         .navbar-stayease .dropdown-item i { font-size: 1rem; color: var(--text-muted); width: 20px; }
         .navbar-stayease .dropdown-item:hover { background: var(--primary-glow); color: var(--primary); }
         .navbar-stayease .dropdown-item:hover i { color: var(--primary); }
-        .navbar-stayease .dropdown-item.text-danger:hover { background: rgba(239,68,68,0.08); color: var(--danger) !important; }
+        .navbar-stayease .dropdown-item.text-danger:hover { background: rgba(239,68,68,0.06); color: var(--danger) !important; }
         .navbar-stayease .dropdown-item.text-danger:hover i { color: var(--danger); }
+
+        /* Auth Buttons */
+        .se-btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--primary-gradient);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-full);
+            padding: 9px 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all var(--transition);
+            box-shadow: 0 2px 8px rgba(37,99,235,0.25);
+            cursor: pointer;
+        }
+        .se-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(37,99,235,0.35);
+            color: #fff;
+        }
+        .se-btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: transparent;
+            color: var(--text);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-full);
+            padding: 8px 18px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all var(--transition);
+            cursor: pointer;
+        }
+        .se-btn-outline:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-glow); }
 
         /* Hamburger */
         .se-hamburger {
@@ -269,11 +317,11 @@
             justify-content: center;
             border: none;
             background: transparent;
-            border-radius: 10px;
+            border-radius: var(--radius-xs);
             color: var(--text);
             font-size: 1.3rem;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background var(--transition);
         }
         .se-hamburger:hover { background: var(--primary-glow); }
         @media (max-width: 991.98px) {
@@ -286,7 +334,7 @@
         .se-drawer-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.4);
+            background: rgba(15,23,42,0.3);
             z-index: 1049;
             opacity: 0;
             pointer-events: none;
@@ -299,14 +347,13 @@
             left: 0;
             width: 300px;
             height: 100vh;
-            background: rgba(255,255,255,0.98);
-            backdrop-filter: blur(20px);
+            background: #fff;
             z-index: 1050;
             transform: translateX(-100%);
             transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
             display: flex;
             flex-direction: column;
-            box-shadow: 4px 0 40px rgba(0,0,0,0.1);
+            box-shadow: 4px 0 40px rgba(15,23,42,0.08);
         }
         .se-drawer.open { transform: translateX(0); }
         .se-drawer-head {
@@ -319,7 +366,7 @@
         .se-drawer-close {
             width: 36px; height: 36px;
             border: none; background: var(--bg);
-            border-radius: 10px; font-size: 1rem;
+            border-radius: var(--radius-xs); font-size: 1rem;
             cursor: pointer; color: var(--text);
             display: flex; align-items: center; justify-content: center;
         }
@@ -328,11 +375,10 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 14px 16px;
-            border-radius: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius-xs);
             text-decoration: none;
             color: var(--text);
-            font-family: var(--font-alt);
             font-size: 0.9rem;
             font-weight: 500;
             transition: all 0.15s;
@@ -346,52 +392,47 @@
         .se-drawer-divider { height: 1px; background: var(--border); margin: 8px 0; }
         .se-drawer-footer { padding: 16px 20px; border-top: 1px solid var(--border); }
 
-        /* ─── Shared Components ─── */
+        /* ─── SHARED COMPONENTS ─── */
         .se-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s ease;
+            box-shadow: var(--shadow-xs);
+            transition: all var(--transition);
         }
         .se-card:hover {
             box-shadow: var(--shadow);
             transform: translateY(-2px);
         }
-        .se-card-lg {
-            border-radius: var(--radius);
-            overflow: hidden;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow-sm);
-        }
 
         .se-section-title {
-            font-weight: 800;
+            font-weight: 700;
             font-size: 1.5rem;
             color: var(--text);
-            margin-bottom: 24px;
+            margin-bottom: 8px;
             letter-spacing: -0.3px;
         }
         .se-section-title .highlight { color: var(--primary); }
+        .se-section-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            max-width: 480px;
+        }
 
         .se-badge {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             padding: 4px 12px;
-            border-radius: 50px;
+            border-radius: var(--radius-full);
             font-size: 0.75rem;
             font-weight: 600;
-            font-family: var(--font-alt);
         }
         .se-badge-primary { background: var(--primary-light); color: var(--primary); }
         .se-badge-success { background: #DCFCE7; color: #16A34A; }
         .se-badge-warning { background: var(--accent-light); color: #D97706; }
         .se-badge-danger { background: #FEE2E2; color: var(--danger); }
-
-        .se-star { color: var(--accent); font-size: 0.8rem; }
-        .se-star-empty { color: #D1D5DB; font-size: 0.8rem; }
 
         /* Buttons */
         .btn-se {
@@ -399,23 +440,24 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            font-family: var(--font-alt);
+            font-family: var(--font);
             font-weight: 600;
-            border-radius: 50px;
+            border-radius: var(--radius-sm);
             padding: 12px 28px;
             border: none;
-            transition: all 0.3s ease;
+            transition: all var(--transition);
             cursor: pointer;
             text-decoration: none;
+            font-size: 0.9rem;
         }
         .btn-se-primary {
             background: var(--primary-gradient);
             color: #fff;
-            box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+            box-shadow: 0 2px 8px rgba(37,99,235,0.25);
         }
         .btn-se-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(37,99,235,0.4);
+            box-shadow: 0 6px 20px rgba(37,99,235,0.35);
             color: #fff;
         }
         .btn-se-outline {
@@ -425,24 +467,14 @@
         }
         .btn-se-outline:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-glow); }
         .btn-se-white {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.15);
             backdrop-filter: blur(10px);
             color: #fff;
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
         }
-        .btn-se-white:hover { background: rgba(255,255,255,0.3); color: #fff; }
+        .btn-se-white:hover { background: rgba(255,255,255,0.25); color: #fff; }
 
-        /* Glass card */
-        .glass-card {
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: var(--radius);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
-        }
-
-        /* Animated elements */
+        /* Animations */
         .fade-in {
             opacity: 0;
             transform: translateY(20px);
@@ -456,55 +488,9 @@
         .fade-in-d3 { animation-delay: 0.3s; }
         .fade-in-d4 { animation-delay: 0.4s; }
 
-        /* Floating animation */
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-        .animate-float { animation: float 3s ease-in-out infinite; }
-
-        /* Shimmer loading */
-        .shimmer {
-            background: linear-gradient(90deg, var(--border) 25%, #F1F5F9 50%, var(--border) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        /* Footer */
-        .se-footer {
-            background: #0F172A;
-            color: #94A3B8;
-            font-family: var(--font-alt);
-        }
-        .se-footer h5, .se-footer h6 { color: #fff; font-weight: 700; }
-        .se-footer a { color: #94A3B8; text-decoration: none; transition: color 0.2s; }
-        .se-footer a:hover { color: #fff; }
-        .se-footer .social-btn {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.15);
-            display: flex; align-items: center; justify-content: center;
-            color: #94A3B8; text-decoration: none;
-            transition: all 0.2s;
-        }
-        .se-footer .social-btn:hover {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: #fff;
-            transform: translateY(-2px);
-        }
-
         /* Breadcrumb */
-        .se-breadcrumb {
-            background: transparent;
-            padding: 0;
-            margin-bottom: 20px;
-        }
-        .se-breadcrumb .breadcrumb-item { font-size: 0.82rem; font-family: var(--font-alt); }
+        .se-breadcrumb { background: transparent; padding: 0; margin-bottom: 20px; }
+        .se-breadcrumb .breadcrumb-item { font-size: 0.82rem; }
         .se-breadcrumb .breadcrumb-item a { color: var(--text-muted); text-decoration: none; }
         .se-breadcrumb .breadcrumb-item a:hover { color: var(--primary); }
         .se-breadcrumb .breadcrumb-item.active { color: var(--primary); font-weight: 600; }
@@ -524,13 +510,12 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            font-family: var(--font-alt);
+            min-width: 40px;
+            height: 40px;
+            border-radius: var(--radius-xs);
             font-weight: 600;
             font-size: 0.85rem;
-            transition: all 0.2s;
+            transition: all var(--transition);
             border: 1.5px solid var(--border);
             background: #fff;
             color: var(--text);
@@ -539,13 +524,13 @@
             border-color: var(--primary);
             color: var(--primary);
             background: var(--primary-glow);
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
         .se-pagination li.active {
             background: var(--primary-gradient);
             border-color: var(--primary);
             color: #fff;
-            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+            box-shadow: 0 2px 8px rgba(37,99,235,0.25);
         }
         .se-pagination li.disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
         .se-pagination li a {
@@ -559,10 +544,81 @@
             padding: 0 14px;
         }
 
+        /* Glass card */
+        .glass-card {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        /* ─── FOOTER ─── */
+        .se-footer {
+            background: #0F172A;
+            color: #94A3B8;
+            font-family: var(--font);
+        }
+        .se-footer h6 {
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: -0.2px;
+        }
+        .se-footer a { color: #94A3B8; text-decoration: none; transition: color var(--transition); }
+        .se-footer a:hover { color: #E2E8F0; }
+        .se-footer-link {
+            display: block;
+            font-size: 0.85rem;
+            color: #94A3B8;
+            text-decoration: none;
+            padding: 4px 0;
+            transition: all var(--transition);
+        }
+        .se-footer-link:hover { color: #fff; padding-left: 4px; }
+        .se-footer .social-btn {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.12);
+            display: flex; align-items: center; justify-content: center;
+            color: #94A3B8; text-decoration: none;
+            transition: all var(--transition);
+            font-size: 0.9rem;
+        }
+        .se-footer .social-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .se-section-title { font-size: 1.25rem; }
-            :root { --nav-height: 60px; }
+            :root { --nav-height: 64px; }
+            .hero-content h1 { font-size: 2rem !important; }
+            .hero-content p { font-size: 0.95rem !important; }
+            .restaurant-hero { height: 35vh; min-height: 250px; }
+            .floating-cart { bottom: 20px; right: 20px; width: 56px; height: 56px; font-size: 1.25rem; }
+            .menu-title { font-size: 1rem !important; }
+            .menu-price { font-size: 1.1rem !important; }
+            .menu-body { padding: 16px !important; }
+            .btn-order { padding: 8px 16px; font-size: 0.85rem; }
+            .se-card, .card { border-radius: var(--radius-sm) !important; }
+            .table-responsive { font-size: 0.9rem; }
+            .container { padding-left: 16px; padding-right: 16px; }
+        }
+
+        @media (max-width: 576px) {
+            .hero-content h1 { font-size: 1.75rem !important; letter-spacing: -0.5px; }
+            .hero-content p { font-size: 0.9rem !important; }
+            .restaurant-hero { height: 30vh; min-height: 220px; }
+            .se-section-title { font-size: 1.15rem; }
+            .menu-price { font-size: 1rem !important; }
+            .btn-order { padding: 10px 18px; width: 100%; justify-content: center; }
+            .menu-footer { flex-direction: column; gap: 10px !important; }
+            .d-flex.gap-2 { gap: 0.5rem !important; }
         }
     </style>
     @stack('styles')
@@ -584,33 +640,27 @@
 
             {{-- Desktop Links --}}
             <div class="se-nav-links">
-                <a href="{{ route('home') }}" class="se-nav-link {{ request()->routeIs('home') ? 'active' : '' }}">
-                    <i class="bi bi-house me-1"></i>Beranda
-                </a>
-                <a href="{{ route('rooms.index') }}" class="se-nav-link {{ request()->routeIs('rooms.*') ? 'active' : '' }}">
-                    <i class="bi bi-building me-1"></i>Hotel
-                </a>
-                <a href="{{ route('customer.restaurant.menu') }}" class="se-nav-link {{ request()->routeIs('customer.restaurant.*') ? 'active' : '' }}">
-                    <i class="bi bi-cup-hot me-1"></i>Restoran
-                </a>
-                <a href="{{ route('customer.gallery') }}" class="se-nav-link {{ request()->routeIs('customer.gallery') ? 'active' : '' }}">
-                    <i class="bi bi-images me-1"></i>Galeri
-                </a>
-                <a href="{{ route('customer.contact') }}" class="se-nav-link {{ request()->routeIs('customer.contact') ? 'active' : '' }}">
-                    <i class="bi bi-chat me-1"></i>Kontak
-                </a>
+                <a href="{{ route('home') }}" class="se-nav-link {{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
+                <a href="{{ route('rooms.index') }}" class="se-nav-link {{ request()->routeIs('rooms.*') ? 'active' : '' }}">Rooms</a>
+                <a href="{{ route('customer.restaurant.menu') }}" class="se-nav-link {{ request()->routeIs('customer.restaurant.*') ? 'active' : '' }}">Restaurant</a>
+                @if(Route::has('admin.promos.index'))
+                <a href="#promotions" class="se-nav-link">Promotions</a>
+                @endif
+                <a href="#about" class="se-nav-link">About</a>
+                <a href="{{ route('customer.contact') }}" class="se-nav-link {{ request()->routeIs('customer.contact') ? 'active' : '' }}">Contact</a>
             </div>
 
             {{-- Right --}}
             <div class="se-nav-right">
+                <a href="{{ route('rooms.index') }}" class="se-icon-btn" title="Search">
+                    <i class="bi bi-search"></i>
+                </a>
                 @auth
-                    <a href="{{ route('customer.bookings') }}" class="se-icon-btn" title="Booking Saya">
-                        <i class="bi bi-calendar-check"></i>
-                    </a>
-                    <a href="{{ route('customer.notifications') }}" class="se-icon-btn" title="Notifikasi">
+                    <a href="{{ route('customer.notifications') }}" class="se-icon-btn" title="Notifications">
                         <i class="bi bi-bell"></i>
                         <span class="badge-dot"></span>
                     </a>
+                    <div class="se-nav-divider"></div>
                     <div class="dropdown">
                         <div class="se-avatar" data-bs-toggle="dropdown" aria-expanded="false" title="{{ auth()->user()->name }}">
                             {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
@@ -620,23 +670,24 @@
                                 <div style="font-weight:700;font-size:0.85rem;color:var(--text);">{{ auth()->user()->name }}</div>
                                 <div style="font-size:0.72rem;color:var(--text-muted);">{{ auth()->user()->email }}</div>
                             </li>
-                            <li class="mt-1"><a class="dropdown-item" href="{{ route('customer.bookings') }}"><i class="bi bi-calendar-check"></i>Booking Saya</a></li>
-                            <li><a class="dropdown-item" href="{{ route('customer.restaurant.orders') }}"><i class="bi bi-receipt"></i>Pesanan Restoran</a></li>
+                            <li class="mt-1"><a class="dropdown-item" href="{{ route('customer.bookings') }}"><i class="bi bi-calendar-check"></i>My Bookings</a></li>
+                            <li><a class="dropdown-item" href="{{ route('customer.restaurant.orders') }}"><i class="bi bi-receipt"></i>Restaurant Orders</a></li>
                             <li><a class="dropdown-item" href="{{ route('customer.wishlist') }}"><i class="bi bi-heart"></i>Wishlist</a></li>
-                            <li><a class="dropdown-item" href="{{ route('customer.reviews') }}"><i class="bi bi-star"></i>Ulasan Saya</a></li>
+                            <li><a class="dropdown-item" href="{{ route('customer.reviews') }}"><i class="bi bi-star"></i>My Reviews</a></li>
                             <li><a class="dropdown-item" href="{{ route('customer.profile') }}"><i class="bi bi-person"></i>Profile</a></li>
                             @if(auth()->user()->role === 'admin' || auth()->user()->role === 'staff')
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i class="bi bi-speedometer2"></i>Admin Panel</a></li>
                             @endif
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="#" onclick="event.preventDefault();document.getElementById('se-logout').submit();"><i class="bi bi-box-arrow-right"></i>Keluar</a></li>
+                            <li><a class="dropdown-item text-danger" href="#" onclick="event.preventDefault();document.getElementById('se-logout').submit();"><i class="bi bi-box-arrow-right"></i>Logout</a></li>
                         </ul>
                         <form id="se-logout" action="{{ route('customer.logout') }}" method="POST" class="d-none">@csrf</form>
                     </div>
                 @else
-                    <a href="{{ route('customer.login') }}" class="se-btn-outline"><i class="bi bi-person"></i><span>Masuk</span></a>
-                    <a href="{{ route('customer.register') }}" class="se-btn-primary"><i class="bi bi-person-plus"></i><span>Daftar</span></a>
+                    <div class="se-nav-divider"></div>
+                    <a href="{{ route('customer.login') }}" class="se-btn-outline"><i class="bi bi-person"></i><span>Sign In</span></a>
+                    <a href="{{ route('customer.register') }}" class="se-btn-primary"><i class="bi bi-person-plus"></i><span>Sign Up</span></a>
                 @endauth
             </div>
         </div>
@@ -654,33 +705,36 @@
         </div>
         <div class="se-drawer-body">
             <a href="{{ route('home') }}" class="se-drawer-link {{ request()->routeIs('home') ? 'active' : '' }}">
-                <i class="bi bi-house"></i> Beranda
+                <i class="bi bi-house"></i> Home
             </a>
             <a href="{{ route('rooms.index') }}" class="se-drawer-link {{ request()->routeIs('rooms.*') ? 'active' : '' }}">
-                <i class="bi bi-building"></i> Cari Hotel
+                <i class="bi bi-building"></i> Rooms
             </a>
             <a href="{{ route('customer.restaurant.menu') }}" class="se-drawer-link {{ request()->routeIs('customer.restaurant.*') ? 'active' : '' }}">
-                <i class="bi bi-cup-hot"></i> Restoran
+                <i class="bi bi-cup-hot"></i> Restaurant
             </a>
-            <a href="{{ route('customer.gallery') }}" class="se-drawer-link {{ request()->routeIs('customer.gallery') ? 'active' : '' }}">
-                <i class="bi bi-images"></i> Galeri
+            <a href="#promotions" class="se-drawer-link">
+                <i class="bi bi-tag"></i> Promotions
+            </a>
+            <a href="#about" class="se-drawer-link">
+                <i class="bi bi-info-circle"></i> About
             </a>
             <a href="{{ route('customer.contact') }}" class="se-drawer-link {{ request()->routeIs('customer.contact') ? 'active' : '' }}">
-                <i class="bi bi-geo-alt"></i> Kontak
+                <i class="bi bi-chat"></i> Contact
             </a>
             <div class="se-drawer-divider"></div>
             @auth
                 <a href="{{ route('customer.bookings') }}" class="se-drawer-link">
-                    <i class="bi bi-calendar-check"></i> Booking Saya
+                    <i class="bi bi-calendar-check"></i> My Bookings
                 </a>
                 <a href="{{ route('customer.restaurant.orders') }}" class="se-drawer-link">
-                    <i class="bi bi-receipt"></i> Pesanan Restoran
+                    <i class="bi bi-receipt"></i> Restaurant Orders
                 </a>
                 <a href="{{ route('customer.wishlist') }}" class="se-drawer-link">
                     <i class="bi bi-heart"></i> Wishlist
                 </a>
                 <a href="{{ route('customer.reviews') }}" class="se-drawer-link">
-                    <i class="bi bi-star"></i> Ulasan Saya
+                    <i class="bi bi-star"></i> My Reviews
                 </a>
                 <a href="{{ route('customer.profile') }}" class="se-drawer-link">
                     <i class="bi bi-person"></i> Profile
@@ -694,10 +748,10 @@
             @else
                 <div class="se-drawer-divider"></div>
                 <a href="{{ route('customer.login') }}" class="se-drawer-link">
-                    <i class="bi bi-box-arrow-in-right"></i> Masuk
+                    <i class="bi bi-box-arrow-in-right"></i> Sign In
                 </a>
                 <a href="{{ route('customer.register') }}" class="se-drawer-link">
-                    <i class="bi bi-person-plus"></i> Daftar Gratis
+                    <i class="bi bi-person-plus"></i> Sign Up Free
                 </a>
             @endauth
         </div>
@@ -711,7 +765,7 @@
                 </div>
             </div>
             <a href="#" onclick="event.preventDefault();document.getElementById('se-logout-drawer').submit();" class="btn-se btn-se-outline w-100" style="color:#EF4444;border-color:#FEE2E2;">
-                <i class="bi bi-box-arrow-right"></i> Keluar
+                <i class="bi bi-box-arrow-right"></i> Logout
             </a>
             <form id="se-logout-drawer" action="{{ route('customer.logout') }}" method="POST" class="d-none">@csrf</form>
         </div>
@@ -764,7 +818,7 @@
         @endif
         @if(session('info'))
             <div class="container mt-3">
-                <div class="alert alert-info alert-dismissible fade show border-0 shadow-sm rounded-4" style="background:#DBEAFE;color:#1D4ED8;">
+                <div class="alert alert-info alert-dismissible fade show border-0 shadow-sm rounded-4" style="background:#EFF6FF;color:#1D4ED8;">
                     <div class="d-flex align-items-center gap-2">
                         <i class="bi bi-info-circle-fill fs-5"></i>
                         <span>{{ session('info') }}</span>
@@ -780,13 +834,15 @@
     {{-- ─── FOOTER ─── --}}
     <footer class="se-footer pt-5 pb-3 mt-5">
         <div class="container">
-            <div class="row g-4">
+            <div class="row g-4 pb-4">
                 <div class="col-lg-4">
                     <a href="{{ route('home') }}" class="se-logo mb-3 d-inline-flex">
-                        <div class="se-logo-icon" style="background:#fff;color:#2563EB;">SE</div>
+                        <div class="se-logo-icon" style="background:#fff;color:var(--primary);">SE</div>
                         <span class="se-logo-text" style="color:#fff;">Stay<span style="color:#60A5FA;">Ease</span></span>
                     </a>
-                    <p style="font-size:0.85rem;line-height:1.7;">Platform booking hotel dan restoran terpercaya. Nikmati pengalaman menginap dan bersantap terbaik dengan harga terbaik.</p>
+                    <p style="font-size:0.85rem;line-height:1.8;color:#94A3B8;margin-top:16px;max-width:320px;">
+                        Your trusted platform for luxury hotel bookings and fine dining experiences. Enjoy seamless reservations with transparent pricing.
+                    </p>
                     <div class="d-flex gap-2 mt-3">
                         <a href="#" class="social-btn"><i class="bi bi-instagram"></i></a>
                         <a href="#" class="social-btn"><i class="bi bi-facebook"></i></a>
@@ -795,36 +851,43 @@
                     </div>
                 </div>
                 <div class="col-6 col-lg-2">
-                    <h6 class="mb-3">Menu</h6>
-                    <ul class="list-unstyled" style="font-size:0.85rem;">
-                        <li class="mb-2"><a href="{{ route('home') }}">Beranda</a></li>
-                        <li class="mb-2"><a href="{{ route('rooms.index') }}">Hotel</a></li>
-                        <li class="mb-2"><a href="{{ route('customer.restaurant.menu') }}">Restoran</a></li>
-                        <li class="mb-2"><a href="{{ route('customer.gallery') }}">Galeri</a></li>
-                        <li class="mb-2"><a href="{{ route('customer.contact') }}">Kontak</a></li>
-                    </ul>
+                    <h6 class="mb-3">Navigation</h6>
+                    <a href="{{ route('home') }}" class="se-footer-link">Home</a>
+                    <a href="{{ route('rooms.index') }}" class="se-footer-link">Rooms</a>
+                    <a href="{{ route('customer.restaurant.menu') }}" class="se-footer-link">Restaurant</a>
+                    <a href="{{ route('customer.contact') }}" class="se-footer-link">Contact</a>
                 </div>
                 <div class="col-6 col-lg-3">
-                    <h6 class="mb-3">Layanan</h6>
-                    <ul class="list-unstyled" style="font-size:0.85rem;">
-                        <li class="mb-2"><a href="#">Bantuan</a></li>
-                        <li class="mb-2"><a href="#">FAQ</a></li>
-                        <li class="mb-2"><a href="#">Kebijakan Privasi</a></li>
-                        <li class="mb-2"><a href="#">Syarat & Ketentuan</a></li>
-                    </ul>
+                    <h6 class="mb-3">Support</h6>
+                    <a href="#" class="se-footer-link">Help Center</a>
+                    <a href="#" class="se-footer-link">FAQ</a>
+                    <a href="#" class="se-footer-link">Privacy Policy</a>
+                    <a href="#" class="se-footer-link">Terms & Conditions</a>
                 </div>
                 <div class="col-lg-3">
-                    <h6 class="mb-3">Kontak</h6>
-                    <ul class="list-unstyled" style="font-size:0.85rem;">
-                        <li class="mb-2"><i class="bi bi-geo-alt me-2"></i>Jakarta, Indonesia</li>
-                        <li class="mb-2"><i class="bi bi-telephone me-2"></i>+62 123 4567 890</li>
-                        <li class="mb-2"><i class="bi bi-envelope me-2"></i>hello@stayease.com</li>
-                        <li class="mb-2"><i class="bi bi-clock me-2"></i>24/7 Customer Support</li>
-                    </ul>
+                    <h6 class="mb-3">Contact</h6>
+                    <div style="font-size:0.85rem;">
+                        <div class="d-flex align-items-start gap-2 mb-2">
+                            <i class="bi bi-geo-alt" style="color:#60A5FA;margin-top:2px;"></i>
+                            <span>Jakarta, Indonesia</span>
+                        </div>
+                        <div class="d-flex align-items-start gap-2 mb-2">
+                            <i class="bi bi-telephone" style="color:#60A5FA;margin-top:2px;"></i>
+                            <span>+62 123 4567 890</span>
+                        </div>
+                        <div class="d-flex align-items-start gap-2 mb-2">
+                            <i class="bi bi-envelope" style="color:#60A5FA;margin-top:2px;"></i>
+                            <span>hello@stayease.com</span>
+                        </div>
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="bi bi-clock" style="color:#60A5FA;margin-top:2px;"></i>
+                            <span>24/7 Customer Support</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <hr class="my-4" style="border-color:rgba(255,255,255,0.1);">
-            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2" style="font-size:0.8rem;">
+            <hr style="border-color:rgba(255,255,255,0.06);margin:0;">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 pt-4" style="font-size:0.8rem;">
                 <p class="mb-0">&copy; {{ date('Y') }} StayEase. All rights reserved.</p>
                 <div class="d-flex gap-3">
                     <a href="#">Privacy</a>
@@ -836,7 +899,10 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
+    {{-- Midtrans Snap JS --}}
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.client_key') }}"></script>
+
     {{-- PWA SW --}}
     <script>
         if ('serviceWorker' in navigator) {

@@ -13,6 +13,8 @@ use App\Models\LandingPageGallery;
 use App\Models\LandingPageTestimonial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Midtrans\Config;
+use Midtrans\Snap;
 
 class CustomerController extends Controller
 {
@@ -138,17 +140,33 @@ class CustomerController extends Controller
 
         $user = Auth::user();
 
-        // Create or get guest
-        $guest = Guest::firstOrCreate(
-            ['email' => $request->email],
-            [
-                'user_id' => $user->id,
-                'full_name' => $request->full_name,
-                'phone' => $request->phone,
-            ]
-        );
+        // Find or create guest — prioritize matching by user_id, then by email
+        $guest = Guest::where('user_id', $user->id)->first();
 
-        // Create booking with pending status
+        if (!$guest) {
+            // Try to find by email and claim ownership
+            $guest = Guest::firstOrCreate(
+                ['email' => $request->email],
+                [
+                    'user_id'   => $user->id,
+                    'full_name' => $request->full_name,
+                    'phone'     => $request->phone,
+                ]
+            );
+            // If guest existed by email but had no user_id, assign this user
+            if (!$guest->user_id) {
+                $guest->update(['user_id' => $user->id]);
+            }
+        } else {
+            // Update guest info from form
+            $guest->update([
+                'full_name' => $request->full_name,
+                'email'     => $request->email,
+                'phone'     => $request->phone,
+            ]);
+        }
+
+        // Create booking with pending status (no payment yet)
         $booking = Booking::create([
             'guest_id' => $guest->id,
             'room_id' => $data['room_id'],
@@ -159,21 +177,15 @@ class CustomerController extends Controller
             'status' => 'pending',
         ]);
 
-        // Update room status
+        // Update room status to booked
         Room::find($data['room_id'])->update(['status' => 'booked']);
-
-        // Create payment record with pending status
-        Payment::create([
-            'booking_id' => $booking->id,
-            'payment_method' => 'midtrans',
-            'payment_status' => 'pending',
-            'amount' => $data['total_price'],
-        ]);
 
         // Clear session
         session()->forget('booking_data');
 
-        return redirect()->route('customer.booking.success', $booking)->with('info', 'Silakan selesaikan pembayaran untuk mengkonfirmasi booking.');
+        // Redirect to booking list with success message
+        return redirect()->route('customer.bookings')
+            ->with('success', 'Booking berhasil dibuat! Silakan lakukan pembayaran untuk mengkonfirmasi kamar Anda.');
     }
 
     public function bookingSuccess(Booking $booking)

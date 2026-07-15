@@ -9,11 +9,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0284C7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
         :root {
             --sidebar-width: 260px;
-            --primary: #2563EB;
-            --primary-dark: #1D4ED8;
+            --primary: #0284C7;
+            --primary-dark: #0369A1;
+            --primary-light: #E0F2FE;
             --bg-dark: #0F172A;
             --bg-sidebar: #0F172A;
             --bg-main: #F1F5F9;
@@ -26,7 +31,7 @@
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg-main);
-            color: #0F172A;
+            color: #334155;
         }
         .sidebar {
             position: fixed;
@@ -50,7 +55,7 @@
         .sidebar-brand .logo-icon {
             width: 36px;
             height: 36px;
-            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            background: linear-gradient(135deg, #0284C7, #0369A1);
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -65,7 +70,7 @@
             margin: 0;
             font-size: 1rem;
         }
-        .sidebar-brand h5 span { color: #60A5FA; }
+        .sidebar-brand h5 span { color: #38BDF8; }
         .sidebar-brand small {
             color: #64748B;
             font-size: 0.7rem;
@@ -103,8 +108,8 @@
         }
         .sidebar .nav-link.active {
             color: #fff;
-            background: linear-gradient(135deg, #2563EB, #1D4ED8);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+            background: linear-gradient(135deg, #0284C7, #0369A1);
+            box-shadow: 0 4px 12px rgba(2,132,199,0.3);
         }
         .main-content {
             margin-left: var(--sidebar-width);
@@ -122,6 +127,7 @@
         .top-bar h4 {
             font-weight: 700;
             margin: 0;
+            color: #334155;
         }
         .top-bar-actions {
             display: flex;
@@ -132,7 +138,7 @@
             width: 38px;
             height: 38px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            background: linear-gradient(135deg, #0284C7, #0369A1);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -163,11 +169,12 @@
             font-size: 1.25rem;
             transition: all 0.3s ease;
         }
-        .stat-icon-primary { background: rgba(37,99,235,0.1); color: #2563EB; }
+        .stat-icon-primary { background: rgba(2,132,199,0.1); color: #0284C7; }
         .stat-icon-success { background: rgba(34,197,94,0.1); color: #16A34A; }
         .stat-icon-warning { background: rgba(251,191,36,0.1); color: #D97706; }
         .stat-icon-info { background: rgba(6,182,212,0.1); color: #0891B2; }
         .stat-icon-purple { background: rgba(139,92,246,0.1); color: #7C3AED; }
+        .stat-icon-danger { background: rgba(239,68,68,0.1); color: #DC2626; }
         .card-hover:hover .stat-icon { transform: scale(1.1); }
         .badge-premium {
             padding: 5px 12px;
@@ -181,7 +188,7 @@
         .badge-premium-success { background: #DCFCE7; color: #16A34A; }
         .badge-premium-warning { background: #FEF3C7; color: #D97706; }
         .badge-premium-danger { background: #FEE2E2; color: #DC2626; }
-        .badge-premium-info { background: #DBEAFE; color: #1D4ED8; }
+        .badge-premium-info { background: #E0F2FE; color: #0284C7; }
         .badge-premium-secondary { background: #F1F5F9; color: #64748B; }
         .table-custom th {
             font-size: 0.72rem;
@@ -200,6 +207,74 @@
             border-bottom: 1px solid #F1F5F9;
         }
         .table-custom tr:last-child td { border-bottom: none; }
+
+        /* Room Status Grid */
+        .room-status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 8px;
+        }
+        .room-status-item {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+        .room-status-item:hover { transform: scale(1.1); }
+        .room-available { background: #DCFCE7; color: #16A34A; border-color: #BBF7D0; }
+        .room-occupied { background: #FEE2E2; color: #DC2626; border-color: #FECACA; }
+        .room-cleaning { background: #FEF3C7; color: #D97706; border-color: #FDE68A; }
+        .room-maintenance { background: #F1F5F9; color: #64748B; border-color: #E2E8F0; }
+
+        /* Activity Timeline */
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #F1F5F9;
+        }
+        .activity-item:last-child { border-bottom: none; }
+        .activity-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+        .activity-time {
+            font-size: 0.72rem;
+            color: #94A3B8;
+            font-weight: 500;
+        }
+
+        /* Quick Action Buttons */
+        .quick-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1.5px solid #E2E8F0;
+            background: #fff;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: #334155;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .quick-action-btn:hover {
+            border-color: #0284C7;
+            background: #E0F2FE;
+            color: #0284C7;
+            transform: translateY(-2px);
+        }
 
         @media (max-width: 768px) {
             .sidebar { width: 100%; position: relative; height: auto; max-height: 280px; overflow-y: auto; }
@@ -225,7 +300,7 @@
                     <i class="bi bi-speedometer2"></i> Dashboard
                 </a>
             </li>
-            <li class="sidebar-section">Master Data</li>
+            <li class="sidebar-section">Manajemen Hotel</li>
             <li class="nav-item">
                 <a class="nav-link {{ Request::routeIs('admin.rooms.*') ? 'active' : '' }}" href="{{ route('admin.rooms.index') }}">
                     <i class="bi bi-door-open"></i> Kamar
@@ -237,19 +312,18 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Request::routeIs('admin.guests.*') ? 'active' : '' }}" href="{{ route('admin.guests.index') }}">
-                    <i class="bi bi-people"></i> Tamu
-                </a>
-            </li>
-            <li class="sidebar-section">Transaksi</li>
-            <li class="nav-item">
                 <a class="nav-link {{ Request::routeIs('admin.bookings.*') ? 'active' : '' }}" href="{{ route('admin.bookings.index') }}">
-                    <i class="bi bi-calendar-check"></i> Booking
+                    <i class="bi bi-calendar-check"></i> Reservasi
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ Request::routeIs('admin.payments.*') ? 'active' : '' }}" href="{{ route('admin.payments.index') }}">
-                    <i class="bi bi-credit-card"></i> Pembayaran
+                <a class="nav-link" href="{{ route('admin.bookings.index', ['status' => 'checked_in']) }}">
+                    <i class="bi bi-box-arrow-in-right"></i> Check In
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.bookings.index', ['status' => 'checked_out']) }}">
+                    <i class="bi bi-box-arrow-right"></i> Check Out
                 </a>
             </li>
             <li class="sidebar-section">Restoran</li>
@@ -259,27 +333,40 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="{{ route('admin.restaurant.menu.index') }}">
+                    <i class="bi bi-tags"></i> Kategori Menu
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link {{ Request::routeIs('admin.restaurant.order.*') ? 'active' : '' }}" href="{{ route('admin.restaurant.order.index') }}">
                     <i class="bi bi-receipt"></i> Pesanan
                 </a>
             </li>
-            <li class="sidebar-section">Konten</li>
+            <li class="sidebar-section">Pelanggan</li>
             <li class="nav-item">
-                <a class="nav-link {{ Request::routeIs('admin.landing-page.*') ? 'active' : '' }}" href="{{ route('admin.landing-page.index') }}">
-                    <i class="bi bi-layout-text-window"></i> Landing Page
+                <a class="nav-link {{ Request::routeIs('admin.guests.*') ? 'active' : '' }}" href="{{ route('admin.guests.index') }}">
+                    <i class="bi bi-people"></i> Pelanggan
+                </a>
+            </li>
+            <li class="sidebar-section">Pembayaran</li>
+            <li class="nav-item">
+                <a class="nav-link {{ Request::routeIs('admin.payments.*') ? 'active' : '' }}" href="{{ route('admin.payments.index') }}">
+                    <i class="bi bi-credit-card"></i> Pembayaran
+                </a>
+            </li>
+            <li class="sidebar-section">Review</li>
+            <li class="nav-item">
+                <a class="nav-link {{ Request::routeIs('admin.reviews.*') ? 'active' : '' }}" href="{{ route('admin.reviews.index') }}">
+                    <i class="bi bi-star"></i> Review
+                </a>
+            </li>
+            <li class="sidebar-section">Laporan</li>
+            <li class="nav-item">
+                <a class="nav-link {{ Request::routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
+                    <i class="bi bi-file-earmark-bar-graph"></i> Laporan
                 </a>
             </li>
             <li class="sidebar-section">Pengaturan</li>
-            <li class="nav-item">
-                <a class="nav-link {{ Request::routeIs('admin.notifications.*') ? 'active' : '' }}" href="{{ route('admin.notifications.index') }}">
-                    <i class="bi bi-bell"></i> Notifikasi
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ Request::routeIs('admin.activity-logs.*') ? 'active' : '' }}" href="{{ route('admin.activity-logs.index') }}">
-                    <i class="bi bi-clock-history"></i> Aktivitas
-                </a>
-            </li>
             <li class="nav-item">
                 <a class="nav-link {{ Request::routeIs('admin.settings.*') ? 'active' : '' }}" href="{{ route('admin.settings.index') }}">
                     <i class="bi bi-gear"></i> Pengaturan
@@ -312,14 +399,13 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('admin.rooms.index') }}">Kamar</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('admin.room-types.index') }}">Tipe Kamar</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.guests.index') }}">Tamu</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.bookings.index') }}">Booking</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.payments.index') }}">Pembayaran</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.bookings.index') }}">Reservasi</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('admin.restaurant.menu.index') }}">Menu Restoran</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('admin.restaurant.order.index') }}">Pesanan</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.landing-page.index') }}">Landing Page</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.notifications.index') }}">Notifikasi</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.activity-logs.index') }}">Aktivitas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.guests.index') }}">Tamu</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.payments.index') }}">Pembayaran</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.reviews.index') }}">Review</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard') }}">Laporan</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('admin.settings.index') }}">Pengaturan</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Website</a></li>
                     <li class="nav-item">
@@ -377,5 +463,15 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @stack('scripts')
+    
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').catch(function(err) {
+                    console.log('SW registration failed:', err);
+                });
+            });
+        }
+    </script>
 </body>
 </html>

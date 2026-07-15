@@ -33,7 +33,7 @@
                     @forelse($payments as $payment)
                         <tr>
                             <td>#{{ $payment->booking_id }}</td>
-                            <td>{{ $payment->booking->guest->full_name }}</td>
+                            <td>{{ $payment->booking?->guest?->full_name ?? '-' }}</td>
                             <td>
                                 <span class="badge bg-info">{{ str_replace('_', ' ', ucfirst(str_replace('_', ' ', $payment->payment_method))) }}</span>
                             </td>

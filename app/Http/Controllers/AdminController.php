@@ -8,61 +8,98 @@ use App\Models\Room;
 use App\Models\Guest;
 use App\Models\Payment;
 use App\Models\RestaurantOrder;
+use App\Models\RestaurantOrderDetail;
+use App\Models\Review;
+use App\Models\ActivityLog;
 
 class AdminController extends Controller
 {
     public function dashboard()
     {
+        $today = now()->startOfDay();
+        $totalRooms = Room::count();
+        $occupiedRooms = Room::where('status', 'occupied')->count();
+        $availableRooms = Room::where('status', 'available')->count();
+        $cleaningRooms = Room::where('status', 'cleaning')->count();
+        $maintenanceRooms = Room::where('status', 'maintenance')->count();
+
         $stats = [
+            'total_rooms' => $totalRooms,
+            'occupied_rooms' => $occupiedRooms,
+            'available_rooms' => $availableRooms,
+            'cleaning_rooms' => $cleaningRooms,
+            'maintenance_rooms' => $maintenanceRooms,
             'total_bookings' => Booking::count(),
-            'total_rooms' => Room::count(),
-            'available_rooms' => Room::where('status', 'available')->count(),
             'total_guests' => Guest::count(),
-            'total_revenue' => Payment::where('payment_status', 'paid')->sum('amount'),
             'pending_bookings' => Booking::where('status', 'pending')->count(),
             'restaurant_orders' => RestaurantOrder::where('status', 'pending')->count(),
+            'today_bookings' => Booking::whereDate('created_at', $today)->count(),
+            'today_restaurant_orders' => RestaurantOrder::whereDate('created_at', $today)->count(),
+            'today_revenue' => Payment::where('payment_status', 'paid')
+                ->whereDate('paid_at', $today)
+                ->sum('amount'),
         ];
 
-        $recent_bookings = Booking::latest()->take(5)->get();
-        $recent_payments = Payment::latest()->take(5)->get();
+        $recent_bookings = Booking::with('guest', 'room.roomType')
+            ->latest()
+            ->take(5)
+            ->get();
 
-        // Top Level Management Reports
+        $recent_payments = Payment::with('booking.guest')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $recent_restaurant_orders = RestaurantOrder::with('details.menu', 'guest')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $recent_reviews = Review::with('user')
+            ->latest()
+            ->take(4)
+            ->get();
+
+        $recent_activities = ActivityLog::latest()->take(6)->get() ?? collect();
+
+        $rooms = Room::with('roomType')->orderBy('room_number')->get();
+
+        // Pre-calculate weekly revenue data (to avoid Payment model usage in Blade)
+        $weeklyRevenue = [];
+        $weeklyDays = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i);
+            $weeklyDays[] = $date->translatedFormat('D');
+            $weeklyRevenue[] = (int) Payment::where('payment_status', 'paid')
+                ->whereDate('paid_at', $date)
+                ->sum('amount');
+        }
+
         $reports = [
             'monthly_revenue' => Payment::where('payment_status', 'paid')
                 ->whereMonth('paid_at', now()->month)
                 ->whereYear('paid_at', now()->year)
                 ->sum('amount'),
-            
             'yearly_revenue' => Payment::where('payment_status', 'paid')
                 ->whereYear('paid_at', now()->year)
                 ->sum('amount'),
-            
-            'occupancy_rate' => $stats['total_rooms'] > 0 ? round(($stats['total_rooms'] - $stats['available_rooms']) / $stats['total_rooms'] * 100, 2) : 0,
-            
+            'occupancy_rate' => $totalRooms > 0 ? round(($totalRooms - $availableRooms) / $totalRooms * 100, 2) : 0,
             'booking_trends' => Booking::selectRaw('MONTH(created_at) as month, COUNT(*) as count, SUM(total_price) as revenue')
                 ->whereYear('created_at', now()->year)
                 ->groupBy('month')
                 ->orderBy('month')
                 ->get(),
-            
-            'room_type_distribution' => \App\Models\RoomType::withCount('rooms')
-                ->get(['name', 'room_type']),
-            
-            'payment_methods' => Payment::where('payment_status', 'paid')
-                ->selectRaw('payment_method, COUNT(*) as count, SUM(amount) as total')
-                ->groupBy('payment_method')
-                ->get(),
-            
-            'guest_demographics' => [
-                'total' => Guest::count(),
-                'verified' => Guest::whereNotNull('email')->count(),
-            ],
-            
-            'restaurant_performance' => \App\Models\RestaurantOrder::selectRaw('MONTH(created_at) as month, COUNT(*) as orders, SUM(total_amount) as revenue')
+            'restaurant_performance' => RestaurantOrder::selectRaw('MONTH(created_at) as month, COUNT(*) as orders, SUM(total_amount) as revenue')
                 ->whereYear('created_at', now()->year)
                 ->groupBy('month')
                 ->orderBy('month')
                 ->get(),
+            'payment_methods' => Payment::where('payment_status', 'paid')
+                ->selectRaw('payment_method, COUNT(*) as count, SUM(amount) as total')
+                ->groupBy('payment_method')
+                ->get(),
+            'weekly_revenue' => $weeklyRevenue,
+            'weekly_days' => $weeklyDays,
         ];
 
         // 14-day Booking Timeline Data
@@ -86,10 +123,44 @@ class AdminController extends Controller
         return view('admin.dashboard', compact(
             'stats', 
             'recent_bookings', 
-            'recent_payments', 
+            'recent_payments',
+            'recent_restaurant_orders',
+            'recent_reviews',
+            'recent_activities',
+            'rooms',
             'reports',
             'timeline_dates',
             'room_types_timeline'
         ));
+    }
+
+    public function reviewsIndex()
+    {
+        $reviews = Review::with('user')->latest()->paginate(20);
+        return view('admin.reviews.index', compact('reviews'));
+    }
+
+    public function approveReview(Review $review)
+    {
+        $review->update(['is_approved' => true, 'status' => 'approved']);
+        return redirect()->back()->with('success', 'Review berhasil disetujui.');
+    }
+
+    public function destroyReview(Review $review)
+    {
+        $review->delete();
+        return redirect()->back()->with('success', 'Review berhasil dihapus.');
+    }
+
+    public function approvePayment(Payment $payment)
+    {
+        $payment->update(['payment_status' => 'paid', 'paid_at' => now()]);
+        return redirect()->back()->with('success', 'Pembayaran berhasil dikonfirmasi.');
+    }
+
+    public function rejectPayment(Payment $payment)
+    {
+        $payment->update(['payment_status' => 'failed']);
+        return redirect()->back()->with('success', 'Pembayaran ditolak.');
     }
 }
