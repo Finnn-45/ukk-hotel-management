@@ -34,22 +34,28 @@ class PaymentController extends Controller
 
         $payment = Payment::where('booking_id', $booking->id)->firstOrFail();
 
+        $booking->load('guest', 'room.roomType');
+
+        $checkIn = \Carbon\Carbon::parse($booking->check_in);
+        $checkOut = \Carbon\Carbon::parse($booking->check_out);
+        $nights = max($checkIn->diffInDays($checkOut), 1);
+
         $params = [
             'transaction_details' => [
-                'order_id' => $booking->booking_code,
+                'order_id' => 'BOOKING-' . $booking->id,
                 'gross_amount' => (int) $booking->total_price,
             ],
             'customer_details' => [
-                'first_name' => $booking->guest->name,
+                'first_name' => $booking->guest->full_name,
                 'email' => $booking->guest->email,
                 'phone' => $booking->guest->phone,
             ],
             'item_details' => [
                 [
                     'id' => $booking->room->id,
-                    'price' => (int) $booking->room->price,
-                    'quantity' => $booking->duration_nights,
-                    'name' => $booking->room->roomType->name . ' - ' . $booking->room->room_number,
+                    'price' => (int) $booking->room->roomType->price,
+                    'quantity' => $nights,
+                    'name' => $booking->room->roomType->name . ' - Room ' . $booking->room->room_number,
                 ]
             ],
         ];
@@ -73,8 +79,13 @@ class PaymentController extends Controller
         $orderId = $notif->order_id;
         $fraud = $notif->fraud_status;
 
-        $booking = Booking::where('booking_code', $orderId)->first();
+        $bookingId = preg_replace('/[^0-9]/', '', $orderId);
+        $booking = Booking::find($bookingId);
         
+        if (!$booking) {
+            return response()->json(['status' => 'error', 'message' => 'Booking not found']);
+        }
+
         if (!$booking) {
             return response()->json(['status' => 'error', 'message' => 'Booking not found']);
         }
@@ -117,12 +128,63 @@ class PaymentController extends Controller
             'payment_method' => 'required|in:cash,transfer,credit_card,e_wallet',
         ]);
 
+        $isNowPaid = $request->payment_status === 'paid' && $payment->payment_status !== 'paid';
+        
         $payment->update([
             'payment_status' => $request->payment_status,
             'payment_method' => $request->payment_method,
-            'paid_at' => $request->payment_status === 'paid' ? now() : $payment->paid_at,
+            'paid_at' => $isNowPaid ? now() : $payment->paid_at,
         ]);
 
+        if ($isNowPaid && !$payment->verification_code) {
+            $payment->update(['verification_code' => $this->generateVerificationCode()]);
+        }
+
         return redirect()->route('admin.payments.index')->with('success', 'Payment berhasil diupdate');
+    }
+
+    public function showVerificationForm()
+    {
+        return view('admin.verify-booking');
+    }
+
+    public function verifyCode(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|string|size:8',
+        ]);
+
+        $code = strtoupper($request->code);
+
+        $payment = Payment::where('verification_code', $code)
+            ->where('payment_status', 'paid')
+            ->with('booking.guest', 'booking.room')
+            ->first();
+
+        if (!$payment) {
+            return back()->with('error', 'Kode verifikasi tidak ditemukan atau pembayaran belum dikonfirmasi.');
+        }
+
+        $booking = $payment->booking;
+
+        if ($booking->status === 'checked_in') {
+            return back()->with('info', 'Booking ini sudah check-in sebelumnya.');
+        }
+
+        $booking->update(['status' => 'checked_in']);
+        $booking->room->update(['status' => 'occupied']);
+
+        ActivityLog::log('check_in_verification', 'Auto check-in via kode verifikasi #' . $booking->id, $booking);
+
+        return view('admin.verify-booking-success', compact('booking', 'payment'));
+    }
+
+    private function generateVerificationCode()
+    {
+        do {
+            $code = strtoupper(substr(bin2hex(random_bytes(4)), 0, 8));
+        } while (Payment::where('verification_code', $code)->exists());
+
+        return $code;
     }
 }

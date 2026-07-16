@@ -10,7 +10,7 @@ class RestaurantOrder extends Model
 {
     protected $fillable = [
         'guest_id', 'order_number', 'table_number', 'order_date', 'total_amount', 'status', 'notes',
-        'order_type', 'delivery_address', 'delivery_notes',
+        'order_type', 'delivery_address', 'delivery_notes', 'verification_code',
     ];
 
     protected $casts = [

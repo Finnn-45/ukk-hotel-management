@@ -121,6 +121,10 @@ Route::prefix('admin')->middleware('admin.auth')->group(function () {
     // Promos CRUD management
     Route::resource('/promos', \App\Http\Controllers\Admin\PromoController::class, ['as' => 'admin']);
 
+    // Booking Verification for Receptionists
+    Route::get('/verify-booking', [PaymentController::class, 'showVerificationForm'])->name('admin.verify.booking.form');
+    Route::post('/verify-booking', [PaymentController::class, 'verifyCode'])->name('admin.verify.booking');
+
 });
 
 // ==============================

@@ -547,7 +547,7 @@
                         <a href="{{ route('admin.restaurant.menu.create') }}" class="quick-action-btn"><i class="bi bi-plus-circle text-warning"></i> Tambah Menu</a>
                     </div>
                     <div class="col-6">
-                        <a href="{{ route('admin.dashboard') }}" class="quick-action-btn"><i class="bi bi-printer text-info"></i> Cetak Laporan</a>
+                        <a href="{{ route('admin.verify.booking.form') }}" class="quick-action-btn"><i class="bi bi-qr-code-scan text-danger"></i> Verifikasi Check-in</a>
                     </div>
                 </div>
             </div>

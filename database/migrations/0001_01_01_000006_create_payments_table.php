@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('payment_status');
             $table->decimal('amount', 12, 2);
             $table->string('midtrans_order_id')->nullable();
+            $table->string('verification_code')->nullable()->unique();
             $table->timestamp('paid_at')->nullable();
             $table->timestamps();
         });

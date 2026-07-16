@@ -384,6 +384,20 @@
                 </div>
             </div>
             
+            {{-- Verification Code --}}
+            @if($booking->payment && $booking->payment->verification_code)
+            <div class="se-info-box" style="background:#ECFDF5;border-left:4px solid #10B981;">
+                <i class="bi bi-shield-check" style="color:#10B981;"></i>
+                <div>
+                    <strong style="color:#065F46;">Kode Verifikasi Check-in</strong>
+                    <p style="margin:4px 0 0 0;color:#047857;font-size:0.85rem;">Tunjukkan kode ini ke resepsionis saat check-in:</p>
+                    <div style="font-size:1.75rem;font-weight:900;letter-spacing:0.3rem;color:#065F46;margin-top:6px;">
+                        {{ $booking->payment->verification_code }}
+                    </div>
+                </div>
+            </div>
+            @endif
+            
             {{-- Info Box --}}
             <div class="se-info-box">
                 <i class="bi bi-info-circle-fill"></i>

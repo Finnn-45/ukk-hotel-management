@@ -58,7 +58,7 @@ class MidtransController extends Controller
             Config::$isSanitized = config('services.midtrans.is_sanitized');
             Config::$is3ds = config('services.midtrans.is_3ds');
 
-            $orderId = 'BOOKING-' . $booking->id;
+            $orderId = 'BOOKING-' . $booking->id . '-' . time();
 
             // Create or update payment record
             $payment = Payment::updateOrCreate(
@@ -93,9 +93,15 @@ class MidtransController extends Controller
 
             $snapToken = Snap::getSnapToken($params);
             
+            // Generate verification code after successful payment initiation
+            if (!$payment->verification_code && $payment->payment_status === 'paid') {
+                $payment->update(['verification_code' => $this->generateVerificationCode()]);
+            }
+            
             return response()->json([
                 'token' => $snapToken,
                 'payment_id' => $payment->id,
+                'verification_code' => $payment->verification_code,
             ]);
         } catch (\Exception $e) {
             Log::error('Midtrans Error: ' . $e->getMessage() . ' | Booking: ' . $booking->id);
@@ -104,6 +110,15 @@ class MidtransController extends Controller
                 'message' => 'Gagal memuat pembayaran: ' . $e->getMessage(),
             ], 500);
         }
+    }
+    
+    private function generateVerificationCode()
+    {
+        do {
+            $code = strtoupper(substr(bin2hex(random_bytes(4)), 0, 8));
+        } while (\App\Models\Payment::where('verification_code', $code)->exists());
+        
+        return $code;
     }
 
     public function paymentSuccess(Request $request)
@@ -120,11 +135,16 @@ class MidtransController extends Controller
                     'paid_at' => now(),
                 ]);
 
+                // Generate verification code if not exists
+                if (!$payment->verification_code) {
+                    $payment->update(['verification_code' => $this->generateVerificationCode()]);
+                }
+
                 $booking = $payment->booking;
                 $booking->update(['status' => 'confirmed']);
 
                 return redirect()->route('customer.booking.success', $booking)
-                    ->with('success', 'Pembayaran berhasil! Booking Anda telah dikonfirmasi.');
+                    ->with('success', 'Pembayaran berhasil! Booking Anda telah dikonfirmasi. Simpan kode verifikasi untuk check-in.');
             }
         }
 
@@ -185,7 +205,7 @@ class MidtransController extends Controller
             Config::$isSanitized = config('services.midtrans.is_sanitized');
             Config::$is3ds = config('services.midtrans.is_3ds');
 
-            $orderId = 'RESTAURANT-' . $order->id;
+            $orderId = 'RESTAURANT-' . $order->id . '-' . time();
 
             $payment = Payment::updateOrCreate(
                 ['restaurant_order_id' => $order->id],

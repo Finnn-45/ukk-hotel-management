@@ -6,6 +6,7 @@ use App\Models\Room;
 use App\Models\Guest;
 use App\Models\Booking;
 use App\Models\Payment;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\BookingConfirmationMail;
