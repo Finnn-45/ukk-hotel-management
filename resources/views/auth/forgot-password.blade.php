@@ -2,132 +2,158 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Lupa Password - {{ config('app.name', 'StayEase Hotel') }}</title>
+    <meta name="description" content="Reset password akun StayEase Hotel Anda melalui email.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         :root {
             --primary: #0284C7;
             --primary-dark: #0369A1;
+            --primary-light: #E0F2FE;
             --accent: #FBBF24;
             --text: #0F172A;
             --text-muted: #64748B;
             --border: #E2E8F0;
-            --font: 'Poppins', sans-serif;
-            --font-alt: 'Inter', sans-serif;
+            --font: 'Inter', sans-serif;
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.08);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: var(--font);
             min-height: 100vh;
+            background: #F0F5FF;
             display: flex;
-            align-items: stretch;
-            background: #0F172A;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
-        .auth-wrapper { display: flex; width: 100%; min-height: 100vh; }
-
+        .auth-container {
+            display: flex;
+            width: 100%;
+            max-width: 900px;
+            min-height: 580px;
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            position: relative;
+        }
         .auth-hero {
             flex: 1;
-            background: linear-gradient(145deg, #1e3a8a 0%, #0369A1 40%, #0284C7 70%, #3b82f6 100%);
+            background: linear-gradient(145deg, #1e3a8a 0%, #0369A1 50%, #0284C7 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: flex-start;
-            padding: 60px 56px;
+            padding: 48px 44px;
             position: relative;
             overflow: hidden;
         }
         .auth-hero::before {
             content: '';
             position: absolute;
-            width: 400px; height: 400px;
+            width: 350px; height: 350px;
             border-radius: 50%;
             background: rgba(255,255,255,0.04);
-            top: -100px; right: -100px;
+            top: -80px; right: -80px;
         }
         .auth-hero::after {
             content: '';
             position: absolute;
-            width: 300px; height: 300px;
+            width: 250px; height: 250px;
             border-radius: 50%;
             background: rgba(255,255,255,0.04);
-            bottom: -80px; left: -60px;
+            bottom: -60px; left: -60px;
         }
-        .hero-icon {
-            width: 64px; height: 64px;
-            background: rgba(255,255,255,0.12);
-            border-radius: 20px;
-            display: flex;
+        .hero-badge {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            color: var(--accent);
+            gap: 8px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            border-radius: 100px;
+            padding: 6px 16px;
+            font-size: 0.75rem;
+            font-weight: 500;
             margin-bottom: 24px;
+            backdrop-filter: blur(8px);
+            width: fit-content;
         }
         .auth-hero h1 {
             color: #fff;
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 800;
             line-height: 1.2;
-            margin-bottom: 16px;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
         }
         .auth-hero h1 span { color: var(--accent); }
-        .auth-hero p {
+        .auth-hero > p {
             color: rgba(255,255,255,0.75);
-            font-family: var(--font-alt);
-            font-size: 1rem;
-            line-height: 1.7;
-            max-width: 360px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 32px;
+            max-width: 320px;
         }
-        .auth-hero-logo {
-            position: absolute;
-            bottom: 32px; left: 56px;
-            color: rgba(255,255,255,0.4);
-            font-size: 0.78rem;
-            font-family: var(--font-alt);
+        .hero-features {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .hero-feature {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+            color: rgba(255,255,255,0.85);
+            font-size: 0.85rem;
         }
-
-        .auth-form-panel {
-            width: 480px;
+        .hero-feature-icon {
+            width: 32px; height: 32px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: #fff;
             flex-shrink: 0;
-            background: #fff;
+        }
+        .auth-form {
+            width: 420px;
+            flex-shrink: 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 56px 48px;
+            padding: 40px 40px;
             position: relative;
         }
-        .back-link {
+        .back-home {
             position: absolute;
-            top: 24px; left: 24px;
+            top: 20px; left: 24px;
             display: flex;
             align-items: center;
             gap: 6px;
             color: var(--text-muted);
             text-decoration: none;
-            font-size: 0.85rem;
-            font-family: var(--font-alt);
+            font-size: 0.8rem;
             font-weight: 500;
             transition: color 0.2s;
         }
-        .back-link:hover { color: var(--primary); }
-
-        .form-header { margin-bottom: 32px; }
-        .form-header .logo {
+        .back-home:hover { color: var(--primary); }
+        .form-header { margin-bottom: 24px; }
+        .form-header .logo-row {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 28px;
+            margin-bottom: 20px;
         }
         .logo-icon {
-            width: 38px; height: 38px;
+            width: 36px; height: 36px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             border-radius: 10px;
             display: flex;
@@ -135,87 +161,77 @@
             justify-content: center;
             color: #fff;
             font-weight: 900;
-            font-size: 1rem;
-            box-shadow: 0 4px 12px rgba(2,132,199,0.35);
+            font-size: 0.95rem;
+            box-shadow: 0 4px 12px rgba(2,132,199,0.3);
         }
-        .logo-text { font-size: 1.1rem; font-weight: 800; color: var(--text); }
+        .logo-text { font-size: 1rem; font-weight: 800; color: var(--text); }
         .logo-text span { color: var(--primary); }
-
-        .icon-box {
-            width: 56px; height: 56px;
-            background: #EFF6FF;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: var(--primary);
-            margin-bottom: 16px;
-        }
         .form-header h2 {
-            font-size: 1.5rem;
+            font-size: 1.35rem;
             font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+        .form-header p { color: var(--text-muted); font-size: 0.85rem; }
+        .alert-custom {
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 0.84rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+        .alert-success { background: #DCFCE7; color: #16A34A; border: 1px solid #BBF7D0; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
             color: var(--text);
             margin-bottom: 6px;
         }
-        .form-header p { color: var(--text-muted); font-size: 0.88rem; font-family: var(--font-alt); }
-
-        .form-group { margin-bottom: 20px; }
-        .form-group label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 8px;
-        }
-        .input-wrapper { position: relative; }
+        .input-wrap { position: relative; }
         .input-icon {
             position: absolute;
-            left: 14px; top: 50%;
+            left: 13px; top: 50%;
             transform: translateY(-50%);
             color: var(--text-muted);
-            font-size: 1rem;
+            font-size: 0.95rem;
             pointer-events: none;
+            z-index: 2;
         }
-        .form-input {
+        .form-control-custom {
             width: 100%;
-            padding: 12px 42px;
+            padding: 11px 16px 11px 42px;
             border: 1.5px solid var(--border);
             border-radius: 12px;
-            font-size: 0.9rem;
-            font-family: var(--font-alt);
+            font-size: 0.87rem;
+            font-family: var(--font);
             color: var(--text);
             background: #F8FAFC;
             transition: all 0.2s;
             outline: none;
         }
-        .form-input:focus {
+        .form-control-custom:focus {
             border-color: var(--primary);
             background: #fff;
             box-shadow: 0 0 0 4px rgba(2,132,199,0.08);
         }
-        .error-text { color: #DC2626; font-size: 0.8rem; margin-top: 6px; font-family: var(--font-alt); }
-
-        .alert-custom {
-            padding: 12px 16px;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            font-family: var(--font-alt);
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 20px;
+        .form-control-custom.is-invalid {
+            border-color: #DC2626;
+            background: #FEF2F2;
         }
-        .alert-success-custom { background: #DCFCE7; color: #16A34A; border: 1px solid #BBF7D0; }
-
-        .btn-submit {
+        .error-text { color: #DC2626; font-size: 0.78rem; margin-top: 6px; }
+        .btn-custom {
             width: 100%;
-            padding: 14px;
+            padding: 13px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: #fff;
             border: none;
             border-radius: 12px;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             font-weight: 700;
             font-family: var(--font);
             cursor: pointer;
@@ -225,94 +241,136 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            margin-bottom: 16px;
         }
-        .btn-submit:hover {
+        .btn-custom:hover {
             transform: translateY(-1px);
             box-shadow: 0 6px 20px rgba(2,132,199,0.4);
         }
-
+        .btn-custom:active { transform: translateY(0); }
+        .btn-custom:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
         .form-footer {
             text-align: center;
-            font-size: 0.85rem;
-            font-family: var(--font-alt);
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            font-family: var(--font);
         }
         .form-footer a {
             color: var(--primary);
             font-weight: 600;
             text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
         }
         .form-footer a:hover { text-decoration: underline; }
-
-        @media (max-width: 991px) {
-            .auth-hero { display: none; }
-            .auth-form-panel { width: 100%; padding: 48px 32px; }
+        @media (max-width: 768px) {
+            body { padding: 0; background: #fff; }
+            .auth-container {
+                border-radius: 0;
+                min-height: auto;
+                flex-direction: column;
+                box-shadow: none;
+            }
+            .auth-hero {
+                padding: 32px 24px 28px;
+                border-radius: 0 0 24px 24px;
+                flex: none;
+            }
+            .auth-hero h1 { font-size: 1.5rem; }
+            .auth-hero > p { font-size: 0.82rem; margin-bottom: 20px; }
+            .hero-features { gap: 10px; }
+            .hero-feature { font-size: 0.8rem; }
+            .hero-feature-icon { width: 28px; height: 28px; font-size: 0.8rem; }
+            .auth-form { width: 100%; padding: 28px 20px 24px; }
+            .back-home { top: 16px; left: 16px; }
+            .form-header .logo-row { margin-bottom: 16px; }
+            .form-header h2 { font-size: 1.2rem; }
+        }
+        @media (max-width: 480px) {
+            .auth-hero { padding: 24px 20px 20px; }
+            .auth-form { padding: 20px 16px 20px; }
+            .auth-hero h1 { font-size: 1.3rem; }
+            .hero-badge { font-size: 0.7rem; padding: 4px 12px; }
         }
     </style>
 </head>
 <body>
-<div class="auth-wrapper">
-    <div class="auth-hero">
-        <div class="hero-icon"><i class="bi bi-envelope-open-heart-fill"></i></div>
-        <h1>Reset<br><span>Password</span> Anda</h1>
-        <p>Tenang, kami akan kirimkan link untuk membuat password baru ke email yang Anda daftarkan.</p>
-        <div class="auth-hero-logo">
-            <i class="bi bi-building"></i>
-            © {{ date('Y') }} StayEase Hotel Management
-        </div>
-    </div>
-
-    <div class="auth-form-panel">
-        <a href="{{ route('customer.login') }}" class="back-link">
-            <i class="bi bi-arrow-left"></i> Kembali ke Login
-        </a>
-
-        <div class="form-header">
-            <div class="logo">
-                <div class="logo-icon">S</div>
-                <div class="logo-text">Stay<span>Ease</span></div>
+    <div class="auth-container">
+        <div class="auth-hero">
+            <div class="hero-badge">
+                <i class="bi bi-star-fill" style="font-size:0.7rem;color:#FBBF24;"></i>
+                Hotel & Restaurant Booking
             </div>
-            <div class="icon-box"><i class="bi bi-lock-open-fill"></i></div>
-            <h2>Lupa Password?</h2>
-            <p>Masukkan email akun Anda. Link reset password akan dikirimkan ke email tersebut.</p>
-        </div>
-
-        @if(session('status'))
-            <div class="alert-custom alert-success-custom">
-                <i class="bi bi-check-circle-fill" style="flex-shrink:0;margin-top:2px;"></i>
-                <span>{{ session('status') }}</span>
-            </div>
-        @endif
-
-        <form method="POST" action="{{ route('password.email') }}">
-            @csrf
-            <div class="form-group">
-                <label for="email">Alamat Email</label>
-                <div class="input-wrapper">
-                    <i class="bi bi-envelope input-icon"></i>
-                    <input type="email" id="email" name="email" class="form-input"
-                           placeholder="nama@email.com" value="{{ old('email') }}" required autofocus>
+            <h1>Reset<br><span>Password</span> Anda</h1>
+            <p>Tenang, kami akan kirimkan link untuk membuat password baru ke email yang Anda daftarkan.</p>
+            <div class="hero-features">
+                <div class="hero-feature">
+                    <div class="hero-feature-icon"><i class="bi bi-envelope-open-heart-fill"></i></div>
+                    Link dikirim ke email Anda
                 </div>
-                @error('email')
-                    <div class="error-text">{{ $message }}</div>
-                @enderror
+                <div class="hero-feature">
+                    <div class="hero-feature-icon"><i class="bi bi-shield-fill-check"></i></div>
+                    Aman & terenkripsi
+                </div>
+                <div class="hero-feature">
+                    <div class="hero-feature-icon"><i class="bi bi-clock-fill"></i></div>
+                    Tautan berlaku 30 menit
+                </div>
             </div>
-
-            <button type="submit" class="btn-submit">
-                <i class="bi bi-send-fill"></i>
-                Kirim Link Reset Password
-            </button>
-        </form>
-
-        <div class="form-footer">
-            <a href="{{ route('customer.login') }}">
-                <i class="bi bi-arrow-left"></i> Kembali ke halaman login
+        </div>
+        <div class="auth-form">
+            <a href="{{ route('customer.login') }}" class="back-home">
+                <i class="bi bi-arrow-left"></i> Kembali ke Login
             </a>
+            <div class="form-header">
+                <div class="logo-row">
+                    <div class="logo-icon">S</div>
+                    <div class="logo-text">Stay<span>Ease</span></div>
+                </div>
+                <h2>Lupa Password?</h2>
+                <p>Masukkan email akun Anda. Link reset password akan dikirimkan ke email tersebut.</p>
+            </div>
+            @if(session('status'))
+                <div class="alert-custom alert-success">
+                    <i class="bi bi-check-circle-fill" style="flex-shrink:0;margin-top:1px;"></i>
+                    <span>{{ session('status') }}</span>
+                </div>
+            @endif
+            <form method="POST" action="{{ route('password.email') }}" id="forgotForm">
+                @csrf
+                <div class="form-group">
+                    <label for="email">Alamat Email</label>
+                    <div class="input-wrap">
+                        <i class="bi bi-envelope input-icon"></i>
+                        <input type="email" id="email" name="email" class="form-control-custom @error('email') is-invalid @enderror"
+                               placeholder="nama@email.com" value="{{ old('email') }}" required autofocus>
+                    </div>
+                    @error('email')
+                        <div class="error-text">{{ $message }}</div>
+                    @enderror
+                </div>
+                <button type="submit" class="btn-custom" id="submitBtn">
+                    <span class="spinner-border spinner-border-sm d-none" id="submitSpinner" role="status"></span>
+                    <span id="submitText"><i class="bi bi-send-fill"></i> Kirim Link Reset Password</span>
+                </button>
+            </form>
+            <div class="form-footer">
+                <a href="{{ route('customer.login') }}">
+                    <i class="bi bi-arrow-left"></i> Kembali ke halaman login
+                </a>
+            </div>
         </div>
     </div>
-</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    document.getElementById('forgotForm')?.addEventListener('submit', function(e) {
+        const btn = document.getElementById('submitBtn');
+        const spinner = document.getElementById('submitSpinner');
+        const text = document.getElementById('submitText');
+        btn.disabled = true;
+        spinner.classList.remove('d-none');
+        text.textContent = '  Mengirim...';
+    });
+    </script>
 </body>
 </html>

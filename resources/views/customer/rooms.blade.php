@@ -392,6 +392,9 @@
                 </div>
 
                 <form method="GET" action="{{ route('rooms.index') }}">
+                    @if(request('sort'))
+                        <input type="hidden" name="sort" value="{{ request('sort') }}">
+                    @endif
                     {{-- Room Type --}}
                     <div class="se-filter-section">
                         <div class="se-filter-title">Tipe Kamar</div>
@@ -458,10 +461,10 @@
         <div class="col-lg-9">
             {{-- Mobile filter button --}}
             <div class="d-flex d-lg-none align-items-center gap-2 mb-3">
-                <button class="se-mobile-filter-btn" onclick="document.querySelector('.se-filter-card')?.classList.toggle('d-none')">
+                <button class="se-mobile-filter-btn" onclick="document.getElementById('mobileFilterCard')?.classList.toggle('d-none')">
                     <i class="bi bi-sliders"></i> Filter
                 </button>
-                <div class="se-filter-card d-none" style="position:fixed;top:60px;left:0;right:0;bottom:0;z-index:1000;overflow-y:auto;border-radius:0;">
+                <div id="mobileFilterCard" class="se-filter-card d-none" style="position:fixed;top:60px;left:0;right:0;bottom:0;z-index:1000;overflow-y:auto;border-radius:0;background:#fff;width:100%;">
                     @include('customer._mobile_filters')
                 </div>
             </div>
@@ -477,9 +480,9 @@
                 <div class="d-flex align-items-center gap-2">
                     <span class="text-muted" style="font-size:0.8rem;font-family:var(--font-alt);">Urutkan:</span>
                     <select class="se-sort-select form-select form-select-sm" style="width:auto;">
-                        <option>Harga Terendah</option>
-                        <option>Harga Tertinggi</option>
-                        <option>Rating Terbaik</option>
+                        <option value="price_asc" {{ request('sort') === 'price_asc' ? 'selected' : '' }}>Harga Terendah</option>
+                        <option value="price_desc" {{ request('sort') === 'price_desc' ? 'selected' : '' }}>Harga Tertinggi</option>
+                        <option value="rating_desc" {{ request('sort') === 'rating_desc' ? 'selected' : '' }}>Rating Terbaik</option>
                     </select>
                 </div>
             </div>
@@ -611,4 +614,16 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.querySelector('.se-sort-select')?.addEventListener('change', function(e) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('sort', e.target.value);
+        // Reset page when sorting changes
+        url.searchParams.delete('page');
+        window.location.href = url.toString();
+    });
+</script>
+@endpush
 @endsection

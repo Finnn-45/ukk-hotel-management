@@ -15,7 +15,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
+        <div class="flex flex-col min-h-screen bg-gray-100">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
@@ -31,6 +31,11 @@
             <main>
                 {{ $slot }}
             </main>
+            <footer class="bg-white border-t border-gray-200 py-4">
+                <div class="max-w-7xl mx-auto text-center text-sm text-gray-500">
+                    © {{ date('Y') }} {{ config('app.name', 'Laravel') }}. All rights reserved.
+                </div>
+            </footer>
         </div>
     </body>
 </html>

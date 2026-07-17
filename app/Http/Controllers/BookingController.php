@@ -17,13 +17,34 @@ class BookingController extends Controller
     {
         $query = Booking::with(['guest', 'room.roomType']);
         
-        if ($request->has('search')) {
-            $query->whereHas('guest', function ($q) use ($request) {
-                $q->where('full_name', 'like', "%{$request->search}%");
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('guest', function ($gq) use ($search) {
+                    $gq->where('full_name', 'like', "%{$search}%")
+                       ->orWhere('email', 'like', "%{$search}%")
+                       ->orWhere('phone', 'like', "%{$search}%");
+                })
+                ->orWhereHas('room', function ($rq) use ($search) {
+                    $rq->where('room_number', 'like', "%{$search}%");
+                })
+                ->orWhere('id', 'like', "%{$search}%");
             });
         }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('check_in')) {
+            $query->whereDate('check_in', $request->check_in);
+        }
+
+        if ($request->filled('check_out')) {
+            $query->whereDate('check_out', $request->check_out);
+        }
         
-        $bookings = $query->latest()->paginate(10);
+        $bookings = $query->latest()->paginate(10)->withQueryString();
         return view('admin.bookings.index', compact('bookings'));
     }
 

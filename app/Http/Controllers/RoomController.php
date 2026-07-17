@@ -8,9 +8,14 @@ use Illuminate\Http\Request;
 
 class RoomController extends Controller
 {
-    public function roomTypeIndex()
+    public function roomTypeIndex(Request $request)
     {
-        $roomTypes = RoomType::withCount('rooms')->get();
+        $query = RoomType::withCount('rooms');
+        if ($request->filled('search')) {
+            $query->where('name', 'like', "%{$request->search}%")
+                  ->orWhere('description', 'like', "%{$request->search}%");
+        }
+        $roomTypes = $query->get();
         return view('admin.room-types.index', compact('roomTypes'));
     }
 
@@ -58,12 +63,28 @@ class RoomController extends Controller
     {
         $query = Room::with('roomType');
         
-        if ($request->has('status')) {
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('room_number', 'like', "%{$search}%")
+                  ->orWhere('floor', 'like', "%{$search}%")
+                  ->orWhereHas('roomType', function ($rt) use ($search) {
+                      $rt->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
+
+        if ($request->filled('room_type_id')) {
+            $query->where('room_type_id', $request->room_type_id);
+        }
         
-        $rooms = $query->latest()->paginate(10);
-        return view('admin.rooms.index', compact('rooms'));
+        $rooms = $query->latest()->paginate(10)->withQueryString();
+        $roomTypes = RoomType::all();
+        return view('admin.rooms.index', compact('rooms', 'roomTypes'));
     }
 
     public function create()

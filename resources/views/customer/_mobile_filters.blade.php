@@ -1,4 +1,13 @@
+<div class="d-flex justify-content-between align-items-center p-3 border-bottom bg-light">
+    <h6 class="mb-0 fw-bold"><i class="bi bi-sliders me-2"></i>Filter Pencarian</h6>
+    <button type="button" class="btn-close" onclick="document.getElementById('mobileFilterCard')?.classList.add('d-none')" aria-label="Close"></button>
+</div>
 <form method="GET" action="{{ route('rooms.index') }}" class="p-3">
+    {{-- Preserve sort param --}}
+    @if(request('sort'))
+        <input type="hidden" name="sort" value="{{ request('sort') }}">
+    @endif
+
     {{-- Room Type --}}
     <div class="mb-3">
         <label class="form-label fw-semibold small">Tipe Kamar</label>

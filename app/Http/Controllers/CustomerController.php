@@ -54,10 +54,10 @@ class CustomerController extends Controller
 
     public function rooms(Request $request)
     {
-        $query = Room::with('roomType')->where('status', 'available');
+        $query = Room::with('roomType')->where('rooms.status', 'available');
 
         if ($request->filled('room_type')) {
-            $query->where('room_type_id', $request->room_type);
+            $query->where('rooms.room_type_id', $request->room_type);
         }
         if ($request->filled('min_price')) {
             $query->whereHas('roomType', fn($q) => $q->where('price', '>=', $request->min_price));
@@ -66,10 +66,30 @@ class CustomerController extends Controller
             $query->whereHas('roomType', fn($q) => $q->where('price', '<=', $request->max_price));
         }
         if ($request->filled('floor')) {
-            $query->where('floor', $request->floor);
+            $query->where('rooms.floor', $request->floor);
         }
 
-        $rooms = $query->paginate(12);
+        $sortBy = $request->get('sort', 'price_asc');
+        if ($sortBy === 'price_asc') {
+            $query->join('room_types', 'rooms.room_type_id', '=', 'room_types.id')
+                  ->orderBy('room_types.price', 'asc')
+                  ->select('rooms.*');
+        } elseif ($sortBy === 'price_desc') {
+            $query->join('room_types', 'rooms.room_type_id', '=', 'room_types.id')
+                  ->orderBy('room_types.price', 'desc')
+                  ->select('rooms.*');
+        } elseif ($sortBy === 'rating_desc') {
+            $query->select('rooms.*')
+                  ->selectSub(function ($q) {
+                      $q->selectRaw('COALESCE(AVG(rating), 0)')
+                        ->from('reviews')
+                        ->whereColumn('reviews.room_id', 'rooms.id')
+                        ->where('reviews.is_approved', true);
+                  }, 'avg_rating')
+                  ->orderBy('avg_rating', 'desc');
+        }
+
+        $rooms = $query->paginate(12)->withQueryString();
         $roomTypes = RoomType::all();
 
         return view('customer.rooms', compact('rooms', 'roomTypes'));
