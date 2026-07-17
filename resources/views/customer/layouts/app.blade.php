@@ -20,6 +20,8 @@
     <meta name="theme-color" content="#2563EB">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.svg">
+    <link rel="apple-touch-startup-image" href="/icons/icon-512x512.svg">
 
     <style>
         /* ════════════════════════════════════════
@@ -644,9 +646,7 @@
                 <a href="{{ route('rooms.index') }}" class="se-nav-link {{ request()->routeIs('rooms.*') ? 'active' : '' }}">Rooms</a>
                 <a href="{{ route('customer.restaurant.menu') }}" class="se-nav-link {{ request()->routeIs('customer.restaurant.*') ? 'active' : '' }}">Restaurant</a>
                 @if(Route::has('admin.promos.index'))
-                <a href="#promotions" class="se-nav-link">Promotions</a>
                 @endif
-                <a href="#about" class="se-nav-link">About</a>
                 <a href="{{ route('customer.contact') }}" class="se-nav-link {{ request()->routeIs('customer.contact') ? 'active' : '' }}">Contact</a>
             </div>
 
@@ -712,12 +712,6 @@
             </a>
             <a href="{{ route('customer.restaurant.menu') }}" class="se-drawer-link {{ request()->routeIs('customer.restaurant.*') ? 'active' : '' }}">
                 <i class="bi bi-cup-hot"></i> Restaurant
-            </a>
-            <a href="#promotions" class="se-drawer-link">
-                <i class="bi bi-tag"></i> Promotions
-            </a>
-            <a href="#about" class="se-drawer-link">
-                <i class="bi bi-info-circle"></i> About
             </a>
             <a href="{{ route('customer.contact') }}" class="se-drawer-link {{ request()->routeIs('customer.contact') ? 'active' : '' }}">
                 <i class="bi bi-chat"></i> Contact
@@ -903,17 +897,89 @@
     {{-- Midtrans Snap JS --}}
     <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.client_key') }}"></script>
 
-    {{-- PWA SW --}}
+    {{-- PWA: Service Worker + Update Prompt --}}
     <script>
+        // ─── Service Worker Registration ───
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js').then(function(reg) {
-                    console.log('StayEase SW registered');
-                }).catch(function(err) {
-                    console.log('StayEase SW failed:', err);
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then((reg) => {
+                    console.log('StayEase: SW registered');
+
+                    // Check for updates
+                    reg.addEventListener('updatefound', () => {
+                        const newSW = reg.installing;
+                        newSW.addEventListener('statechange', () => {
+                            if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+                                showUpdatePrompt(reg);
+                            }
+                        });
+                    });
+                }).catch((err) => {
+                    console.log('StayEase: SW registration failed:', err);
                 });
             });
+
+            // Reload on controller change
+            let refreshing = false;
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (refreshing) return;
+                refreshing = true;
+                window.location.reload();
+            });
         }
+
+        // ─── Update Prompt ───
+        function showUpdatePrompt(reg) {
+            if (document.getElementById('se-pwa-update-toast')) return;
+
+            const toast = document.createElement('div');
+            toast.id = 'se-pwa-update-toast';
+            toast.innerHTML = `
+                <div style="display:flex;align-items:center;gap:12px;">
+                    <i class="bi bi-arrow-clockwise" style="font-size:1.2rem;color:#2563EB;"></i>
+                    <span style="flex:1;font-size:0.85rem;">Versi baru tersedia!</span>
+                    <button id="se-update-btn" style="
+                        background:#2563EB;color:#fff;border:none;border-radius:8px;
+                        padding:8px 16px;font-size:0.8rem;font-weight:600;cursor:pointer;
+                        font-family:'Poppins',sans-serif;
+                    ">Update</button>
+                    <button id="se-update-close" style="
+                        background:transparent;color:#94A3B8;border:none;
+                        font-size:1.2rem;cursor:pointer;padding:0 4px;
+                    ">&times;</button>
+                </div>
+            `;
+            toast.style.cssText = `
+                position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+                z-index: 9998;
+                background: #fff; border: 1px solid #E2E8F0;
+                border-radius: 16px; padding: 16px 20px;
+                box-shadow: 0 8px 32px rgba(15,23,42,0.12);
+                min-width: 320px; max-width: 90vw;
+                font-family: 'Poppins', sans-serif;
+                animation: sePwaFadeIn 0.5s ease;
+            `;
+            document.body.appendChild(toast);
+
+            document.getElementById('se-update-btn').onclick = () => {
+                if (reg.waiting) {
+                    reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+                }
+            };
+            document.getElementById('se-update-close').onclick = () => toast.remove();
+
+            setTimeout(() => { if (toast.parentNode) toast.remove(); }, 20000);
+        }
+
+        // ─── Animations ───
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = `
+            @keyframes sePwaFadeIn {
+                from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+                to { opacity: 1; transform: translateX(-50%) translateY(0); }
+            }
+        `;
+        document.head.appendChild(styleSheet);
     </script>
     @stack('scripts')
 </body>

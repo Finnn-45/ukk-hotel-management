@@ -22,19 +22,8 @@ class CustomerAuthController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
+            'g-recaptcha-response' => 'required|captcha',
         ]);
-
-        // Validasi captcha hanya wajib di production
-        if (app()->environment('production')) {
-            $validator->addRules([
-                'g-recaptcha-response' => 'required|captcha',
-            ]);
-        } else {
-            // Di development/local, captcha tetap dicek jika diisi
-            $validator->addRules([
-                'g-recaptcha-response' => 'sometimes|captcha',
-            ]);
-        }
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
@@ -77,19 +66,8 @@ class CustomerAuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
+            'g-recaptcha-response' => 'required|captcha',
         ]);
-
-        // Validasi captcha hanya wajib di production
-        if (app()->environment('production')) {
-            $validator->addRules([
-                'g-recaptcha-response' => 'required|captcha',
-            ]);
-        } else {
-            // Di development/local, captcha tetap dicek jika diisi
-            $validator->addRules([
-                'g-recaptcha-response' => 'sometimes|captcha',
-            ]);
-        }
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();

@@ -25,15 +25,10 @@ class AdminAuthController extends Controller
             'password' => 'required',
         ]);
 
-        // Validasi captcha hanya wajib di production
-        if (app()->environment('production')) {
+        // Captcha hanya diverifikasi jika diisi (tidak wajib)
+        if ($request->has('g-recaptcha-response') && !empty($request->g-recaptcha-response)) {
             $validator->addRules([
-                'g-recaptcha-response' => 'required|captcha',
-            ]);
-        } else {
-            // Di development/local, captcha tetap dicek jika diisi
-            $validator->addRules([
-                'g-recaptcha-response' => 'sometimes|captcha',
+                'g-recaptcha-response' => 'captcha',
             ]);
         }
 
@@ -47,7 +42,7 @@ class AdminAuthController extends Controller
         ], $request->filled('remember'))) {
 
             $user = Auth::user();
-            
+
             // Check if user is admin or staff
             if (!in_array($user->role, ['admin', 'staff'])) {
                 Auth::logout();

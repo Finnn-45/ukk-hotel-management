@@ -11,6 +11,8 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\Auth\CustomerAuthController;
 use App\Http\Controllers\MidtransController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\Admin\UserManagementController;
 
 // ==============================
 // AUTH ADMIN (terpisah total)
@@ -18,7 +20,7 @@ use App\Http\Controllers\MidtransController;
 Route::prefix('admin')->group(function () {
     Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login.form');
     Route::post('/login', [AdminAuthController::class, 'login'])->name('admin.login');
-    
+
     // Admin protected routes
     Route::middleware('admin.auth')->group(function () {
         Route::post('/logout', function (\Illuminate\Http\Request $request) {
@@ -29,7 +31,7 @@ Route::prefix('admin')->group(function () {
         })->name('admin.logout');
 
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-        
+
         // Bookings
         Route::get('/bookings', [BookingController::class, 'index'])->name('admin.bookings.index');
         Route::get('/bookings/create', [BookingController::class, 'create'])->name('admin.bookings.create');
@@ -40,7 +42,7 @@ Route::prefix('admin')->group(function () {
         Route::post('/bookings/{booking}/check-in', [BookingController::class, 'checkIn'])->name('admin.bookings.check-in');
         Route::post('/bookings/{booking}/check-out', [BookingController::class, 'checkOut'])->name('admin.bookings.check-out');
         Route::delete('/bookings/{booking}', [BookingController::class, 'destroy'])->name('admin.bookings.destroy');
-        
+
         // Rooms
         Route::get('/rooms', [RoomController::class, 'index'])->name('admin.rooms.index');
         Route::get('/rooms/create', [RoomController::class, 'create'])->name('admin.rooms.create');
@@ -48,14 +50,14 @@ Route::prefix('admin')->group(function () {
         Route::get('/rooms/{room}/edit', [RoomController::class, 'edit'])->name('admin.rooms.edit');
         Route::put('/rooms/{room}', [RoomController::class, 'update'])->name('admin.rooms.update');
         Route::delete('/rooms/{room}', [RoomController::class, 'destroy'])->name('admin.rooms.destroy');
-        
+
         // Room Types
         Route::get('/room-types', [RoomController::class, 'roomTypeIndex'])->name('admin.room-types.index');
         Route::post('/room-types', [RoomController::class, 'roomTypeStore'])->name('admin.room-types.store');
         Route::get('/room-types/{roomType}/edit', [RoomController::class, 'roomTypeEdit'])->name('admin.room-types.edit');
         Route::put('/room-types/{roomType}', [RoomController::class, 'roomTypeUpdate'])->name('admin.room-types.update');
         Route::delete('/room-types/{roomType}', [RoomController::class, 'roomTypeDestroy'])->name('admin.room-types.destroy');
-        
+
         // Guests
         Route::get('/guests', [GuestController::class, 'index'])->name('admin.guests.index');
         Route::get('/guests/create', [GuestController::class, 'create'])->name('admin.guests.create');
@@ -63,12 +65,12 @@ Route::prefix('admin')->group(function () {
         Route::get('/guests/{guest}/edit', [GuestController::class, 'edit'])->name('admin.guests.edit');
         Route::put('/guests/{guest}', [GuestController::class, 'update'])->name('admin.guests.update');
         Route::delete('/guests/{guest}', [GuestController::class, 'destroy'])->name('admin.guests.destroy');
-        
+
         // Payments
         Route::get('/payments', [PaymentController::class, 'index'])->name('admin.payments.index');
         Route::get('/payments/{payment}', [PaymentController::class, 'show'])->name('admin.payments.show');
         Route::put('/payments/{payment}', [PaymentController::class, 'update'])->name('admin.payments.update');
-        
+
         // Restaurant
         Route::prefix('restaurant')->group(function () {
             Route::get('/menu', [RestaurantController::class, 'menuIndex'])->name('admin.restaurant.menu.index');
@@ -118,6 +120,15 @@ Route::prefix('admin')->middleware('admin.auth')->group(function () {
     Route::post('/reviews/{review}/approve', [AdminController::class, 'approveReview'])->name('admin.reviews.approve');
     Route::delete('/reviews/{review}', [AdminController::class, 'destroyReview'])->name('admin.reviews.destroy');
 
+    // User Management
+    Route::get('/users', [UserManagementController::class, 'index'])->name('admin.users.index');
+    Route::get('/users/{user}', [UserManagementController::class, 'show'])->name('admin.users.show');
+    Route::get('/users/{user}/edit', [UserManagementController::class, 'edit'])->name('admin.users.edit');
+    Route::put('/users/{user}', [UserManagementController::class, 'update'])->name('admin.users.update');
+    Route::delete('/users/{user}', [UserManagementController::class, 'destroy'])->name('admin.users.destroy');
+    Route::post('/users/{user}/toggle-verification', [UserManagementController::class, 'toggleVerification'])->name('admin.users.toggle-verification');
+    Route::post('/users/{user}/toggle-active', [UserManagementController::class, 'toggleActive'])->name('admin.users.toggle-active');
+
     // Promos CRUD management
     Route::resource('/promos', \App\Http\Controllers\Admin\PromoController::class, ['as' => 'admin']);
 
@@ -134,7 +145,7 @@ Route::get('/login', [CustomerAuthController::class, 'showLoginForm'])->name('cu
 Route::post('/login', [CustomerAuthController::class, 'login']);
 Route::get('/register', [CustomerAuthController::class, 'showRegisterForm'])->name('customer.register');
 Route::post('/register', [CustomerAuthController::class, 'register']);
-Route::get('/email/verify/{id}/{hash}', [CustomerAuthController::class, 'verifyEmail'])->middleware(['signed'])->name('verification.verify');
+Route::get('/email/verify/{id}/{hash}', [CustomerAuthController::class, 'verifyEmail'])->name('verification.verify');
 Route::get('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
 Route::post('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::get('/reset-password/{token}', [App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForm'])->name('password.reset');
@@ -142,8 +153,13 @@ Route::post('/reset-password', [App\Http\Controllers\Auth\ResetPasswordControlle
 
 Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('customer.logout');
 
-// Review
-Route::post('/review', [App\Http\Controllers\ReviewController::class, 'store'])->name('customer.review.store');
+
+// ==============================
+// PWA Offline Route
+// ==============================
+Route::get('/offline', function () {
+    return view('offline');
+})->name('offline');
 
 // ==============================
 // CUSTOMER FRONTEND
@@ -177,14 +193,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/booking-saya', [CustomerController::class, 'myBookings'])->name('customer.bookings');
     Route::post('/booking/{booking}/cancel', [CustomerController::class, 'cancelBooking'])->name('customer.booking.cancel');
     Route::post('/booking/{booking}/checkout', [CustomerController::class, 'customerCheckOut'])->name('customer.booking.checkout');
+    Route::get('/booking/{booking}/review', [CustomerController::class, 'reviewForm'])->name('customer.booking.review');
+    Route::post('/review', [ReviewController::class, 'store'])->name('customer.review.store');
     Route::get('/profile', [CustomerController::class, 'profile'])->name('customer.profile');
     Route::post('/profile', [CustomerController::class, 'updateProfile'])->name('customer.profile.update');
     Route::get('/wishlist', [CustomerController::class, 'wishlist'])->name('customer.wishlist');
     Route::get('/notifications', [CustomerController::class, 'notifications'])->name('customer.notifications');
     Route::get('/reviews', [CustomerController::class, 'reviews'])->name('customer.reviews');
-    
+
     // Restaurant Ordering (hanya yang butuh login)
     Route::post('/restaurant/order', [App\Http\Controllers\CustomerRestaurantController::class, 'placeOrder'])->name('customer.restaurant.order.place');
+    Route::get('/restaurant/order/{order}/payment', [App\Http\Controllers\CustomerRestaurantController::class, 'payment'])->name('customer.restaurant.payment');
+    Route::get('/restaurant/payment/success', [App\Http\Controllers\CustomerRestaurantController::class, 'paymentSuccess'])->name('customer.restaurant.payment.success');
+    Route::get('/restaurant/payment/pending', [App\Http\Controllers\CustomerRestaurantController::class, 'paymentPending'])->name('customer.restaurant.payment.pending');
+    Route::get('/restaurant/payment/error', [App\Http\Controllers\CustomerRestaurantController::class, 'paymentError'])->name('customer.restaurant.payment.error');
     Route::get('/restaurant/order/{order}/confirmation', [App\Http\Controllers\CustomerRestaurantController::class, 'orderConfirmation'])->name('customer.restaurant.order.confirmation');
     Route::get('/restaurant/orders', [App\Http\Controllers\CustomerRestaurantController::class, 'myOrders'])->name('customer.restaurant.orders');
     Route::get('/restaurant/order/{order}', [App\Http\Controllers\CustomerRestaurantController::class, 'orderDetail'])->name('customer.restaurant.order.detail');

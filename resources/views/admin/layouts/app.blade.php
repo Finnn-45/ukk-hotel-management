@@ -348,10 +348,9 @@
                     <i class="bi bi-people"></i> Pelanggan
                 </a>
             </li>
-            <li class="sidebar-section">Pembayaran</li>
             <li class="nav-item">
-                <a class="nav-link {{ Request::routeIs('admin.payments.*') ? 'active' : '' }}" href="{{ route('admin.payments.index') }}">
-                    <i class="bi bi-credit-card"></i> Pembayaran
+                <a class="nav-link {{ Request::routeIs('admin.users.*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
+                    <i class="bi bi-person-badge"></i> Users
                 </a>
             </li>
             <li class="sidebar-section">Review</li>
@@ -463,13 +462,28 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @stack('scripts')
-    
+
+    {{-- PWA: Service Worker + Update --}}
     <script>
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/sw.js').catch(function(err) {
-                    console.log('SW registration failed:', err);
-                });
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then((reg) => {
+                    console.log('StayEase Admin: SW registered');
+                    reg.addEventListener('updatefound', () => {
+                        const sw = reg.installing;
+                        sw.addEventListener('statechange', () => {
+                            if (sw.state === 'installed' && navigator.serviceWorker.controller) {
+                                if (confirm('Versi baru StayEase tersedia. Muat ulang?')) window.location.reload();
+                            }
+                        });
+                    });
+                }).catch((err) => console.log('StayEase Admin: SW failed:', err));
+            });
+            let refreshing = false;
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (refreshing) return;
+                refreshing = true;
+                window.location.reload();
             });
         }
     </script>

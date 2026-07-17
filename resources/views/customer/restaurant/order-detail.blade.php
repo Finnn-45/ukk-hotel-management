@@ -145,6 +145,19 @@
                             <span style="font-family:var(--font-alt);font-size:0.9rem;">{{ $order->notes }}</span>
                         </div>
                     @endif
+
+                    @if($order->status === 'pending_payment')
+                        <div class="mt-4 p-3 rounded-3" style="background: #FEF3C7; border: 1px solid #FBBF24;">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <i class="bi bi-exclamation-triangle-fill" style="color: #D97706;"></i>
+                                <strong style="color: #D97706;">Menunggu Pembayaran</strong>
+                            </div>
+                            <p class="small mb-3" style="color: #92400E;">Silakan selesaikan pembayaran untuk memproses pesanan Anda.</p>
+                            <a href="{{ route('customer.restaurant.payment', $order) }}" class="btn btn-warning w-100">
+                                <i class="bi bi-shield-lock-fill"></i> Bayar Sekarang
+                            </a>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

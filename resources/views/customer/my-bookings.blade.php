@@ -139,7 +139,7 @@
                                     </form>
                                 @endif
                                 @if($booking->status === 'checked_out' && !$booking->review)
-                                    <a href="{{ route('customer.reviews') }}" class="btn-se btn-se-outline flex-grow-1" style="padding:8px 14px;font-size:0.78rem;">
+                                    <a href="{{ route('customer.booking.review', $booking) }}" class="btn-se btn-se-outline flex-grow-1" style="padding:8px 14px;font-size:0.78rem;">
                                         <i class="bi bi-star"></i> Review
                                     </a>
                                 @endif
@@ -192,10 +192,10 @@
             const bookingId = {{ $b->id }};
             const amount = {{ $b->total_price }};
             const payBtn = document.getElementById('payButton-{{ $b->id }}');
-            
+
             payBtn.disabled = true;
             payBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Memuat...';
-            
+
             fetch(`/payment/midtrans/${bookingId}/token`, {
                 method: 'GET',
                 headers: {

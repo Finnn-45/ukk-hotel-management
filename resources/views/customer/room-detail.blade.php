@@ -588,8 +588,8 @@
                         'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=200',
                         'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=200',
                     ] as $index => $img)
-                    <img src="{{ $img }}" 
-                         class="se-thumbnail" 
+                    <img src="{{ $img }}"
+                         class="se-thumbnail"
                          alt="Thumbnail {{ $index + 1 }}"
                          onclick="document.getElementById('mainImage').src='{{ $img }}'.replace('w=200', 'w=800')">
                     @endforeach
@@ -925,7 +925,7 @@
                         </div>
                         <h3 class="se-section-title">Restoran Hotel</h3>
                     </div>
-                    
+
                     {{-- Restaurant Image Gallery --}}
                     <div class="se-room-gallery mb-3">
                         <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800"
@@ -941,14 +941,14 @@
                                 'https://images.unsplash.com/photo-1550966871-3ed3c47e718c?w=200',
                                 'https://images.unsplash.com/photo-1544025162-d76694265947?w=200',
                             ] as $index => $img)
-                            <img src="{{ $img }}" 
-                                 class="se-thumbnail" 
+                            <img src="{{ $img }}"
+                                 class="se-thumbnail"
                                  alt="Restaurant {{ $index + 1 }}"
                                  onclick="document.getElementById('restaurantMainImage').src='{{ $img }}'.replace('w=200', 'w=800')">
                             @endforeach
                         </div>
                     </div>
-                    
+
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
                             <h5 class="fw-bold mb-1">The EstEase Restaurant</h5>
@@ -1004,7 +1004,7 @@
                     @endphp
                     @foreach(['Lobby', 'Restaurant', 'Kolam Renang', 'Gym', 'Garden', 'Parking'] as $index => $gallery)
                         <div class="se-gallery-item" data-bs-toggle="modal" data-bs-target="#galleryModal{{ $index }}">
-                            <img src="https://images.unsplash.com/photo-{{ $galleryImages[$index % 6] }}?w=400" 
+                            <img src="https://images.unsplash.com/photo-{{ $galleryImages[$index % 6] }}?w=400"
                                  alt="{{ $gallery }}">
                             <div class="se-gallery-overlay">
                                 <i class="bi bi-zoom-in"></i>
@@ -1027,11 +1027,11 @@
                         </div>
                         <h5 class="fw-bold mb-0">Booking Kamar</h5>
                     </div>
-                    
+
                     <form action="{{ route('customer.booking') }}" method="POST" id="bookingForm">
                         @csrf
                         <input type="hidden" name="room_id" value="{{ $room->id }}">
-                        
+
                         <div class="mb-3">
                             <label class="form-label fw-semibold small">
                                 <i class="bi bi-calendar me-1"></i> Check In
@@ -1143,9 +1143,9 @@
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content" style="border-radius: var(--se-radius);">
             <div class="modal-body p-0">
-                <img src="https://images.unsplash.com/photo-{{ $modalImages[$index % 6] }}?w=1200" 
-                     alt="{{ $gallery }}" 
-                     class="w-100" 
+                <img src="https://images.unsplash.com/photo-{{ $modalImages[$index % 6] }}?w=1200"
+                     alt="{{ $gallery }}"
+                     class="w-100"
                      style="border-radius: var(--se-radius);">
             </div>
         </div>
@@ -1153,29 +1153,38 @@
 </div>
 @endforeach
 
-{{-- Mobile Fixed Bottom Booking Button --}}
-<div class="d-lg-none" style="position: fixed; bottom: 0; left: 0; right: 0; background: var(--se-card); border-top: 1px solid var(--se-border); padding: 16px; z-index: 1000; box-shadow: 0 -4px 20px rgba(0,0,0,0.08);">
+{{-- Mobile Fixed Bottom Booking Bar --}}
+<div class="d-lg-none" style="position: fixed; bottom: 0; left: 0; right: 0; background: var(--se-card); border-top: 1px solid var(--se-border); padding: 12px 16px; z-index: 1000; box-shadow: 0 -4px 20px rgba(0,0,0,0.08);">
     <form action="{{ route('customer.booking') }}" method="POST" id="mobileBookingForm">
         @csrf
         <input type="hidden" name="room_id" value="{{ $room->id }}">
-        <input type="hidden" name="check_in" id="mobileCheckIn">
-        <input type="hidden" name="check_out" id="mobileCheckOut">
-        
-        <div class="d-flex gap-2">
+
+        <div class="d-flex gap-2 mb-2">
+            <div class="flex-grow-1">
+                <label class="form-label mb-1" style="font-size: 0.75rem; font-weight: 600; color: var(--se-text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Check In</label>
+                <input type="date" name="check_in" id="mobileCheckIn" class="form-control form-control-sm" style="font-size: 0.85rem; border-radius: var(--se-radius-xs);" min="{{ date('Y-m-d') }}" required>
+            </div>
+            <div class="flex-grow-1">
+                <label class="form-label mb-1" style="font-size: 0.75rem; font-weight: 600; color: var(--se-text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Check Out</label>
+                <input type="date" name="check_out" id="mobileCheckOut" class="form-control form-control-sm" style="font-size: 0.85rem; border-radius: var(--se-radius-xs);" min="{{ date('Y-m-d', strtotime('+1 day')) }}" required>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 align-items-center">
             <div class="flex-grow-1">
                 <div class="d-flex justify-content-between mb-1">
-                    <small class="text-muted">Total</small>
-                    <small class="text-muted" id="mobileNights">-</small>
+                    <small class="text-muted" style="font-size: 0.75rem;">Total</small>
+                    <small class="text-muted" id="mobileNights" style="font-size: 0.75rem;">-</small>
                 </div>
-                <strong class="fs-4 d-block" id="mobileTotalDisplay" style="color: var(--se-primary);">Rp 0</strong>
+                <strong class="fs-5 d-block" id="mobileTotalDisplay" style="color: var(--se-primary);">Rp 0</strong>
             </div>
-            <div style="flex-shrink: 0; min-width: 120px;">
+            <div style="flex-shrink: 0;">
                 @auth
-                    <button type="button" onclick="submitMobileBooking()" class="btn-se btn-se-primary w-100 py-3" style="font-size: 0.9rem; min-height: 52px; border-radius: var(--se-radius-sm);">
+                    <button type="submit" class="btn-se btn-se-primary" style="padding: 10px 24px; font-size: 0.85rem; min-height: 44px; border-radius: var(--se-radius-xs);">
                         <i class="bi bi-check-circle me-1"></i> Booking
                     </button>
                 @else
-                    <a href="{{ route('customer.login') }}" class="btn-se btn-se-primary w-100 py-3" style="font-size: 0.9rem; min-height: 52px; border-radius: var(--se-radius-sm); text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                    <a href="{{ route('customer.login') }}" class="btn-se btn-se-primary" style="padding: 10px 24px; font-size: 0.85rem; min-height: 44px; border-radius: var(--se-radius-xs); text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
                         <i class="bi bi-box-arrow-in-right me-1"></i> Login
                     </a>
                 @endauth
@@ -1193,7 +1202,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const nightsEl = document.getElementById('nightsCount');
     const pricePerNight = {{ $room->roomType->price }};
     const submitBtn = document.querySelector('#bookingForm button[type="submit"]');
-    
+
     const mobileTotalDisplay = document.getElementById('mobileTotalDisplay');
     const mobileNights = document.getElementById('mobileNights');
 
@@ -1207,19 +1216,19 @@ document.addEventListener('DOMContentLoaded', function() {
             const end = new Date(checkOut.value);
             const diffTime = Math.abs(end - start);
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            
+
             if (diffDays > 0) {
                 const total = pricePerNight * diffDays;
                 totalEl.textContent = formatRupiah(total);
                 nightsEl.textContent = diffDays + ' malam';
-                
+
                 if (mobileTotalDisplay) {
                     mobileTotalDisplay.textContent = formatRupiah(total);
                 }
                 if (mobileNights) {
                     mobileNights.textContent = diffDays + ' malam';
                 }
-                
+
                 if (submitBtn) submitBtn.disabled = false;
             } else {
                 totalEl.textContent = '-';
@@ -1235,25 +1244,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const today = new Date().toISOString().split('T')[0];
     if (checkIn) checkIn.min = today;
-    
+
     if (checkIn && checkOut) {
         checkIn.addEventListener('change', function() {
             const nextDay = new Date(this.value);
             nextDay.setDate(nextDay.getDate() + 1);
             checkOut.min = nextDay.toISOString().split('T')[0];
-            if (checkOut.value && new Date(checkOut.value) <= new Date(this.value)) {
-                checkOut.value = '';
+
+            // Auto-set check-out to next day if not set
+            if (!checkOut.value || new Date(checkOut.value) <= new Date(this.value)) {
+                checkOut.value = nextDay.toISOString().split('T')[0];
             }
             calculateTotal();
         });
-        
+
         checkOut.addEventListener('change', calculateTotal);
     }
 
     // Sticky nav active state on scroll
     const sections = document.querySelectorAll('[id]');
     const navLinks = document.querySelectorAll('.se-sticky-nav a');
-    
+
     window.addEventListener('scroll', function() {
         let current = '';
         sections.forEach(section => {
@@ -1262,7 +1273,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 current = section.getAttribute('id');
             }
         });
-        
+
         navLinks.forEach(link => {
             link.classList.remove('active');
             if (link.getAttribute('href').slice(1) === current) {
@@ -1272,22 +1283,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-function submitMobileBooking() {
-    const checkIn = document.querySelector('input[name="check_in"]');
-    const checkOut = document.querySelector('input[name="check_out"]');
-    const mobileCheckIn = document.getElementById('mobileCheckIn');
-    const mobileCheckOut = document.getElementById('mobileCheckOut');
-    
-    if (!checkIn.value || !checkOut.value) {
-        alert('Silakan pilih tanggal check-in dan check-out terlebih dahulu');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        return;
-    }
-    
-    mobileCheckIn.value = checkIn.value;
-    mobileCheckOut.value = checkOut.value;
-    document.getElementById('mobileBookingForm').submit();
-}
 </script>
 @endpush
 @endsection

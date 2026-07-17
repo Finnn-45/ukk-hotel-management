@@ -8,13 +8,17 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('payments', function (Blueprint $table) {
-            $table->string('verification_code')->nullable()->unique()->after('midtrans_order_id');
-        });
+        if (!Schema::hasColumn('payments', 'verification_code')) {
+            Schema::table('payments', function (Blueprint $table) {
+                $table->string('verification_code')->nullable()->unique()->after('midtrans_order_id');
+            });
+        }
 
-        Schema::table('restaurant_orders', function (Blueprint $table) {
-            $table->string('verification_code')->nullable()->unique()->after('order_number');
-        });
+        if (!Schema::hasColumn('restaurant_orders', 'verification_code')) {
+            Schema::table('restaurant_orders', function (Blueprint $table) {
+                $table->string('verification_code')->nullable()->unique()->after('order_number');
+            });
+        }
     }
 
     public function down(): void

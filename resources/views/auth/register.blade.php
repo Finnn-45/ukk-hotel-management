@@ -2,16 +2,18 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Akun - {{ config('app.name', 'StayEase Hotel') }}</title>
-    <meta name="description" content="Buat akun baru untuk menikmati layanan booking hotel premium.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Daftar - {{ config('app.name', 'StayEase Hotel') }}</title>
+    <meta name="description" content="Buat akun baru untuk booking hotel, restoran, dan layanan eksklusif.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     {!! NoCaptcha::renderJs() !!}
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         :root {
             --primary: #0284C7;
             --primary-dark: #0369A1;
@@ -19,48 +21,60 @@
             --text: #0F172A;
             --text-muted: #64748B;
             --border: #E2E8F0;
-            --font: 'Poppins', sans-serif;
-            --font-alt: 'Inter', sans-serif;
+            --font: 'Inter', sans-serif;
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.08);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
             font-family: var(--font);
             min-height: 100vh;
+            background: #F0F5FF;
             display: flex;
-            align-items: stretch;
-            background: #0F172A;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
-        .auth-wrapper { display: flex; width: 100%; min-height: 100vh; }
 
-        /* Hero Panel */
+        .auth-container {
+            display: flex;
+            width: 100%;
+            max-width: 950px;
+            min-height: 600px;
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ─── LEFT HERO ─── */
         .auth-hero {
             flex: 1;
-            background: linear-gradient(145deg, #1e3a8a 0%, #0369A1 40%, #0284C7 70%, #3b82f6 100%);
+            background: linear-gradient(145deg, #1e3a8a 0%, #0369A1 50%, #0284C7 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: flex-start;
-            padding: 60px 56px;
+            padding: 48px 44px;
             position: relative;
             overflow: hidden;
         }
         .auth-hero::before {
             content: '';
             position: absolute;
-            width: 400px; height: 400px;
+            width: 350px; height: 350px;
             border-radius: 50%;
             background: rgba(255,255,255,0.04);
-            top: -100px; right: -100px;
+            top: -80px; right: -80px;
         }
         .auth-hero::after {
             content: '';
             position: absolute;
-            width: 300px; height: 300px;
+            width: 250px; height: 250px;
             border-radius: 50%;
             background: rgba(255,255,255,0.04);
-            bottom: -80px; left: -60px;
+            bottom: -60px; left: -60px;
         }
-        .auth-hero-badge {
+        .hero-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -69,104 +83,98 @@
             color: #fff;
             border-radius: 100px;
             padding: 6px 16px;
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-weight: 500;
-            margin-bottom: 28px;
+            margin-bottom: 24px;
             backdrop-filter: blur(8px);
+            width: fit-content;
         }
         .auth-hero h1 {
             color: #fff;
-            font-size: 2.8rem;
+            font-size: 2rem;
             font-weight: 800;
-            line-height: 1.15;
-            margin-bottom: 20px;
+            line-height: 1.2;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
         }
         .auth-hero h1 span { color: var(--accent); }
-        .auth-hero p {
+        .auth-hero > p {
             color: rgba(255,255,255,0.75);
-            font-family: var(--font-alt);
-            font-size: 1rem;
-            line-height: 1.7;
-            max-width: 380px;
-            margin-bottom: 40px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 32px;
+            max-width: 320px;
         }
-        .auth-steps { display: flex; flex-direction: column; gap: 20px; }
-        .auth-step {
+        .hero-steps {
             display: flex;
-            align-items: flex-start;
+            flex-direction: column;
             gap: 16px;
         }
+        .hero-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
         .step-num {
-            width: 32px; height: 32px;
-            background: rgba(255,255,255,0.15);
-            border: 1px solid rgba(255,255,255,0.25);
+            width: 30px; height: 30px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #fff;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 700;
             flex-shrink: 0;
         }
         .step-text strong {
             display: block;
             color: #fff;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             margin-bottom: 2px;
         }
         .step-text span {
             color: rgba(255,255,255,0.65);
-            font-size: 0.82rem;
-            font-family: var(--font-alt);
-        }
-        .auth-hero-logo {
-            position: absolute;
-            bottom: 32px; left: 56px;
-            color: rgba(255,255,255,0.4);
-            font-size: 0.78rem;
-            font-family: var(--font-alt);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 0.8rem;
         }
 
-        /* Form Panel */
-        .auth-form-panel {
-            width: 500px;
+        /* ─── RIGHT FORM ─── */
+        .auth-form {
+            width: 440px;
             flex-shrink: 0;
-            background: #fff;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 48px 48px;
-            overflow-y: auto;
+            padding: 32px 40px;
             position: relative;
         }
-        .back-link {
+
+        .back-home {
             position: absolute;
-            top: 24px; left: 24px;
+            top: 16px; left: 24px;
             display: flex;
             align-items: center;
             gap: 6px;
             color: var(--text-muted);
             text-decoration: none;
-            font-size: 0.85rem;
-            font-family: var(--font-alt);
+            font-size: 0.8rem;
             font-weight: 500;
             transition: color 0.2s;
         }
-        .back-link:hover { color: var(--primary); }
+        .back-home:hover { color: var(--primary); }
 
-        .form-header { margin-bottom: 28px; }
-        .form-header .logo {
+        .form-header {
+            margin-bottom: 20px;
+        }
+        .form-header .logo-row {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
         }
         .logo-icon {
-            width: 38px; height: 38px;
+            width: 36px; height: 36px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             border-radius: 10px;
             display: flex;
@@ -174,84 +182,114 @@
             justify-content: center;
             color: #fff;
             font-weight: 900;
-            font-size: 1rem;
-            box-shadow: 0 4px 12px rgba(2,132,199,0.35);
+            font-size: 0.95rem;
+            box-shadow: 0 4px 12px rgba(2,132,199,0.3);
         }
-        .logo-text { font-size: 1.1rem; font-weight: 800; color: var(--text); }
+        .logo-text { font-size: 1rem; font-weight: 800; color: var(--text); }
         .logo-text span { color: var(--primary); }
         .form-header h2 {
-            font-size: 1.5rem;
+            font-size: 1.35rem;
             font-weight: 700;
             color: var(--text);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
-        .form-header p { color: var(--text-muted); font-size: 0.88rem; font-family: var(--font-alt); }
+        .form-header p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
 
-        .form-group { margin-bottom: 16px; }
+        /* ─── ALERTS ─── */
+        .alert-custom {
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .alert-danger { background: #FEE2E2; color: #DC2626; border: 1px solid #FECACA; }
+        .alert-success { background: #DCFCE7; color: #16A34A; border: 1px solid #BBF7D0; }
+
+        /* ─── FORM ELEMENTS ─── */
+        .form-group { margin-bottom: 14px; }
         .form-group label {
             display: block;
             font-size: 0.82rem;
             font-weight: 600;
             color: var(--text);
-            margin-bottom: 7px;
+            margin-bottom: 5px;
         }
-        .input-wrapper { position: relative; }
-        .input-icon {
-            position: absolute;
-            left: 14px; top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 1rem;
-            pointer-events: none;
+        .input-wrap {
+            position: relative;
         }
-        .form-input {
+        .form-control-custom {
             width: 100%;
-            padding: 11px 42px;
+            padding: 10px 14px;
             border: 1.5px solid var(--border);
             border-radius: 12px;
-            font-size: 0.88rem;
-            font-family: var(--font-alt);
+            font-size: 0.87rem;
+            font-family: var(--font);
             color: var(--text);
             background: #F8FAFC;
             transition: all 0.2s;
             outline: none;
         }
-        .form-input:focus {
+        .form-control-custom:focus {
             border-color: var(--primary);
             background: #fff;
             box-shadow: 0 0 0 4px rgba(2,132,199,0.08);
         }
-        .form-input.has-toggle { padding-right: 48px; }
-        .toggle-password {
+        .form-control-custom.is-invalid {
+            border-color: #DC2626;
+            background: #FEF2F2;
+        }
+        .password-toggle {
             position: absolute;
-            right: 14px; top: 50%;
+            right: 12px; top: 50%;
             transform: translateY(-50%);
             background: none;
             border: none;
             color: var(--text-muted);
             cursor: pointer;
-            padding: 0;
-            font-size: 1rem;
+            padding: 4px;
+            font-size: 0.95rem;
             transition: color 0.2s;
+            z-index: 2;
         }
-        .toggle-password:hover { color: var(--primary); }
+        .password-toggle:hover { color: var(--primary); }
 
-        .captcha-container {
+        .info-box {
+            background: #EFF6FF;
+            border: 1px solid #BFDBFE;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.8rem;
+            color: #0369A1;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        /* ─── CAPTCHA ─── */
+        .captcha-wrap {
             background: #F8FAFC;
             border: 1.5px solid var(--border);
             border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 16px;
+            padding: 10px;
+            margin-bottom: 14px;
         }
 
-        .btn-submit {
+        /* ─── BUTTON ─── */
+        .btn-register {
             width: 100%;
-            padding: 13px;
+            padding: 12px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: #fff;
             border: none;
             border-radius: 12px;
-            font-size: 0.93rem;
+            font-size: 0.92rem;
             font-weight: 700;
             font-family: var(--font);
             cursor: pointer;
@@ -261,201 +299,228 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            margin-bottom: 16px;
         }
-        .btn-submit:hover {
+        .btn-register:hover {
             transform: translateY(-1px);
             box-shadow: 0 6px 20px rgba(2,132,199,0.4);
         }
+        .btn-register:active { transform: translateY(0); }
+        .btn-register:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
 
+        /* ─── FOOTER ─── */
         .form-footer {
             text-align: center;
-            font-size: 0.85rem;
-            font-family: var(--font-alt);
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            font-size: 0.84rem;
             color: var(--text-muted);
+            font-family: var(--font);
         }
-        .form-footer a { color: var(--primary); font-weight: 600; text-decoration: none; }
+        .form-footer a {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
         .form-footer a:hover { text-decoration: underline; }
 
-        .alert-custom {
-            padding: 11px 16px;
-            border-radius: 10px;
-            font-size: 0.84rem;
-            font-family: var(--font-alt);
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 16px;
-        }
-        .alert-danger-custom { background: #FEE2E2; color: #DC2626; border: 1px solid #FECACA; }
-        .alert-success-custom { background: #DCFCE7; color: #16A34A; border: 1px solid #BBF7D0; }
+        /* ─── SPINNER ─── */
+        .spinner { display: none; }
+        .spinner.show { display: inline-block; }
 
-        .info-box {
-            background: #EFF6FF;
-            border: 1px solid #BFDBFE;
-            border-radius: 10px;
-            padding: 11px 14px;
-            font-size: 0.82rem;
-            font-family: var(--font-alt);
-            color: #0369A1;
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        @media (max-width: 991px) {
-            .auth-hero { display: none; }
-            .auth-form-panel { width: 100%; padding: 48px 32px; }
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 768px) {
+            body { padding: 0; background: #fff; }
+            .auth-container {
+                border-radius: 0;
+                min-height: auto;
+                flex-direction: column;
+                box-shadow: none;
+            }
+            .auth-hero {
+                padding: 28px 24px 24px;
+                border-radius: 0 0 24px 24px;
+                flex: none;
+            }
+            .auth-hero h1 { font-size: 1.5rem; }
+            .auth-hero > p { font-size: 0.82rem; margin-bottom: 20px; }
+            .hero-steps { gap: 12px; }
+            .auth-form {
+                width: 100%;
+                padding: 24px 20px 20px;
+            }
+            .back-home { top: 12px; left: 16px; }
+            .form-header h2 { font-size: 1.2rem; }
         }
         @media (max-width: 480px) {
-            .auth-form-panel { padding: 40px 20px; }
+            .auth-hero { padding: 24px 20px 20px; }
+            .auth-form { padding: 20px 16px 16px; }
+            .auth-hero h1 { font-size: 1.3rem; }
+            .hero-badge { font-size: 0.7rem; padding: 4px 12px; }
+            .form-header h2 { font-size: 1.1rem; }
         }
     </style>
 </head>
 <body>
-<div class="auth-wrapper">
+    <div class="auth-container">
 
-    {{-- Hero Panel --}}
-    <div class="auth-hero">
-        <div class="auth-hero-badge">
-            <i class="bi bi-person-plus-fill" style="font-size:0.75rem;"></i>
-            Bergabung Sekarang
+        {{-- LEFT HERO --}}
+        <div class="auth-hero">
+            <div class="hero-badge">
+                <i class="bi bi-person-plus-fill" style="font-size:0.7rem;"></i>
+                Bergabung Sekarang
+            </div>
+            <h1>Mulai Perjalanan<br>Anda Bersama <span>Kami</span></h1>
+            <p>Daftar dan nikmati kemudahan booking kamar hotel premium, restoran eksklusif, dan berbagai layanan unggulan lainnya.</p>
+            <div class="hero-steps">
+                <div class="hero-step">
+                    <div class="step-num">1</div>
+                    <div class="step-text">
+                        <strong>Buat akun gratis</strong>
+                        <span>Hanya memerlukan email & password</span>
+                    </div>
+                </div>
+                <div class="hero-step">
+                    <div class="step-num">2</div>
+                    <div class="step-text">
+                        <strong>Verifikasi email</strong>
+                        <span>Konfirmasi melalui email yang dikirimkan</span>
+                    </div>
+                </div>
+                <div class="hero-step">
+                    <div class="step-num">3</div>
+                    <div class="step-text">
+                        <strong>Mulai booking</strong>
+                        <span>Nikmati semua fasilitas hotel bintang 5</span>
+                    </div>
+                </div>
+            </div>
         </div>
-        <h1>Mulai Perjalanan<br>Anda Bersama <span>Kami</span></h1>
-        <p>Daftar dan nikmati kemudahan booking kamar hotel premium, restoran eksklusif, dan berbagai layanan unggulan lainnya.</p>
-        <div class="auth-steps">
-            <div class="auth-step">
-                <div class="step-num">1</div>
-                <div class="step-text">
-                    <strong>Buat akun gratis</strong>
-                    <span>Hanya memerlukan email & password</span>
+
+        {{-- RIGHT FORM --}}
+        <div class="auth-form">
+            <a href="{{ route('home') }}" class="back-home">
+                <i class="bi bi-arrow-left"></i> Beranda
+            </a>
+
+            <div class="form-header">
+                <div class="logo-row">
+                    <div class="logo-icon">S</div>
+                    <div class="logo-text">Stay<span>Ease</span></div>
                 </div>
+                <h2>Buat Akun Baru</h2>
+                <p>Isi formulir di bawah untuk mendaftar</p>
             </div>
-            <div class="auth-step">
-                <div class="step-num">2</div>
-                <div class="step-text">
-                    <strong>Verifikasi email</strong>
-                    <span>Konfirmasi melalui email yang dikirimkan</span>
+
+            {{-- Validation Errors --}}
+            @if($errors->any())
+                <div class="alert-custom alert-danger">
+                    <i class="bi bi-exclamation-circle-fill" style="flex-shrink:0;margin-top:1px;"></i>
+                    <div>
+                        @foreach($errors->all() as $error)
+                            <div>{{ $error }}</div>
+                        @endforeach
+                    </div>
                 </div>
+            @endif
+
+            <div class="info-box">
+                <i class="bi bi-info-circle-fill" style="flex-shrink:0;margin-top:2px;"></i>
+                <span>Setelah registrasi, cek email Anda untuk melakukan verifikasi akun sebelum bisa login.</span>
             </div>
-            <div class="auth-step">
-                <div class="step-num">3</div>
-                <div class="step-text">
-                    <strong>Mulai booking</strong>
-                    <span>Nikmati semua fasilitas hotel bintang 5</span>
+
+            <form method="POST" action="{{ route('customer.register') }}" id="registerForm">
+                @csrf
+
+                <div class="form-group">
+                    <label for="name">Nama Lengkap</label>
+                    <div class="input-wrap">
+                        <input type="text" id="name" name="name"
+                               class="form-control-custom @error('name') is-invalid @enderror"
+                               placeholder="Nama lengkap Anda" value="{{ old('name') }}" required autofocus>
+                    </div>
                 </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <div class="input-wrap">
+                        <input type="email" id="email" name="email"
+                               class="form-control-custom @error('email') is-invalid @enderror"
+                               placeholder="nama@email.com" value="{{ old('email') }}" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrap">
+                        <input type="password" id="password" name="password"
+                               class="form-control-custom @error('password') is-invalid @enderror"
+                               placeholder="Minimal 6 karakter" required>
+                        <button type="button" class="password-toggle" onclick="togglePass('password', this)" tabindex="-1">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password_confirmation">Konfirmasi Password</label>
+                    <div class="input-wrap">
+                        <input type="password" id="password_confirmation" name="password_confirmation"
+                               class="form-control-custom" placeholder="Ulangi password" required>
+                        <button type="button" class="password-toggle" onclick="togglePass('password_confirmation', this)" tabindex="-1">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="captcha-wrap">
+                    {!! NoCaptcha::display() !!}
+                    @error('g-recaptcha-response')
+                        <div style="color:#DC2626;font-size:0.78rem;margin-top:6px;">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <button type="submit" class="btn-register" id="submitBtn">
+                    <span class="spinner" id="spinner">
+                        <span class="spinner-border spinner-border-sm" role="status"></span>
+                    </span>
+                    <span id="btnText"><i class="bi bi-person-plus-fill"></i> Daftar Sekarang</span>
+                </button>
+            </form>
+
+            <div class="form-footer">
+                Sudah punya akun? <a href="{{ route('customer.login') }}">Masuk di sini</a>
             </div>
-        </div>
-        <div class="auth-hero-logo">
-            <i class="bi bi-building"></i>
-            © {{ date('Y') }} StayEase Hotel Management
         </div>
     </div>
 
-    {{-- Form Panel --}}
-    <div class="auth-form-panel">
-        <a href="{{ route('home') }}" class="back-link">
-            <i class="bi bi-arrow-left"></i> Kembali ke Beranda
-        </a>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    function togglePass(inputId, btn) {
+        const input = document.getElementById(inputId);
+        const icon = btn.querySelector('i');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.className = 'bi bi-eye-slash';
+        } else {
+            input.type = 'password';
+            icon.className = 'bi bi-eye';
+        }
+    }
 
-        <div class="form-header">
-            <div class="logo">
-                <div class="logo-icon">S</div>
-                <div class="logo-text">Stay<span>Ease</span></div>
-            </div>
-            <h2>Buat Akun Baru</h2>
-            <p>Isi formulir di bawah untuk mendaftar</p>
-        </div>
-
-        @if($errors->any())
-            <div class="alert-custom alert-danger-custom">
-                <i class="bi bi-exclamation-circle-fill" style="flex-shrink:0;margin-top:2px;"></i>
-                <div>
-                    @foreach($errors->all() as $error)
-                        <div>{{ $error }}</div>
-                    @endforeach
-                </div>
-            </div>
-        @endif
-
-        <div class="info-box">
-            <i class="bi bi-info-circle-fill" style="flex-shrink:0;margin-top:2px;"></i>
-            <span>Setelah registrasi, cek email Anda untuk melakukan verifikasi akun sebelum bisa login.</span>
-        </div>
-
-        <form method="POST" action="{{ route('customer.register') }}" id="registerForm">
-            @csrf
-
-            <div class="form-group">
-                <label for="name">Nama Lengkap</label>
-                <div class="input-wrapper">
-                    <i class="bi bi-person input-icon"></i>
-                    <input type="text" id="name" name="name" class="form-input"
-                           placeholder="Nama lengkap Anda" value="{{ old('name') }}" required autofocus>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="email">Email</label>
-                <div class="input-wrapper">
-                    <i class="bi bi-envelope input-icon"></i>
-                    <input type="email" id="email" name="email" class="form-input"
-                           placeholder="nama@email.com" value="{{ old('email') }}" required>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="password">Password</label>
-                <div class="input-wrapper">
-                    <i class="bi bi-lock input-icon"></i>
-                    <input type="password" id="password" name="password" class="form-input has-toggle"
-                           placeholder="Minimal 6 karakter" required>
-                    <button type="button" class="toggle-password" onclick="togglePass('password', this)" tabindex="-1">
-                        <i class="bi bi-eye"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="password_confirmation">Konfirmasi Password</label>
-                <div class="input-wrapper">
-                    <i class="bi bi-lock-fill input-icon"></i>
-                    <input type="password" id="password_confirmation" name="password_confirmation" class="form-input has-toggle"
-                           placeholder="Ulangi password" required>
-                    <button type="button" class="toggle-password" onclick="togglePass('password_confirmation', this)" tabindex="-1">
-                        <i class="bi bi-eye"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="captcha-container">
-                {!! NoCaptcha::display() !!}
-                @if($errors->has('g-recaptcha-response'))
-                    <div style="color:#DC2626;font-size:0.8rem;margin-top:6px;">{{ $errors->first('g-recaptcha-response') }}</div>
-                @endif
-            </div>
-
-            <button type="submit" class="btn-submit">
-                <i class="bi bi-person-plus-fill"></i>
-                Daftar Sekarang
-            </button>
-        </form>
-
-        <div class="form-footer">
-            Sudah punya akun? <a href="{{ route('customer.login') }}">Masuk di sini</a>
-        </div>
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-function togglePass(inputId, btn) {
-    const input = document.getElementById(inputId);
-    const icon = btn.querySelector('i');
-    input.type = input.type === 'password' ? 'text' : 'password';
-    icon.className = input.type === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash';
-}
-</script>
+    // Loading state on submit
+    document.getElementById('registerForm')?.addEventListener('submit', function(e) {
+        const btn = document.getElementById('submitBtn');
+        const spinner = document.getElementById('spinner');
+        const btnText = document.getElementById('btnText');
+        btn.disabled = true;
+        spinner.classList.add('show');
+        btnText.textContent = '  Mendaftarkan...';
+    });
+    </script>
 </body>
 </html>

@@ -22,7 +22,7 @@ class CustomerController extends Controller
     {
         $roomTypes = RoomType::withCount('rooms')->get();
         $rooms = Room::with('roomType')->where('status', 'available')->take(8)->get();
-        
+
         // Dynamic Landing Page Data
         $sections = LandingPageSection::where('is_active', true)->orderBy('order')->get();
         $services = LandingPageService::where('is_active', true)->orderBy('order')->get();
@@ -180,6 +180,23 @@ class CustomerController extends Controller
         // Update room status to booked
         Room::find($data['room_id'])->update(['status' => 'booked']);
 
+        // Send notification to admin
+        \App\Models\Notification::sendToAdmins(
+            'new_booking',
+            'Booking Baru',
+            $guest->full_name . ' melakukan booking kamar ' . $booking->room->room_number . ' (' . $data['check_in'] . ' - ' . $data['check_out'] . ')',
+            route('admin.bookings.show', $booking)
+        );
+
+        // Send notification to customer
+        \App\Models\Notification::send(
+            $guest->user_id,
+            'booking_created',
+            'Booking Berhasil',
+            'Booking kamar ' . $booking->room->room_number . ' telah dibuat. Silakan lakukan pembayaran.',
+            route('customer.bookings')
+        );
+
         // Clear session
         session()->forget('booking_data');
 
@@ -254,7 +271,51 @@ class CustomerController extends Controller
         $booking->update(['status' => 'checked_out']);
         $booking->room->update(['status' => 'available']);
 
-        return back()->with('success', 'Check-out berhasil! Terima kasih telah menginap di hotel kami.');
+        // Send notification to admin
+        \App\Models\Notification::sendToAdmins(
+            'checkout_completed',
+            'Check-out Selesai',
+            $guest->full_name . ' melakukan check-out dari kamar ' . $booking->room->room_number,
+            route('admin.bookings.show', $booking)
+        );
+
+        // Send notification to customer
+        \App\Models\Notification::send(
+            $guest->user_id,
+            'checkout_success',
+            'Check-out Berhasil',
+            'Terima kasih telah menginap di hotel kami. Berikan review Anda!',
+            route('customer.booking.review', $booking)
+        );
+
+        // Redirect to review page
+        return redirect()->route('customer.booking.review', $booking)
+            ->with('success', 'Check-out berhasil! Silakan berikan review Anda.');
+    }
+
+    public function reviewForm(Booking $booking)
+    {
+        $user = Auth::user();
+        $guest = Guest::where('user_id', $user->id)->firstOrFail();
+
+        if ($booking->guest_id !== $guest->id) {
+            abort(403);
+        }
+
+        if ($booking->status !== 'checked_out') {
+            return redirect()->route('customer.bookings')
+                ->with('error', 'Anda hanya bisa memberikan review setelah check-out');
+        }
+
+        // Check if already reviewed
+        $existingReview = \App\Models\Review::where('booking_id', $booking->id)->first();
+        if ($existingReview) {
+            return redirect()->route('customer.bookings')
+                ->with('info', 'Anda sudah memberikan review untuk booking ini');
+        }
+
+        $booking->load(['room.roomType']);
+        return view('customer.review-form', compact('booking'));
     }
 
     public function profile()

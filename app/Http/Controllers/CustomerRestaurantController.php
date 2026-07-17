@@ -14,7 +14,7 @@ class CustomerRestaurantController extends Controller
     {
         $categories = RestaurantMenu::select('category')->distinct()->pluck('category');
         $menus = RestaurantMenu::where('is_available', true)->get();
-        
+
         // Hanya tamu dengan reservasi aktif yang boleh memesan restoran.
         $hasBookedRoom = false;
         if (auth()->check()) {
@@ -23,7 +23,7 @@ class CustomerRestaurantController extends Controller
                 $hasBookedRoom = true;
             }
         }
-        
+
         return view('customer.restaurant.menu', compact('menus', 'categories', 'hasBookedRoom'));
     }
 
@@ -36,26 +36,18 @@ class CustomerRestaurantController extends Controller
             'notes' => 'nullable|string|max:500',
             'order_type' => 'required|in:dine_in,takeaway,delivery',
             'table_number' => 'nullable|string|max:20',
-            'delivery_address' => 'nullable|required_if:order_type,delivery|string|max:500',
-            'delivery_city_id' => 'nullable|required_if:order_type,delivery|string|max:20',
-            'delivery_province_id' => 'nullable|required_if:order_type,delivery|string|max:20',
-            'delivery_postal_code' => 'nullable|required_if:order_type,delivery|string|max:10',
-            'shipping_courier' => 'nullable|required_if:order_type,delivery|string|max:20',
-            'shipping_service' => 'nullable|required_if:order_type,delivery|string|max:50',
-            'shipping_cost' => 'nullable|required_if:order_type,delivery|numeric|min:0',
-            'estimated_delivery' => 'nullable|required_if:order_type,delivery|string|max:50',
         ]);
 
         $user = Auth::user();
-        
+
         // Cegah bypass dari request manual: wajib memiliki reservasi aktif.
         $guest = \App\Models\Guest::where('user_id', $user->id)->first();
         $hasBookedRoom = $guest && $guest->bookings()->whereIn('status', ['confirmed', 'checked_in'])->exists();
-        
+
         if (!$hasBookedRoom) {
             return redirect()->back()->with('error', 'Anda harus melakukan booking kamar terlebih dahulu sebelum dapat memesan makanan restoran.');
         }
-        
+
         $guest = \App\Models\Guest::firstOrCreate(
             ['user_id' => $user->id],
             [
@@ -72,28 +64,16 @@ class CustomerRestaurantController extends Controller
             $total += $menu->price * $item['quantity'];
         }
 
-        // Add shipping cost for delivery orders
-        $shippingCost = $request->shipping_cost ?? 0;
-        $total += $shippingCost;
-
         // Create order
         $order = RestaurantOrder::create([
             'guest_id' => $guest->id,
             'order_number' => 'ORD-' . time() . '-' . rand(1000, 9999),
             'order_date' => now(),
             'total_amount' => $total,
-            'status' => 'pending',
+            'status' => 'pending_payment',
             'notes' => $request->notes,
             'order_type' => $request->order_type,
             'table_number' => $request->order_type === 'dine_in' ? $request->table_number : null,
-            'delivery_address' => $request->order_type === 'delivery' ? $request->delivery_address : null,
-            'delivery_city_id' => $request->delivery_city_id,
-            'delivery_province_id' => $request->delivery_province_id,
-            'delivery_postal_code' => $request->delivery_postal_code,
-            'shipping_courier' => $request->shipping_courier,
-            'shipping_service' => $request->shipping_service,
-            'shipping_cost' => $shippingCost,
-            'estimated_delivery' => $request->estimated_delivery,
         ]);
 
         // Create order details
@@ -108,8 +88,136 @@ class CustomerRestaurantController extends Controller
             ]);
         }
 
-        return redirect()->route('customer.restaurant.order.confirmation', $order)
-            ->with('success', 'Pesanan berhasil dibuat!');
+        // Create payment record with truly unique order_id
+        $payment = \App\Models\Payment::create([
+            'restaurant_order_id' => $order->id,
+            'payment_method' => 'midtrans',
+            'payment_status' => 'pending',
+            'amount' => $total,
+            'midtrans_order_id' => 'RESTAURANT-' . $order->id . '-' . microtime(true),
+        ]);
+
+        // Send notification to admin
+        \App\Models\Notification::sendToAdmins(
+            'new_restaurant_order',
+            'Pesanan Restaurant Baru',
+            $guest->full_name . ' memesan ' . $order->details->count() . ' item (Total: Rp ' . number_format($total, 0, ',', '.') . ')',
+            route('admin.restaurant.order.show', $order)
+        );
+
+        // Send notification to customer
+        \App\Models\Notification::send(
+            $guest->user_id,
+            'restaurant_order_created',
+            'Pesanan Restaurant Diterima',
+            'Pesanan Anda telah diterima. Silakan lakukan pembayaran.',
+            route('customer.restaurant.order.detail', $order)
+        );
+
+        // Redirect to payment page
+        return redirect()->route('customer.restaurant.payment', $order)
+            ->with('success', 'Pesanan berhasil dibuat! Silakan lakukan pembayaran.');
+    }
+
+    public function payment(RestaurantOrder $order)
+    {
+        $user = Auth::user();
+        $guest = \App\Models\Guest::where('user_id', $user->id)->first();
+
+        if (!$guest || $order->guest_id !== $guest->id) {
+            abort(403, 'Anda tidak memiliki akses ke pesanan ini');
+        }
+
+        $order->load(['details.menu']);
+        $payment = $order->payment;
+
+        if (!$payment) {
+            abort(404, 'Pembayaran tidak ditemukan');
+        }
+
+        // Get Midtrans Snap Token
+        \Midtrans\Config::$serverKey = config('services.midtrans.server_key');
+        \Midtrans\Config::$isProduction = config('services.midtrans.is_production');
+        \Midtrans\Config::$isSanitized = config('services.midtrans.is_sanitized');
+        \Midtrans\Config::$is3ds = config('services.midtrans.is_3ds');
+
+        // Always generate new unique order_id to avoid Midtrans duplicate error
+        $newOrderId = 'RESTAURANT-' . $order->id . '-' . time() . '-' . rand(1000, 9999);
+
+        $params = [
+            'transaction_details' => [
+                'order_id' => $newOrderId,
+                'gross_amount' => (int) $order->total_amount,
+            ],
+            'customer_details' => [
+                'first_name' => $guest->full_name,
+                'email' => $guest->email,
+                'phone' => $guest->phone,
+            ],
+            'item_details' => $order->details->map(function ($detail) {
+                return [
+                    'id' => $detail->menu_id,
+                    'price' => (int) $detail->price,
+                    'quantity' => $detail->quantity,
+                    'name' => $detail->menu->name,
+                ];
+            })->toArray(),
+        ];
+
+        $snapToken = \Midtrans\Snap::getSnapToken($params);
+
+        // Update payment with new order_id and snap token
+        $payment->update([
+            'midtrans_order_id' => $newOrderId,
+            'midtrans_snap_token' => $snapToken,
+        ]);
+
+        return view('customer.restaurant.payment', compact('order', 'payment', 'snapToken'));
+    }
+
+    public function paymentSuccess(Request $request)
+    {
+        $orderId = $request->query('order_id');
+        $statusCode = $request->query('status_code');
+
+        if ($statusCode == 200 && $orderId) {
+            $payment = \App\Models\Payment::where('midtrans_order_id', $orderId)->first();
+
+            if ($payment && $payment->restaurantOrder) {
+                $payment->update([
+                    'payment_status' => 'paid',
+                    'paid_at' => now(),
+                ]);
+
+                $order = $payment->restaurantOrder;
+                $order->update(['status' => 'preparing']);
+
+                return redirect()->route('customer.restaurant.order.detail', $order)
+                    ->with('success', 'Pembayaran berhasil! Pesanan Anda sedang diproses.');
+            }
+        }
+
+        return redirect()->route('customer.restaurant.orders')
+            ->with('error', 'Pembayaran gagal atau dibatalkan.');
+    }
+
+    public function paymentPending(Request $request)
+    {
+        $orderId = $request->query('order_id');
+        $payment = \App\Models\Payment::where('midtrans_order_id', $orderId)->first();
+
+        if ($payment) {
+            $payment->update(['payment_status' => 'pending']);
+        }
+
+        return redirect()->route('customer.restaurant.order.detail', $payment->restaurantOrder)
+            ->with('info', 'Menunggu pembayaran. Silakan selesaikan pembayaran sebelum batas waktu.');
+    }
+
+    public function paymentError(Request $request)
+    {
+        return redirect()->route('customer.restaurant.orders')
+            ->with('error', 'Pembayaran gagal. Silakan coba lagi.');
     }
 
     public function orderConfirmation(RestaurantOrder $order)

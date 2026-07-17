@@ -14,13 +14,13 @@ class PaymentController extends Controller
     public function index(Request $request)
     {
         $query = Payment::with(['booking.guest', 'booking.room.roomType']);
-        
+
         if ($request->has('search')) {
             $paymentStatus = strtolower($request->search);
             $query->where('payment_status', 'like', "%{$paymentStatus}%")
                   ->orWhere('payment_method', 'like', "%{$paymentStatus}%");
         }
-        
+
         $payments = $query->latest()->paginate(10);
         return view('admin.payments.index', compact('payments'));
     }
@@ -73,7 +73,7 @@ class PaymentController extends Controller
     public function midtransNotification(Request $request)
     {
         $notif = new \Midtrans\Notification();
-        
+
         $transaction = $notif->transaction_status;
         $type = $notif->payment_type;
         $orderId = $notif->order_id;
@@ -81,7 +81,7 @@ class PaymentController extends Controller
 
         $bookingId = preg_replace('/[^0-9]/', '', $orderId);
         $booking = Booking::find($bookingId);
-        
+
         if (!$booking) {
             return response()->json(['status' => 'error', 'message' => 'Booking not found']);
         }
@@ -91,6 +91,8 @@ class PaymentController extends Controller
         }
 
         $payment = Payment::where('booking_id', $booking->id)->firstOrFail();
+
+        $oldStatus = $payment->payment_status;
 
         if ($transaction == 'capture') {
             if ($type == 'credit_card') {
@@ -112,6 +114,49 @@ class PaymentController extends Controller
             $payment->update(['payment_status' => 'cancelled']);
         }
 
+        // Send notifications if payment status changed to paid
+        if ($oldStatus != 'paid' && $payment->payment_status == 'paid') {
+            if ($payment->booking) {
+                $booking = $payment->booking;
+                $booking->update(['status' => 'confirmed']);
+
+                \App\Models\Notification::sendToAdmins(
+                    'payment_received',
+                    'Pembayaran Diterima',
+                    'Pembayaran booking kamar ' . $booking->room->room_number . ' sebesar Rp ' . number_format($payment->amount, 0, ',', '.') . ' telah dikonfirmasi',
+                    route('admin.bookings.show', $booking)
+                );
+
+                \App\Models\Notification::send(
+                    $booking->guest->user_id,
+                    'payment_success',
+                    'Pembayaran Berhasil',
+                    'Pembayaran booking kamar ' . $booking->room->room_number . ' telah dikonfirmasi. Kamar Anda sudah terbooking!',
+                    route('customer.bookings')
+                );
+            }
+
+            if ($payment->restaurantOrder) {
+                $order = $payment->restaurantOrder;
+                $order->update(['status' => 'preparing']);
+
+                \App\Models\Notification::sendToAdmins(
+                    'restaurant_payment_received',
+                    'Pembayaran Restaurant Diterima',
+                    'Pembayaran pesanan restaurant #' . $order->order_number . ' sebesar Rp ' . number_format($payment->amount, 0, ',', '.') . ' telah dikonfirmasi',
+                    route('admin.restaurant.order.show', $order)
+                );
+
+                \App\Models\Notification::send(
+                    $order->guest->user_id,
+                    'restaurant_payment_success',
+                    'Pembayaran Restaurant Berhasil',
+                    'Pembayaran pesanan restaurant Anda telah dikonfirmasi. Pesanan sedang diproses.',
+                    route('customer.restaurant.order.detail', $order)
+                );
+            }
+        }
+
         return response()->json(['status' => 'success']);
     }
 
@@ -129,7 +174,7 @@ class PaymentController extends Controller
         ]);
 
         $isNowPaid = $request->payment_status === 'paid' && $payment->payment_status !== 'paid';
-        
+
         $payment->update([
             'payment_status' => $request->payment_status,
             'payment_method' => $request->payment_method,

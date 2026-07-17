@@ -7,261 +7,245 @@
     /* ─── Restaurant Hero ─── */
     .restaurant-hero {
         position: relative;
-        height: 50vh;
-        min-height: 350px;
-        background: linear-gradient(135deg, rgba(15, 23, 42, 0.75) 0%, rgba(30, 58, 95, 0.85) 100%), 
-                    url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920') center/cover;
+        min-height: 45vh;
+        background: linear-gradient(135deg, #1e3a8a 0%, #0369A1 50%, #0284C7 100%);
         display: flex;
         align-items: center;
         justify-content: center;
         text-align: center;
         color: white;
+        padding: 80px 20px;
         overflow: hidden;
     }
     .restaurant-hero::before {
         content: '';
         position: absolute;
-        bottom: 0; left: 0; right: 0;
-        height: 80px;
-        background: linear-gradient(to top, var(--bg), transparent);
-        z-index: 3;
-    }
-    .restaurant-hero::after {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -20%;
-        width: 400px;
-        height: 400px;
-        background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
-        border-radius: 50%;
-        animation: float 6s ease-in-out infinite;
-    }
-    @keyframes float {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-30px); }
+        inset: 0;
+        background: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920&q=80') center/cover;
+        opacity: 0.1;
     }
     .hero-content {
-        z-index: 2;
         position: relative;
+        z-index: 2;
+        max-width: 700px;
     }
     .hero-content h1 {
-        font-size: 3.5rem;
-        font-weight: 900;
-        letter-spacing: -2px;
+        font-size: 2.5rem;
+        font-weight: 800;
         margin-bottom: 16px;
-        background: linear-gradient(135deg, #FFF 0%, #FCD34D 50%, #F59E0B 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        text-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
-        animation: fadeInUp 0.8s ease;
+        letter-spacing: -1px;
     }
     .hero-content p {
-        font-size: 1.15rem;
-        color: rgba(255, 255, 255, 0.9);
-        font-weight: 500;
-        max-width: 650px;
-        margin: 0 auto;
-        line-height: 1.7;
-        animation: fadeInUp 0.8s ease 0.2s both;
-    }
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(30px); }
-        to { opacity: 1; transform: translateY(0); }
+        font-size: 1rem;
+        color: rgba(255,255,255,0.85);
+        line-height: 1.6;
     }
 
-    /* ─── Booking Guard Notice ─── */
-    .se-booking-guard {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow-sm);
-        padding: 20px 24px;
-        position: relative;
-        transition: all 0.25s;
+    /* ─── About Section ─── */
+    .about-section {
+        padding: 60px 0;
+        background: #fff;
     }
-    .se-booking-guard-body {
+    .about-card {
+        background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+        border: 1px solid #BAE6FD;
+        border-radius: 20px;
+        padding: 40px;
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 30px;
     }
-    .se-booking-guard-icon {
-        flex-shrink: 0;
-        width: 52px; height: 52px;
-        border-radius: var(--radius);
-        background: #EFF6FF;
-        color: var(--primary);
+    .about-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #0284C7, #0369A1);
+        border-radius: 20px;
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 2.5rem;
+        flex-shrink: 0;
+        box-shadow: 0 8px 20px rgba(2,132,199,0.3);
+    }
+    .about-text h3 {
         font-size: 1.5rem;
-    }
-    .se-booking-guard-content {
-        flex: 1;
-        min-width: 0;
-    }
-    .se-booking-guard-title {
-        color: var(--text);
-        font-size: 1rem;
-        font-weight: 750;
-        display: block;
-        margin-bottom: 4px;
-    }
-    .se-booking-guard-text {
-        color: var(--text-muted);
-        font-family: var(--font-alt);
-        font-size: 0.88rem;
-        line-height: 1.6;
-    }
-    .se-booking-guard-btn {
-        flex-shrink: 0;
-        background: var(--primary);
-        color: #fff;
-        border-radius: var(--radius-xs);
-        padding: 10px 18px;
-        font-size: 0.88rem;
         font-weight: 700;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        text-decoration: none;
-        transition: all 0.2s;
-        white-space: nowrap;
+        color: #0F172A;
+        margin-bottom: 12px;
     }
-    .se-booking-guard-btn:hover {
-        background: #1d4ed8;
+    .about-text p {
+        color: #475569;
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    /* ─── Promotions Section ─── */
+    .promo-section {
+        padding: 50px 0;
+        background: #F8FAFC;
+    }
+    .section-title {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: #0F172A;
+        margin-bottom: 8px;
+        text-align: center;
+    }
+    .section-subtitle {
+        text-align: center;
+        color: #64748B;
+        margin-bottom: 32px;
+    }
+    .promo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+    .promo-card {
+        background: #fff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        transition: all 0.3s;
+        border: 1px solid #E2E8F0;
+    }
+    .promo-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    }
+    .promo-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+    .promo-body {
+        padding: 20px;
+    }
+    .promo-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #FBBF24, #F59E0B);
         color: #fff;
-        transform: translateY(-1px);
-    }
-    .se-booking-guard-close {
-        position: absolute;
-        top: 12px;
-        right: 16px;
-        background: transparent;
-        border: none;
-        color: var(--text-muted);
-        cursor: pointer;
-        font-size: 1rem;
-        transition: color 0.2s;
-    }
-    .se-booking-guard-close:hover {
-        color: var(--text);
-    }
-
-    @media (max-width: 768px) {
-        .se-booking-guard-body {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-        .se-booking-guard-btn {
-            width: 100%;
-            justify-content: center;
-            margin-top: 16px;
-        }
-        .se-booking-guard-close {
-            top: 16px;
-            right: 16px;
-        }
-    }
-
-    /* ─── Category Sticky Bar ─── */
-    .category-bar-section {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-bottom: 1px solid var(--border);
-        padding: 18px 0;
-        position: sticky;
-        top: var(--nav-height);
-        z-index: 50;
-        box-shadow: 0 2px 20px rgba(0,0,0,0.06);
-    }
-    .category-badges {
-        display: flex;
-        gap: 12px;
-        overflow-x: auto;
-        padding-bottom: 4px;
-        scrollbar-width: none;
-    }
-    .category-badges::-webkit-scrollbar { display: none; }
-    .category-badge {
-        flex-shrink: 0;
-        padding: 10px 24px;
+        padding: 4px 12px;
         border-radius: 100px;
-        font-size: 0.88rem;
-        font-weight: 600;
-        cursor: pointer;
-        border: 2px solid var(--border);
-        background: var(--bg-card);
-        color: var(--text-muted);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        white-space: nowrap;
+        font-size: 0.75rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+    .promo-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #0F172A;
+        margin-bottom: 6px;
+    }
+    .promo-desc {
+        font-size: 0.85rem;
+        color: #64748B;
+        margin-bottom: 12px;
+    }
+    .promo-price {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #0284C7;
+    }
+    .promo-price del {
+        font-size: 0.9rem;
+        color: #94A3B8;
+        margin-left: 8px;
+        font-weight: 500;
+    }
+
+    /* ─── Menu Section ─── */
+    .menu-section {
+        padding: 60px 0 100px;
+        background: #fff;
+    }
+
+    /* Search & Filter Bar */
+    .menu-toolbar {
+        background: #fff;
+        border: 1px solid #E2E8F0;
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 30px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
-    .category-badge:hover {
-        border-color: var(--primary);
-        color: var(--primary);
-        background: var(--primary-light);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+    .search-box {
+        position: relative;
+        margin-bottom: 16px;
     }
-    .category-badge.active {
-        background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
-        border-color: var(--primary);
-        color: #fff;
-        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
-        transform: translateY(-2px);
+    .search-box input {
+        width: 100%;
+        padding: 12px 16px 12px 44px;
+        border: 1.5px solid #E2E8F0;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        transition: all 0.2s;
+    }
+    .search-box input:focus {
+        outline: none;
+        border-color: #0284C7;
+        box-shadow: 0 0 0 4px rgba(2,132,199,0.08);
+    }
+    .search-box i {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #64748B;
+    }
+    .filter-row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+    .filter-select {
+        flex: 1;
+        min-width: 150px;
+        padding: 10px 14px;
+        border: 1.5px solid #E2E8F0;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        background: #fff;
+        cursor: pointer;
+    }
+    .filter-select:focus {
+        outline: none;
+        border-color: #0284C7;
     }
 
-    /* ─── Menu Grid ─── */
-    .menu-section {
-        padding: 48px 0 100px;
-        background: linear-gradient(180deg, var(--bg) 0%, #F1F5F9 100%);
+    .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 24px;
     }
     .menu-card {
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
+        background: #fff;
+        border: 1px solid #E2E8F0;
+        border-radius: 16px;
         overflow: hidden;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        box-shadow: var(--shadow-xs);
-        position: relative;
+        transition: all 0.3s;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
     .menu-card:hover {
-        transform: translateY(-10px) scale(1.02);
-        box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        transform: translateY(-6px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.12);
         border-color: transparent;
-    }
-    .menu-card::before {
-        content: '';
-        position: absolute;
-        top: 0; left: 0; right: 0;
-        height: 3px;
-        background: linear-gradient(90deg, #2563EB 0%, #F59E0B 50%, #2563EB 100%);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        z-index: 10;
-    }
-    .menu-card:hover::before {
-        opacity: 1;
     }
     .menu-image-container {
         position: relative;
+        width: 100%;
+        height: 220px;
         overflow: hidden;
-        aspect-ratio: 4/3;
-        background: var(--bg);
+        background: #F1F5F9;
     }
     .menu-card-img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: transform 0.5s;
     }
     .menu-card:hover .menu-card-img {
-        transform: scale(1.1);
+        transform: scale(1.08);
     }
     .menu-image-placeholder {
         width: 100%;
@@ -269,99 +253,48 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 5rem;
-        transition: all 0.6s ease;
-        position: absolute;
-        top: 0; left: 0;
-    }
-    .menu-card:hover .menu-image-placeholder {
-        transform: scale(1.1) rotate(5deg);
-    }
-    .menu-placeholder-1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-    .menu-placeholder-2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
-    .menu-placeholder-3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
-    .menu-placeholder-4 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
-    .menu-placeholder-5 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
-    .menu-placeholder-6 { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
-    .menu-placeholder-7 { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
-    .menu-placeholder-8 { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
-    .menu-placeholder-9 { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); }
-    .menu-placeholder-10 { background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%); }
-    .menu-placeholder-11 { background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%); }
-    .menu-placeholder-12 { background: linear-gradient(135deg, #fddb92 0%, #d1fdff 100%); }
-    .menu-image-shine {
-        position: absolute;
-        top: 0; left: -100%;
-        width: 100%; height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-        transition: left 0.6s ease;
-        z-index: 2;
-    }
-    .menu-card:hover .menu-image-shine {
-        left: 100%;
+        font-size: 4rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
     .menu-status-badge {
         position: absolute;
-        top: 16px; right: 16px;
+        top: 12px;
+        right: 12px;
         padding: 6px 14px;
         border-radius: 100px;
         font-size: 0.72rem;
         font-weight: 700;
-        letter-spacing: 0.5px;
         text-transform: uppercase;
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         backdrop-filter: blur(10px);
         z-index: 5;
     }
-    .bg-available { 
-        background: rgba(220, 252, 231, 0.95); 
-        color: #15803D; 
+    .bg-available {
+        background: rgba(220, 252, 231, 0.95);
+        color: #15803D;
         border: 1px solid #BBF7D0;
     }
-    .bg-unavailable { 
-        background: rgba(254, 226, 226, 0.95); 
-        color: #B91C1C; 
+    .bg-unavailable {
+        background: rgba(254, 226, 226, 0.95);
+        color: #B91C1C;
         border: 1px solid #FECACA;
     }
-    .menu-image-overlay {
-        position: absolute;
-        bottom: 0; left: 0; right: 0;
-        height: 50%;
-        background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-    .menu-card:hover .menu-image-overlay {
-        opacity: 1;
-    }
-
     .menu-body {
-        padding: 24px;
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        position: relative;
+        padding: 20px;
     }
     .menu-title {
-        font-size: 1.2rem;
-        font-weight: 800;
-        color: var(--text);
-        margin-bottom: 10px;
-        line-height: 1.35;
-        letter-spacing: -0.3px;
-        transition: color 0.3s ease;
-    }
-    .menu-card:hover .menu-title {
-        color: var(--primary);
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #0F172A;
+        margin-bottom: 6px;
     }
     .menu-desc {
-        font-size: 0.88rem;
-        color: var(--text-muted);
-        margin-bottom: 20px;
-        line-height: 1.65;
-        flex-grow: 1;
+        font-size: 0.85rem;
+        color: #64748B;
+        margin-bottom: 12px;
+        line-height: 1.5;
         display: -webkit-box;
-        -webkit-line-clamp: 3;
+        -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
@@ -369,99 +302,75 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 16px;
-        margin-top: auto;
-        padding-top: 16px;
-        border-top: 1px solid var(--border);
-    }
-    .menu-price-wrapper {
-        position: relative;
-        display: inline-block;
+        padding-top: 12px;
+        border-top: 1px solid #E2E8F0;
     }
     .menu-price {
-        font-size: 1.35rem;
-        font-weight: 900;
-        color: var(--primary);
-        white-space: nowrap;
-        letter-spacing: -0.5px;
-        position: relative;
-    }
-    .menu-price::after {
-        content: '';
-        position: absolute;
-        bottom: -2px; left: 0;
-        width: 0; height: 2px;
-        background: var(--primary);
-        transition: width 0.3s ease;
-    }
-    .menu-card:hover .menu-price::after {
-        width: 100%;
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: #0284C7;
     }
     .btn-order {
-        background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+        background: linear-gradient(135deg, #0284C7, #0369A1);
         color: #fff;
         border: none;
-        border-radius: var(--radius-xs);
-        padding: 11px 22px;
+        border-radius: 10px;
+        padding: 10px 20px;
         font-size: 0.88rem;
-        font-weight: 700;
+        font-weight: 600;
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        white-space: nowrap;
-        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+        gap: 6px;
+        transition: all 0.3s;
+        box-shadow: 0 4px 14px rgba(2,132,199,0.25);
     }
     .btn-order:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
-        background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%);
-    }
-    .btn-order:active {
-        transform: translateY(0);
+        box-shadow: 0 8px 20px rgba(2,132,199,0.4);
     }
     .btn-order:disabled {
-        background: var(--bg);
+        background: #E2E8F0;
         color: #94A3B8;
-        border: 1px solid var(--border);
         cursor: not-allowed;
         box-shadow: none;
     }
 
-    /* ─── Floating Cart Button ─── */
+    /* ─── Floating Cart ─── */
     .floating-cart {
         position: fixed;
-        bottom: 30px; right: 30px;
-        width: 70px; height: 70px;
-        background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+        bottom: 30px;
+        right: 30px;
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, #0284C7, #0369A1);
         color: #fff;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 1.6rem;
-        box-shadow: 0 12px 32px rgba(37, 99, 235, 0.45);
+        box-shadow: 0 12px 32px rgba(2,132,199,0.45);
         cursor: pointer;
         z-index: 999;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         border: none;
         animation: pulse 2s ease-in-out infinite;
     }
     @keyframes pulse {
-        0%, 100% { box-shadow: 0 12px 32px rgba(37, 99, 235, 0.45); }
-        50% { box-shadow: 0 12px 40px rgba(37, 99, 235, 0.65); }
+        0%, 100% { box-shadow: 0 12px 32px rgba(2,132,199,0.45); }
+        50% { box-shadow: 0 12px 40px rgba(2,132,199,0.65); }
     }
     .floating-cart:hover {
         transform: translateY(-6px) scale(1.08);
-        box-shadow: 0 18px 44px rgba(37, 99, 235, 0.55);
         animation: none;
     }
     .cart-badge {
         position: absolute;
-        top: -6px; right: -6px;
-        width: 26px; height: 26px;
+        top: -6px;
+        right: -6px;
+        width: 26px;
+        height: 26px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+        background: linear-gradient(135deg, #EF4444, #DC2626);
         color: #fff;
         font-size: 0.75rem;
         font-weight: 800;
@@ -472,69 +381,48 @@
         border: 2px solid #fff;
     }
 
-    /* ─── Cart Sidebar ─── */
-    .cart-offcanvas {
-        border-radius: 20px 0 0 20px;
-        box-shadow: -10px 0 40px rgba(0,0,0,0.1);
-    }
-    .cart-item-row {
-        padding: 16px 0;
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .btn-trash {
-        background: #FEE2E2;
-        color: var(--danger);
-        border: none;
-        width: 32px; height: 32px;
-        border-radius: var(--radius-xs);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.9rem;
-        transition: all 0.2s;
-    }
-    .btn-trash:hover {
-        background: var(--danger);
-        color: #fff;
-    }
-
-    /* ─── Modal Styles ─── */
-    .custom-modal-content {
-        border-radius: 24px;
-        border: none;
-        overflow: hidden;
-    }
-
+    /* ─── Responsive ─── */
     @media (max-width: 768px) {
-        .restaurant-hero { height: 40vh; min-height: 280px; }
-        .hero-content h1 { font-size: 2.2rem; letter-spacing: -1px; }
-        .hero-content p { font-size: 0.95rem; }
-        .menu-body { padding: 18px; }
-        .menu-title { font-size: 1.05rem; }
-        .menu-price { font-size: 1.15rem; }
-        .floating-cart { bottom: 20px; right: 20px; width: 60px; height: 60px; font-size: 1.4rem; }
-        .btn-order { padding: 9px 18px; font-size: 0.85rem; }
-        .category-badge { padding: 8px 18px; font-size: 0.82rem; }
-        .menu-card {
-            border-radius: var(--radius-sm);
+        .hero-content h1 { font-size: 1.8rem; }
+        .hero-content p { font-size: 0.9rem; }
+        .about-card {
+            flex-direction: column;
+            text-align: center;
+            padding: 30px 20px;
+        }
+        .about-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 2rem;
+        }
+        .menu-grid {
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 16px;
+        }
+        .menu-image-container {
+            height: 180px;
+        }
+        .floating-cart {
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            font-size: 1.4rem;
         }
     }
-    
-    @media (max-width: 576px) {
-        .restaurant-hero { height: 35vh; min-height: 240px; }
-        .hero-content h1 { font-size: 1.8rem; }
-        .hero-content p { font-size: 0.88rem; }
-        .menu-body { padding: 16px; }
-        .menu-title { font-size: 1rem; }
-        .menu-price { font-size: 1.1rem; }
-        .btn-order { padding: 8px 16px; font-size: 0.82rem; }
-        .menu-status-badge { 
-            top: 10px; right: 10px; 
-            padding: 5px 10px; 
-            font-size: 0.68rem; 
+    @media (max-width: 480px) {
+        .restaurant-hero {
+            min-height: 35vh;
+            padding: 60px 16px;
+        }
+        .hero-content h1 {
+            font-size: 1.5rem;
+        }
+        .menu-grid {
+            grid-template-columns: 1fr;
+        }
+        .promo-grid {
+            grid-template-columns: 1fr;
         }
     }
 </style>
@@ -545,101 +433,148 @@
 <div class="restaurant-hero">
     <div class="hero-content">
         <h1>🍽️ Restoran StayEase</h1>
-        <p>Manjakan diri dengan berbagai pilihan menu masakan premium, disiapkan oleh chef profesional kami langsung untuk Anda.</p>
+        <p>Nikmati hidangan lezat dari chef profesional kami dengan bahan-bahan pilihan terbaik.</p>
     </div>
 </div>
 
-{{-- Booking reservation guard notice --}}
-@auth
-    @if(!$hasBookedRoom)
-    <div class="container mt-4">
-        <div class="se-booking-guard">
-            <div class="se-booking-guard-body">
-                <div class="se-booking-guard-icon"><i class="bi bi-shield-lock-fill"></i></div>
-                <div class="se-booking-guard-content">
-                    <strong class="se-booking-guard-title">Akses restoran untuk tamu hotel</strong>
-                    <span class="se-booking-guard-text">Anda belum memiliki reservasi kamar. <b>Pesan / cek-in kamar terlebih dahulu</b> agar bisa memesan makanan di sini.</span>
-                </div>
-                <a href="{{ route('rooms.index') }}" class="se-booking-guard-btn">
-                    <i class="bi bi-building"></i> Booking Sekarang
-                </a>
-            </div>
-            <button type="button" class="se-booking-guard-close" data-bs-dismiss="alert" aria-label="Tutup">
-                <i class="bi bi-x-lg"></i>
-            </button>
-        </div>
-    </div>
-    @endif
-@endauth
-
-{{-- Category Stick Bar --}}
-<div class="category-bar-section">
+{{-- About Section --}}
+<div class="about-section">
     <div class="container">
-        <div class="category-badges">
-            <button class="category-badge active" data-category="all">
-                <i class="bi bi-grid-3x3-gap me-1"></i> Semua Menu
-            </button>
-            @foreach($categories as $category)
-                <button class="category-badge" data-category="{{ $category }}">
-                    {{ ucfirst($category) }}
-                </button>
-            @endforeach
+        <div class="about-card">
+            <div class="about-icon">👨‍🍳</div>
+            <div class="about-text">
+                <h3>Tentang Restoran Kami</h3>
+                <p>Restoran StayEase menawarkan pengalaman kuliner yang tak terlupakan dengan menu fusion Asia-Eropa yang dibuat oleh chef berpengalaman. Setiap hidangan disajikan dengan penuh dedikasi menggunakan bahan-bahan segar pilihan untuk memastikan kualitas terbaik untuk Anda.</p>
+            </div>
         </div>
     </div>
 </div>
 
-{{-- Menu Grid --}}
+{{-- Promotions Section --}}
+<div class="promo-section">
+    <div class="container">
+        <h2 class="section-title">🔥 Promo Spesial</h2>
+        <p class="section-subtitle">Penawaran eksklusif untuk Anda</p>
+
+        <div class="promo-grid">
+            <div class="promo-card">
+                <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=600&q=80" alt="Weekend Dinner" class="promo-image">
+                <div class="promo-body">
+                    <span class="promo-badge">HOT</span>
+                    <div class="promo-title">Weekend Dinner Special</div>
+                    <div class="promo-desc">Set menu dinner untuk 2 orang dengan pemandangan city view</div>
+                    <div class="promo-price">Rp 350.000 <del>Rp 500.000</del></div>
+                </div>
+            </div>
+
+            <div class="promo-card">
+                <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=600&q=80" alt="Lunch Set" class="promo-image">
+                <div class="promo-body">
+                    <span class="promo-badge">NEW</span>
+                    <div class="promo-title">Business Lunch Set</div>
+                    <div class="promo-desc">Paket lunch hemat untuk pelaku bisnis, Senin-Jumat</div>
+                    <div class="promo-price">Rp 85.000 <del>Rp 120.000</del></div>
+                </div>
+            </div>
+
+            <div class="promo-card">
+                <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80" alt="Breakfast" class="promo-image">
+                <div class="promo-body">
+                    <span class="promo-badge">SAVE 30%</span>
+                    <div class="promo-title">Breakfast Paradise</div>
+                    <div class="promo-desc">Breakfast buffet dengan pilihan menu internasional</div>
+                    <div class="promo-price">Rp 150.000 <del>Rp 220.000</del></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Menu Section --}}
 <div class="menu-section">
     <div class="container">
-        <div class="row g-4" id="menuGrid">
+        <h2 class="section-title">Menu Kami</h2>
+        <p class="section-subtitle">Pilihan hidangan terbaik dari chef kami</p>
+
+        {{-- Search & Filter Toolbar --}}
+        <div class="menu-toolbar">
+            <div class="search-box">
+                <i class="bi bi-search"></i>
+                <input type="text" id="searchInput" placeholder="Cari menu favorit Anda...">
+            </div>
+            <div class="filter-row">
+                <select class="filter-select" id="categoryFilter">
+                    <option value="all">Semua Kategori</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category }}">{{ ucfirst($category) }}</option>
+                    @endforeach
+                </select>
+                <select class="filter-select" id="sortFilter">
+                    <option value="default">Urutkan: Default</option>
+                    <option value="price-asc">Harga: Rendah ke Tinggi</option>
+                    <option value="price-desc">Harga: Tinggi ke Rendah</option>
+                    <option value="name-asc">Nama: A-Z</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="menu-grid" id="menuGrid">
             @forelse($menus as $menu)
-                <div class="col-12 col-sm-6 col-lg-4 menu-item animate-up" data-category="{{ $menu->category }}">
+                <div class="menu-item" data-category="{{ $menu->category }}" data-price="{{ $menu->price }}" data-name="{{ strtolower($menu->name) }}">
                     <div class="menu-card">
                         <div class="menu-image-container">
                             @if($menu->image)
                                 <img src="{{ asset('storage/' . $menu->image) }}" alt="{{ $menu->name }}" class="menu-card-img" loading="lazy">
                             @else
                                 @php
-                                    $emojis = ['🍕', '🍔', '🍟', '🌭', '🍿', '🧁', '🍩', '🍪', '🎂', '🍰', '🥗', '🍝', '🍜', '🍱', '🍛', '🍣', '🍤', '🍗', '🥘', '🍲'];
-                                    $emoji = $emojis[$menu->id % count($emojis)];
-                                    $placeholderClass = 'menu-placeholder-' . (($menu->id % 12) + 1);
+                                    $foodImages = [
+                                        'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=80',
+                                        'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80',
+                                        'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=80',
+                                        'https://images.unsplash.com/photo-1551782450-17144efb9c50?w=600&q=80',
+                                        'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=600&q=80',
+                                        'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=600&q=80',
+                                        'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600&q=80',
+                                        'https://images.unsplash.com/photo-1555126634-323283e090fa?w=600&q=80',
+                                        'https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=600&q=80',
+                                        'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=80',
+                                        'https://images.unsplash.com/photo-1569718212165-515a7cb661fc?w=600&q=80',
+                                        'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=600&q=80',
+                                        'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600&q=80',
+                                        'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600&q=80',
+                                        'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&q=80',
+                                        'https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=600&q=80',
+                                        'https://images.unsplash.com/photo-1551232864-3f0890e580d9?w=600&q=80',
+                                        'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=600&q=80',
+                                        'https://images.unsplash.com/photo-1588166524941-3bf61a9c41db?w=600&q=80',
+                                        'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=600&q=80',
+                                    ];
+                                    $imageUrl = $foodImages[$menu->id % count($foodImages)];
                                 @endphp
-                                <div class="menu-image-placeholder {{ $placeholderClass }}">
-                                    <span style="filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));">{{ $emoji }}</span>
-                                </div>
+                                <img src="{{ $imageUrl }}" alt="{{ $menu->name }}" class="menu-card-img" loading="lazy">
                             @endif
-                            
-                            @if($menu->image)
-                                <div class="menu-image-shine"></div>
-                                <div class="menu-image-overlay"></div>
-                            @endif
-                            
                             <span class="menu-status-badge {{ $menu->is_available ? 'bg-available' : 'bg-unavailable' }}">
                                 {{ $menu->is_available ? 'Tersedia' : 'Habis' }}
                             </span>
                         </div>
-                        
                         <div class="menu-body">
-                            <h5 class="menu-title">{{ $menu->name }}</h5>
-                            <p class="menu-desc">{{ $menu->description }}</p>
-                            
+                            <div class="menu-title">{{ $menu->name }}</div>
+                            <div class="menu-desc">{{ $menu->description }}</div>
                             <div class="menu-footer">
                                 <div class="menu-price">Rp {{ number_format($menu->price, 0, ',', '.') }}</div>
                                 @auth
                                     @if($menu->is_available)
                                         @if($hasBookedRoom)
-                                        <button class="btn-order" onclick="addToCart({{ $menu->id }}, this)">
-                                            <i class="bi bi-cart-plus-fill"></i> Tambah
-                                        </button>
+                                            <button class="btn-order" onclick="addToCart({{ $menu->id }}, this)">
+                                                <i class="bi bi-cart-plus-fill"></i> Tambah
+                                            </button>
                                         @else
-                                        <button class="btn-order" onclick="showBookingAlert()">
-                                            <i class="bi bi-cart-plus-fill"></i> Tambah
-                                        </button>
+                                            <button class="btn-order" disabled title="Booking kamar terlebih dahulu">
+                                                <i class="bi bi-lock-fill"></i>
+                                            </button>
                                         @endif
                                     @else
-                                        <button class="btn-order" disabled>
-                                            <i class="bi bi-x-circle-fill"></i> Habis
-                                        </button>
+                                        <button class="btn-order" disabled>Habis</button>
                                     @endif
                                 @else
                                     <a href="{{ route('customer.login') }}" class="btn-order">
@@ -652,8 +587,7 @@
                 </div>
             @empty
                 <div class="col-12 text-center py-5">
-                    <div style="font-size: 3.5rem;" class="text-muted mb-3"><i class="bi bi-egg-fried"></i></div>
-                    <h5 class="fw-bold" style="color: var(--text);">Menu Belum Tersedia</h5>
+                    <h5 class="text-muted">Menu Belum Tersedia</h5>
                     <p class="text-muted">Kembali lagi nanti untuk menu terupdate.</p>
                 </div>
             @endforelse
@@ -662,318 +596,320 @@
 </div>
 
 {{-- Floating Cart Button --}}
-<button class="floating-cart" onclick="toggleCart()" id="cartFloatingBtn">
-    <i class="bi bi-cart3"></i>
-    <span class="cart-badge" id="cartCount">0</span>
-</button>
+@auth
+    @if($hasBookedRoom)
+        <button class="floating-cart" onclick="toggleCart()">
+            <i class="bi bi-cart-fill"></i>
+            <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
+        </button>
+    @endif
+@endauth
 
-{{-- Cart Sidebar --}}
-<div class="offcanvas offcanvas-end cart-offcanvas" tabindex="-1" id="cartSidebar">
-    <div class="offcanvas-header border-bottom py-3 px-4">
-        <h5 class="offcanvas-title fw-bold" style="color: var(--text);"><i class="bi bi-cart3 text-primary me-2"></i> Keranjang Belanja</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-    </div>
-    <div class="offcanvas-body d-flex flex-column px-4">
-        <div id="cartItems" class="flex-grow-1 overflow-auto"></div>
-        <div class="pt-4 border-top mt-auto mb-2">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <span class="text-muted">Total Pembayaran</span>
-                <strong id="cartTotal" class="text-primary fs-4 fw-extrabold">Rp 0</strong>
-            </div>
-            <button class="btn btn-primary w-100 py-3 rounded-3 fw-bold" onclick="showCheckoutModal()">
-                <i class="bi bi-credit-card-fill me-1"></i> Checkout Sekarang
-            </button>
-        </div>
-    </div>
-</div>
-
-{{-- Order Type Modal --}}
-<div class="modal fade" id="orderTypeModal" tabindex="-1">
+{{-- Dining Preference Modal --}}
+<div class="modal fade" id="diningModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content custom-modal-content">
-            <div class="modal-header bg-light border-bottom py-3 px-4">
-                <h5 class="modal-title fw-bold" style="color:var(--text);"><i class="bi bi-file-text text-primary me-2"></i> Detail Pemesanan</h5>
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold">🍽️ Pilihan Makan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body p-4">
+            <div class="modal-body">
+                <p class="text-muted mb-3">Silakan pilih cara Anda ingin menikmati makanan:</p>
+
                 <div class="mb-3">
-                    <label class="form-label fw-bold small text-uppercase" style="color:var(--text-muted);">Metode Pengantaran</label>
-                    <select class="form-select form-select-lg rounded-3 fs-6" id="orderType" onchange="toggleOrderFields()">
-                        <option value="dine_in">🍽️ Dine In (Makan di tempat / kamar)</option>
-                        <option value="takeaway">🥡 Takeaway (Ambil sendiri di restoran)</option>
-                    </select>
-                </div>
-                
-                <div class="mb-3" id="tableNumberField">
-                    <label class="form-label fw-bold small text-uppercase" style="color:var(--text-muted);">Nomor Kamar / Meja *</label>
-                    <input type="text" class="form-control form-control-lg rounded-3 fs-6" id="tableNumber" placeholder="Contoh: Kamar 302">
+                    <label class="form-label fw-semibold">Opsi Makan:</label>
+                    <div class="d-flex flex-column gap-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="order_type" id="dineIn" value="dine_in" checked>
+                            <label class="form-check-label" for="dineIn">
+                                <strong>🍴 Dine In</strong> - Makan di restoran
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="order_type" id="takeaway" value="takeaway">
+                            <label class="form-check-label" for="takeaway">
+                                <strong>📦 Takeaway</strong> - Bawa pulang
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="order_type" id="delivery" value="delivery">
+                            <label class="form-check-label" for="delivery">
+                                <strong>🚚 Delivery</strong> - Dikirim ke kamar
+                            </label>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="mb-0">
-                    <label class="form-label fw-bold small text-uppercase" style="color:var(--text-muted);">Catatan Tambahan (Opsional)</label>
-                    <textarea class="form-control rounded-3" id="orderNotes" rows="2" placeholder="Contoh: Sendok plastik, tidak pedas, dll."></textarea>
+                <div class="mb-3" id="roomNumberField">
+                    <label for="tableNumber" class="form-label fw-semibold">Nomor Kamar <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="tableNumber" placeholder="Contoh: 101, 205, dll">
+                    <small class="text-muted">Masukkan nomor kamar Anda untuk room service</small>
+                </div>
+
+                <div class="mb-3">
+                    <label for="addons" class="form-label fw-semibold">Tambahan / Permintaan Khusus</label>
+                    <textarea class="form-control" id="addons" rows="3" placeholder="Contoh: Tanpa pedas, extra saos, dll"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="orderNotes" class="form-label fw-semibold">Catatan Lainnya</label>
+                    <textarea class="form-control" id="orderNotes" rows="2" placeholder="Catatan tambahan (opsional)"></textarea>
                 </div>
             </div>
-            <div class="modal-footer bg-light border-top p-3">
-                <button type="button" class="btn btn-outline-secondary px-4 py-2" data-bs-dismiss="modal">Kembali</button>
-                <button type="button" class="btn btn-primary fw-bold px-4 py-2" onclick="processCheckout()">
-                    <i class="bi bi-check-circle-fill"></i> Buat Pesanan
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-primary" onclick="confirmOrder()">
+                    <i class="bi bi-check-circle"></i> Konfirmasi Pesanan
                 </button>
             </div>
         </div>
     </div>
 </div>
 
-{{-- Booking Required Alert Modal --}}
-<div class="modal fade" id="bookingAlertModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="border: none; border-radius: 24px; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.15);">
-            <div class="text-center px-4 pt-5 pb-4" style="background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);">
-                <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 8px 24px rgba(245,158,11,0.3);">
-                    <i class="bi bi-building" style="font-size: 2rem; color: #fff;"></i>
-                </div>
-                <h4 class="fw-bold mb-1" style="color: #92400E;">Booking Kamar Diperlukan</h4>
-                <p style="color: #A16207; font-size: 0.9rem; font-family: var(--font-alt); max-width: 360px; margin: 0 auto;">Anda belum memesan kamar hotel. Silakan booking kamar terlebih dahulu untuk mengakses layanan restoran.</p>
+{{-- Cart Sidebar --}}
+<div class="offcanvas offcanvas-end cart-offcanvas" tabindex="-1" id="cartOffcanvas">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Keranjang Belanja</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div id="cartItems">
+            <p class="text-muted text-center py-4">Keranjang kosong</p>
+        </div>
+        <div id="cartFooter" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 1px solid #E2E8F0;">
+            <div class="d-flex justify-content-between mb-3">
+                <strong>Total:</strong>
+                <strong id="cartTotal" style="color: #0284C7; font-size: 1.2rem;">Rp 0</strong>
             </div>
-            <div class="text-center px-4 py-4" style="background: #FFFBEB;">
-                <div style="display: flex; align-items: flex-start; gap: 12px; background: #fff; border-radius: 16px; padding: 16px; text-align: left; margin-bottom: 16px; border: 1px solid #FDE68A;">
-                    <div style="width: 36px; height: 36px; border-radius: 10px; background: #EFF6FF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                        <i class="bi bi-info-circle" style="color: #0284C7; font-size: 1rem;"></i>
-                    </div>
-                    <div style="font-size: 0.82rem; color: #64748B; font-family: var(--font-alt); line-height: 1.5;">
-                        Layanan restoran StayEase tersedia <strong style="color: #0F172A;">khusus untuk tamu hotel</strong> yang telah melakukan booking kamar.
-                    </div>
-                </div>
-                <div class="d-flex gap-2">
-                    <a href="{{ route('rooms.index') }}" class="btn-se btn-se-primary flex-grow-1" style="padding: 12px 20px; font-size: 0.9rem;">
-                        <i class="bi bi-building me-1"></i> Booking Kamar
-                    </a>
-                    <button type="button" class="btn-se btn-se-outline" style="padding: 12px 20px; font-size: 0.9rem;" data-bs-dismiss="modal">
-                        Nanti
-                    </button>
-                </div>
-            </div>
+            <button class="btn-order w-100" onclick="checkout()">
+                <i class="bi bi-check-circle-fill"></i> Checkout
+            </button>
         </div>
     </div>
 </div>
 
+@endsection
+
 @push('scripts')
 <script>
-    let cart = [];
+let cart = [];
 
-    function showBookingAlert() {
-        const modal = new bootstrap.Modal(document.getElementById('bookingAlertModal'));
-        modal.show();
-    }
-    
-    function toggleCart() {
-        const cartEl = document.getElementById('cartSidebar');
-        const cartSidebar = new bootstrap.Offcanvas(cartEl);
-        cartSidebar.show();
-    }
+function toggleCart() {
+    const offcanvas = new bootstrap.Offcanvas(document.getElementById('cartOffcanvas'));
+    offcanvas.toggle();
+}
 
-    document.addEventListener('DOMContentLoaded', function() {
-        updateCartCount();
-    });
+function addToCart(menuId, btn) {
+    const item = menusData[menuId];
+    if (!item) return;
 
-    function showCheckoutModal() {
-        if (cart.length === 0) {
-            alert('Keranjang masih kosong');
-            return;
-        }
-        const cartEl = document.getElementById('cartSidebar');
-        const cartSidebar = bootstrap.Offcanvas.getInstance(cartEl);
-        if (cartSidebar) cartSidebar.hide();
-        
-        setTimeout(() => {
-            new bootstrap.Modal(document.getElementById('orderTypeModal')).show();
-        }, 300);
-    }
-
-    function toggleOrderFields() {
-        const orderType = document.getElementById('orderType').value;
-        const tableField = document.getElementById('tableNumberField');
-        if (orderType === 'dine_in') {
-            tableField.classList.remove('d-none');
-        } else if (orderType === 'takeaway') {
-            tableField.classList.add('d-none');
-        }
-    }
-
-    function processCheckout() {
-        if (cart.length === 0) {
-            alert('Keranjang masih kosong');
-            return;
-        }
-
-        const orderType = document.getElementById('orderType').value;
-        const orderNotes = document.getElementById('orderNotes').value;
-
-        if (orderType === 'dine_in') {
-            const tableNumber = document.getElementById('tableNumber').value;
-            if (!tableNumber.trim()) {
-                alert('Mohon masukkan nomor kamar/meja');
-                return;
-            }
-        }
-
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '{{ route('customer.restaurant.order.place') }}';
-        
-        const csrf = document.createElement('input');
-        csrf.type = 'hidden';
-        csrf.name = '_token';
-        csrf.value = '{{ csrf_token() }}';
-        form.appendChild(csrf);
-
-        cart.forEach(function(item, index) {
-            const menuIdInput = document.createElement('input');
-            menuIdInput.type = 'hidden';
-            menuIdInput.name = 'items[' + index + '][menu_id]';
-            menuIdInput.value = item.menu_id;
-            form.appendChild(menuIdInput);
-
-            const qtyInput = document.createElement('input');
-            qtyInput.type = 'hidden';
-            qtyInput.name = 'items[' + index + '][quantity]';
-            qtyInput.value = item.quantity;
-            form.appendChild(qtyInput);
+    const existingItem = cart.find(i => i.menu_id === menuId);
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({
+            menu_id: menuId,
+            name: item.name,
+            price: item.price,
+            quantity: 1
         });
-
-        const typeInput = document.createElement('input');
-        typeInput.type = 'hidden';
-        typeInput.name = 'order_type';
-        typeInput.value = orderType;
-        form.appendChild(typeInput);
-
-        if (orderNotes) {
-            const orderNotesInput = document.createElement('input');
-            orderNotesInput.type = 'hidden';
-            orderNotesInput.name = 'notes';
-            orderNotesInput.value = orderNotes;
-            form.appendChild(orderNotesInput);
-        }
-
-        if (orderType === 'dine_in') {
-            const tableInput = document.createElement('input');
-            tableInput.type = 'hidden';
-            tableInput.name = 'table_number';
-            tableInput.value = document.getElementById('tableNumber').value;
-            form.appendChild(tableInput);
-        }
-
-        document.body.appendChild(form);
-        form.submit();
     }
 
-    // Store menus data for JavaScript
-    const menusData = @json($menus->keyBy('id')->toArray());
-    
-    function addToCart(menuId, btn) {
-        const item = menusData[menuId];
-        
-        if (!item) return;
+    updateCartUI();
 
-        const existingItem = cart.find(i => i.menu_id === menuId);
-        if (existingItem) {
-            existingItem.quantity++;
-        } else {
-            cart.push({
-                menu_id: menuId,
-                name: item.name,
-                price: item.price,
-                quantity: 1
-            });
-        }
+    // Button feedback
+    const originalHTML = btn.innerHTML;
+    btn.innerHTML = '<i class="bi bi-check-circle-fill"></i> Ditambahkan';
+    btn.disabled = true;
+    setTimeout(() => {
+        btn.innerHTML = originalHTML;
+        btn.disabled = false;
+    }, 1500);
+}
 
-        updateCartUI();
-        updateCartCount();
-        
-        if (btn) {
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="bi bi-check-circle-fill"></i> Ok';
-            btn.style.background = '#10B981';
-            btn.style.color = '#fff';
-            btn.style.borderColor = '#10B981';
-            setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.style.background = '';
-                btn.style.color = '';
-                btn.style.borderColor = '';
-            }, 800);
-        }
+function removeFromCart(menuId) {
+    cart = cart.filter(i => i.menu_id !== menuId);
+    updateCartUI();
+}
+
+function updateCartUI() {
+    const cartItems = document.getElementById('cartItems');
+    const cartBadge = document.getElementById('cartBadge');
+    const cartFooter = document.getElementById('cartFooter');
+    const cartTotal = document.getElementById('cartTotal');
+
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+    // Update badge
+    if (totalItems > 0) {
+        cartBadge.style.display = 'flex';
+        cartBadge.textContent = totalItems;
+    } else {
+        cartBadge.style.display = 'none';
     }
 
-    function removeFromCart(menuId) {
-        cart = cart.filter(i => i.menu_id !== menuId);
-        updateCartUI();
-        updateCartCount();
-    }
-
-    function updateCartUI() {
-        const cartItems = document.getElementById('cartItems');
-        const cartTotal = document.getElementById('cartTotal');
-        
-        if (cart.length === 0) {
-            cartItems.innerHTML = '<div class="text-center py-5"><i class="bi bi-cart-x text-muted mb-2" style="font-size: 3rem;"></i><p class="text-muted">Keranjang kosong</p></div>';
-            cartTotal.textContent = 'Rp 0';
-            return;
-        }
-
-        let html = '<div class="d-flex flex-column gap-3">';
-        let total = 0;
-
-        cart.forEach(item => {
-            const subtotal = item.price * item.quantity;
-            total += subtotal;
-            html += `
-                <div class="cart-item-row">
-                    <div style="max-width: 70%;">
-                        <strong class="text-dark d-block text-truncate" style="font-size:0.95rem;">${item.name}</strong>
-                        <span class="text-muted small">Rp ${item.price.toLocaleString('id-ID')} × ${item.quantity}</span>
-                    </div>
-                    <div class="text-end">
-                        <span class="fw-bold text-dark d-block">Rp ${subtotal.toLocaleString('id-ID')}</span>
-                        <button class="btn-trash ms-auto mt-1" onclick="removeFromCart(${item.menu_id})">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </div>
+    // Update cart items
+    if (cart.length === 0) {
+        cartItems.innerHTML = '<p class="text-muted text-center py-4">Keranjang kosong</p>';
+        cartFooter.style.display = 'none';
+    } else {
+        cartItems.innerHTML = cart.map(item => `
+            <div class="cart-item-row">
+                <div>
+                    <div style="font-weight: 600; font-size: 0.95rem; color: #0F172A;">${item.name}</div>
+                    <small class="text-muted">Qty: x${item.quantity}</small>
                 </div>
-            `;
-        });
+                <div class="d-flex align-items-center gap-2">
+                    <strong style="color: #0284C7;">Rp ${(item.price * item.quantity).toLocaleString('id-ID')}</strong>
+                    <button class="btn-trash" onclick="removeFromCart(${item.menu_id})">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+        cartFooter.style.display = 'block';
+        cartTotal.textContent = 'Rp ' + totalPrice.toLocaleString('id-ID');
+    }
+}
 
-        html += '</div>';
-        cartItems.innerHTML = html;
-        cartTotal.textContent = 'Rp ' + total.toLocaleString('id-ID');
+function checkout() {
+    if (cart.length === 0) {
+        alert('Keranjang belanja kosong!');
+        return;
     }
 
-    function updateCartCount() {
-        const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-        const el = document.getElementById('cartCount');
-        if (el) el.textContent = count;
+    // Show dining preference modal
+    const modal = new bootstrap.Modal(document.getElementById('diningModal'));
+    modal.show();
+}
+
+function confirmOrder() {
+    const orderType = document.querySelector('input[name="order_type"]:checked').value;
+    const tableNumber = document.getElementById('tableNumber').value;
+    const notes = document.getElementById('orderNotes').value;
+    const addons = document.getElementById('addons').value;
+
+    if (orderType === 'dine_in' && !tableNumber) {
+        alert('Silakan masukkan nomor kamar Anda');
+        return;
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        toggleOrderFields();
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '{{ route("customer.restaurant.order.place") }}';
+
+    const csrfInput = document.createElement('input');
+    csrfInput.type = 'hidden';
+    csrfInput.name = '_token';
+    csrfInput.value = '{{ csrf_token() }}';
+    form.appendChild(csrfInput);
+
+    cart.forEach((item, index) => {
+        const menuIdInput = document.createElement('input');
+        menuIdInput.type = 'hidden';
+        menuIdInput.name = `items[${index}][menu_id]`;
+        menuIdInput.value = item.menu_id;
+        form.appendChild(menuIdInput);
+
+        const qtyInput = document.createElement('input');
+        qtyInput.type = 'hidden';
+        qtyInput.name = `items[${index}][quantity]`;
+        qtyInput.value = item.quantity;
+        form.appendChild(qtyInput);
     });
 
-    // Category filter
-    document.querySelectorAll('.category-badge').forEach(badge => {
-        badge.addEventListener('click', function() {
-            document.querySelectorAll('.category-badge').forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
+    const orderTypeInput = document.createElement('input');
+    orderTypeInput.type = 'hidden';
+    orderTypeInput.name = 'order_type';
+    orderTypeInput.value = orderType;
+    form.appendChild(orderTypeInput);
 
-            const category = this.dataset.category;
-            document.querySelectorAll('.menu-item').forEach(item => {
-                if (category === 'all' || item.dataset.category === category) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        });
+    if (orderType === 'dine_in') {
+        const tableInput = document.createElement('input');
+        tableInput.type = 'hidden';
+        tableInput.name = 'table_number';
+        tableInput.value = tableNumber;
+        form.appendChild(tableInput);
+    }
+
+    const notesInput = document.createElement('input');
+    notesInput.type = 'hidden';
+    notesInput.name = 'notes';
+    notesInput.value = (notes + (addons ? '\nTambahan: ' + addons : '')).trim();
+    form.appendChild(notesInput);
+
+    document.body.appendChild(form);
+    form.submit();
+
+    // Hide modal
+    const modal = bootstrap.Modal.getInstance(document.getElementById('diningModal'));
+    modal.hide();
+}
+
+// Store menus data for JavaScript
+const menusData = @json($menus->keyBy('id')->toArray());
+
+// Search, Filter, Sort functionality
+const searchInput = document.getElementById('searchInput');
+const categoryFilter = document.getElementById('categoryFilter');
+const sortFilter = document.getElementById('sortFilter');
+
+function filterAndSortMenus() {
+    const searchTerm = searchInput.value.toLowerCase();
+    const selectedCategory = categoryFilter.value;
+    const sortType = sortFilter.value;
+
+    const menuItems = document.querySelectorAll('.menu-item');
+
+    menuItems.forEach(item => {
+        const name = item.dataset.name;
+        const category = item.dataset.category;
+        const price = parseInt(item.dataset.price);
+
+        // Search filter
+        const matchesSearch = name.includes(searchTerm);
+
+        // Category filter
+        const matchesCategory = selectedCategory === 'all' || category === selectedCategory;
+
+        // Show/hide based on filters
+        if (matchesSearch && matchesCategory) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
     });
+
+    // Sort visible items
+    const visibleItems = Array.from(menuItems).filter(item => item.style.display !== 'none');
+
+    visibleItems.sort((a, b) => {
+        const priceA = parseInt(a.dataset.price);
+        const priceB = parseInt(b.dataset.price);
+        const nameA = a.dataset.name;
+        const nameB = b.dataset.name;
+
+        switch(sortType) {
+            case 'price-asc':
+                return priceA - priceB;
+            case 'price-desc':
+                return priceB - priceA;
+            case 'name-asc':
+                return nameA.localeCompare(nameB);
+            default:
+                return 0;
+        }
+    });
+
+    // Reorder in DOM
+    const menuGrid = document.getElementById('menuGrid');
+    visibleItems.forEach(item => menuGrid.appendChild(item));
+}
+
+// Event listeners
+searchInput.addEventListener('input', filterAndSortMenus);
+categoryFilter.addEventListener('change', filterAndSortMenus);
+sortFilter.addEventListener('change', filterAndSortMenus);
 </script>
 @endpush
-@endsection
