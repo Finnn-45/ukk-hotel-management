@@ -1,9 +1,9 @@
 {
   "name": "StayEase - Hotel & Restaurant Booking",
   "short_name": "StayEase",
-  "description": "Platform booking hotel dan restoran premium. Pesan kamar hotel dan restoran dengan mudah.",
+  "description": "Platform booking hotel dan restoran premium.",
   "start_url": "/",
-  "display": "standalone",
+  "display": "minimal-ui",
   "background_color": "#F8FAFC",
   "theme_color": "#2563EB",
   "orientation": "portrait-primary",
@@ -11,68 +11,16 @@
   "scope": "/",
   "icons": [
     {
-      "src": "/icons/icon-72x72.svg",
-      "sizes": "72x72",
-      "type": "image/svg+xml"
-    },
-    {
-      "src": "/icons/icon-96x96.svg",
-      "sizes": "96x96",
-      "type": "image/svg+xml"
-    },
-    {
-      "src": "/icons/icon-128x128.svg",
-      "sizes": "128x128",
-      "type": "image/svg+xml"
-    },
-    {
-      "src": "/icons/icon-144x144.svg",
-      "sizes": "144x144",
-      "type": "image/svg+xml"
-    },
-    {
-      "src": "/icons/icon-152x152.svg",
-      "sizes": "152x152",
-      "type": "image/svg+xml"
-    },
-    {
       "src": "/icons/icon-192x192.svg",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-384x384.svg",
-      "sizes": "384x384",
-      "type": "image/svg+xml"
-    },
-    {
       "src": "/icons/icon-512x512.svg",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
-    }
-  ],
-  "categories": ["travel", "hotel", "restaurant", "booking"],
-  "screenshots": [],
-  "shortcuts": [
-    {
-      "name": "Cari Kamar",
-      "short_name": "Kamar",
-      "description": "Cari dan booking kamar hotel",
-      "url": "/kamar"
-    },
-    {
-      "name": "Menu Restoran",
-      "short_name": "Restoran",
-      "description": "Lihat menu restoran",
-      "url": "/restaurant/menu"
-    },
-    {
-      "name": "Booking Saya",
-      "short_name": "Booking",
-      "description": "Lihat booking saya",
-      "url": "/booking-saya"
     }
   ]
 }

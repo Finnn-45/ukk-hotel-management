@@ -26,7 +26,7 @@ class AdminAuthController extends Controller
         ]);
 
         // Captcha hanya diverifikasi jika diisi (tidak wajib)
-        if ($request->has('g-recaptcha-response') && !empty($request->g-recaptcha-response)) {
+        if ($request->has('g-recaptcha-response') && !empty($request->input('g-recaptcha-response'))) {
             $validator->addRules([
                 'g-recaptcha-response' => 'captcha',
             ]);

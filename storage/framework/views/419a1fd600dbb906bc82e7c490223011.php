@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>@yield('title', 'StayEase - Premium Hotel & Restaurant Booking')</title>
+    <title><?php echo $__env->yieldContent('title', 'StayEase - Premium Hotel & Restaurant Booking'); ?></title>
     <meta name="description" content="StayEase — Discover luxury hotels, fine dining, and unforgettable experiences. Book easily with transparent pricing and 24/7 support.">
 
-    {{-- Fonts --}}
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-    {{-- Bootstrap + Icons --}}
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    {{-- PWA minimal-ui --}}
+    
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#2563EB">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -622,147 +622,148 @@
             .d-flex.gap-2 { gap: 0.5rem !important; }
         }
     </style>
-    @stack('styles')
+    <?php echo $__env->yieldPushContent('styles'); ?>
 </head>
 <body>
-    {{-- ─── NAVBAR ─── --}}
+    
     <nav class="navbar-stayease" id="seNavbar">
         <div class="container">
-            {{-- Hamburger --}}
+            
             <button class="se-hamburger" id="seDrawerToggle" aria-label="Menu">
                 <i class="bi bi-list"></i>
             </button>
 
-            {{-- Logo --}}
-            <a href="{{ route('home') }}" class="se-logo">
+            
+            <a href="<?php echo e(route('home')); ?>" class="se-logo">
                 <div class="se-logo-icon">SE</div>
                 <span class="se-logo-text">Stay<span>Ease</span></span>
             </a>
 
-            {{-- Desktop Links --}}
+            
             <div class="se-nav-links">
-                <a href="{{ route('home') }}" class="se-nav-link {{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
-                <a href="{{ route('rooms.index') }}" class="se-nav-link {{ request()->routeIs('rooms.*') ? 'active' : '' }}">Rooms</a>
-                <a href="{{ route('customer.restaurant.menu') }}" class="se-nav-link {{ request()->routeIs('customer.restaurant.*') ? 'active' : '' }}">Restaurant</a>
-                @if(Route::has('admin.promos.index'))
-                @endif
-                <a href="{{ route('customer.contact') }}" class="se-nav-link {{ request()->routeIs('customer.contact') ? 'active' : '' }}">Contact</a>
+                <a href="<?php echo e(route('home')); ?>" class="se-nav-link <?php echo e(request()->routeIs('home') ? 'active' : ''); ?>">Home</a>
+                <a href="<?php echo e(route('rooms.index')); ?>" class="se-nav-link <?php echo e(request()->routeIs('rooms.*') ? 'active' : ''); ?>">Rooms</a>
+                <a href="<?php echo e(route('customer.restaurant.menu')); ?>" class="se-nav-link <?php echo e(request()->routeIs('customer.restaurant.*') ? 'active' : ''); ?>">Restaurant</a>
+                <?php if(Route::has('admin.promos.index')): ?>
+                <?php endif; ?>
+                <a href="<?php echo e(route('customer.contact')); ?>" class="se-nav-link <?php echo e(request()->routeIs('customer.contact') ? 'active' : ''); ?>">Contact</a>
             </div>
 
-            {{-- Right --}}
+            
             <div class="se-nav-right">
-                <a href="{{ route('rooms.index') }}" class="se-icon-btn" title="Search">
+                <a href="<?php echo e(route('rooms.index')); ?>" class="se-icon-btn" title="Search">
                     <i class="bi bi-search"></i>
                 </a>
-                @auth
-                    <a href="{{ route('customer.notifications') }}" class="se-icon-btn" title="Notifications">
+                <?php if(auth()->guard()->check()): ?>
+                    <a href="<?php echo e(route('customer.notifications')); ?>" class="se-icon-btn" title="Notifications">
                         <i class="bi bi-bell"></i>
                         <span class="badge-dot"></span>
                     </a>
                     <div class="se-nav-divider"></div>
                     <div class="dropdown">
-                        <div class="se-avatar" data-bs-toggle="dropdown" aria-expanded="false" title="{{ auth()->user()->name }}">
-                            {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
+                        <div class="se-avatar" data-bs-toggle="dropdown" aria-expanded="false" title="<?php echo e(auth()->user()->name); ?>">
+                            <?php echo e(strtoupper(substr(auth()->user()->name, 0, 2))); ?>
+
                         </div>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li class="px-3 py-2 border-bottom" style="border-color: var(--border) !important;">
-                                <div style="font-weight:700;font-size:0.85rem;color:var(--text);">{{ auth()->user()->name }}</div>
-                                <div style="font-size:0.72rem;color:var(--text-muted);">{{ auth()->user()->email }}</div>
+                                <div style="font-weight:700;font-size:0.85rem;color:var(--text);"><?php echo e(auth()->user()->name); ?></div>
+                                <div style="font-size:0.72rem;color:var(--text-muted);"><?php echo e(auth()->user()->email); ?></div>
                             </li>
-                            <li class="mt-1"><a class="dropdown-item" href="{{ route('customer.bookings') }}"><i class="bi bi-calendar-check"></i>My Bookings</a></li>
-                            <li><a class="dropdown-item" href="{{ route('customer.restaurant.orders') }}"><i class="bi bi-receipt"></i>Restaurant Orders</a></li>
-                            <li><a class="dropdown-item" href="{{ route('customer.wishlist') }}"><i class="bi bi-heart"></i>Wishlist</a></li>
-                            <li><a class="dropdown-item" href="{{ route('customer.reviews') }}"><i class="bi bi-star"></i>My Reviews</a></li>
-                            <li><a class="dropdown-item" href="{{ route('customer.profile') }}"><i class="bi bi-person"></i>Profile</a></li>
-                            @if(auth()->user()->role === 'admin' || auth()->user()->role === 'staff')
+                            <li class="mt-1"><a class="dropdown-item" href="<?php echo e(route('customer.bookings')); ?>"><i class="bi bi-calendar-check"></i>My Bookings</a></li>
+                            <li><a class="dropdown-item" href="<?php echo e(route('customer.restaurant.orders')); ?>"><i class="bi bi-receipt"></i>Restaurant Orders</a></li>
+                            <li><a class="dropdown-item" href="<?php echo e(route('customer.wishlist')); ?>"><i class="bi bi-heart"></i>Wishlist</a></li>
+                            <li><a class="dropdown-item" href="<?php echo e(route('customer.reviews')); ?>"><i class="bi bi-star"></i>My Reviews</a></li>
+                            <li><a class="dropdown-item" href="<?php echo e(route('customer.profile')); ?>"><i class="bi bi-person"></i>Profile</a></li>
+                            <?php if(auth()->user()->role === 'admin' || auth()->user()->role === 'staff'): ?>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}"><i class="bi bi-speedometer2"></i>Admin Panel</a></li>
-                            @endif
+                                <li><a class="dropdown-item" href="<?php echo e(route('admin.dashboard')); ?>"><i class="bi bi-speedometer2"></i>Admin Panel</a></li>
+                            <?php endif; ?>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-danger" href="#" onclick="event.preventDefault();document.getElementById('se-logout').submit();"><i class="bi bi-box-arrow-right"></i>Logout</a></li>
                         </ul>
-                        <form id="se-logout" action="{{ route('customer.logout') }}" method="POST" class="d-none">@csrf</form>
+                        <form id="se-logout" action="<?php echo e(route('customer.logout')); ?>" method="POST" class="d-none"><?php echo csrf_field(); ?></form>
                     </div>
-                @else
+                <?php else: ?>
                     <div class="se-nav-divider"></div>
-                    <a href="{{ route('customer.login') }}" class="se-btn-outline"><i class="bi bi-person"></i><span>Sign In</span></a>
-                    <a href="{{ route('customer.register') }}" class="se-btn-primary"><i class="bi bi-person-plus"></i><span>Sign Up</span></a>
-                @endauth
+                    <a href="<?php echo e(route('customer.login')); ?>" class="se-btn-outline"><i class="bi bi-person"></i><span>Sign In</span></a>
+                    <a href="<?php echo e(route('customer.register')); ?>" class="se-btn-primary"><i class="bi bi-person-plus"></i><span>Sign Up</span></a>
+                <?php endif; ?>
             </div>
         </div>
     </nav>
 
-    {{-- ─── SIDE DRAWER ─── --}}
+    
     <div class="se-drawer-overlay" id="seOverlay"></div>
     <div class="se-drawer" id="seDrawer">
         <div class="se-drawer-head">
-            <a href="{{ route('home') }}" class="se-logo">
+            <a href="<?php echo e(route('home')); ?>" class="se-logo">
                 <div class="se-logo-icon">SE</div>
                 <span class="se-logo-text">Stay<span>Ease</span></span>
             </a>
             <button class="se-drawer-close" id="seDrawerClose"><i class="bi bi-x-lg"></i></button>
         </div>
         <div class="se-drawer-body">
-            <a href="{{ route('home') }}" class="se-drawer-link {{ request()->routeIs('home') ? 'active' : '' }}">
+            <a href="<?php echo e(route('home')); ?>" class="se-drawer-link <?php echo e(request()->routeIs('home') ? 'active' : ''); ?>">
                 <i class="bi bi-house"></i> Home
             </a>
-            <a href="{{ route('rooms.index') }}" class="se-drawer-link {{ request()->routeIs('rooms.*') ? 'active' : '' }}">
+            <a href="<?php echo e(route('rooms.index')); ?>" class="se-drawer-link <?php echo e(request()->routeIs('rooms.*') ? 'active' : ''); ?>">
                 <i class="bi bi-building"></i> Rooms
             </a>
-            <a href="{{ route('customer.restaurant.menu') }}" class="se-drawer-link {{ request()->routeIs('customer.restaurant.*') ? 'active' : '' }}">
+            <a href="<?php echo e(route('customer.restaurant.menu')); ?>" class="se-drawer-link <?php echo e(request()->routeIs('customer.restaurant.*') ? 'active' : ''); ?>">
                 <i class="bi bi-cup-hot"></i> Restaurant
             </a>
-            <a href="{{ route('customer.contact') }}" class="se-drawer-link {{ request()->routeIs('customer.contact') ? 'active' : '' }}">
+            <a href="<?php echo e(route('customer.contact')); ?>" class="se-drawer-link <?php echo e(request()->routeIs('customer.contact') ? 'active' : ''); ?>">
                 <i class="bi bi-chat"></i> Contact
             </a>
             <div class="se-drawer-divider"></div>
-            @auth
-                <a href="{{ route('customer.bookings') }}" class="se-drawer-link">
+            <?php if(auth()->guard()->check()): ?>
+                <a href="<?php echo e(route('customer.bookings')); ?>" class="se-drawer-link">
                     <i class="bi bi-calendar-check"></i> My Bookings
                 </a>
-                <a href="{{ route('customer.restaurant.orders') }}" class="se-drawer-link">
+                <a href="<?php echo e(route('customer.restaurant.orders')); ?>" class="se-drawer-link">
                     <i class="bi bi-receipt"></i> Restaurant Orders
                 </a>
-                <a href="{{ route('customer.wishlist') }}" class="se-drawer-link">
+                <a href="<?php echo e(route('customer.wishlist')); ?>" class="se-drawer-link">
                     <i class="bi bi-heart"></i> Wishlist
                 </a>
-                <a href="{{ route('customer.reviews') }}" class="se-drawer-link">
+                <a href="<?php echo e(route('customer.reviews')); ?>" class="se-drawer-link">
                     <i class="bi bi-star"></i> My Reviews
                 </a>
-                <a href="{{ route('customer.profile') }}" class="se-drawer-link">
+                <a href="<?php echo e(route('customer.profile')); ?>" class="se-drawer-link">
                     <i class="bi bi-person"></i> Profile
                 </a>
-                @if(auth()->user()->role === 'admin' || auth()->user()->role === 'staff')
+                <?php if(auth()->user()->role === 'admin' || auth()->user()->role === 'staff'): ?>
                     <div class="se-drawer-divider"></div>
-                    <a href="{{ route('admin.dashboard') }}" class="se-drawer-link">
+                    <a href="<?php echo e(route('admin.dashboard')); ?>" class="se-drawer-link">
                         <i class="bi bi-speedometer2"></i> Admin Panel
                     </a>
-                @endif
-            @else
+                <?php endif; ?>
+            <?php else: ?>
                 <div class="se-drawer-divider"></div>
-                <a href="{{ route('customer.login') }}" class="se-drawer-link">
+                <a href="<?php echo e(route('customer.login')); ?>" class="se-drawer-link">
                     <i class="bi bi-box-arrow-in-right"></i> Sign In
                 </a>
-                <a href="{{ route('customer.register') }}" class="se-drawer-link">
+                <a href="<?php echo e(route('customer.register')); ?>" class="se-drawer-link">
                     <i class="bi bi-person-plus"></i> Sign Up Free
                 </a>
-            @endauth
+            <?php endif; ?>
         </div>
-        @auth
+        <?php if(auth()->guard()->check()): ?>
         <div class="se-drawer-footer">
             <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-                <div class="se-avatar" style="width:38px;height:38px;font-size:0.8rem;">{{ strtoupper(substr(auth()->user()->name,0,2)) }}</div>
+                <div class="se-avatar" style="width:38px;height:38px;font-size:0.8rem;"><?php echo e(strtoupper(substr(auth()->user()->name,0,2))); ?></div>
                 <div>
-                    <div style="font-weight:700;font-size:0.85rem;">{{ auth()->user()->name }}</div>
-                    <div style="font-size:0.72rem;color:var(--text-muted);">{{ auth()->user()->email }}</div>
+                    <div style="font-weight:700;font-size:0.85rem;"><?php echo e(auth()->user()->name); ?></div>
+                    <div style="font-size:0.72rem;color:var(--text-muted);"><?php echo e(auth()->user()->email); ?></div>
                 </div>
             </div>
             <a href="#" onclick="event.preventDefault();document.getElementById('se-logout-drawer').submit();" class="btn-se btn-se-outline w-100" style="color:#EF4444;border-color:#FEE2E2;">
                 <i class="bi bi-box-arrow-right"></i> Logout
             </a>
-            <form id="se-logout-drawer" action="{{ route('customer.logout') }}" method="POST" class="d-none">@csrf</form>
+            <form id="se-logout-drawer" action="<?php echo e(route('customer.logout')); ?>" method="POST" class="d-none"><?php echo csrf_field(); ?></form>
         </div>
-        @endauth
+        <?php endif; ?>
     </div>
 
     <script>
@@ -785,54 +786,55 @@
         })();
     </script>
 
-    {{-- ─── CONTENT ─── --}}
+    
     <main>
-        @if(session('success'))
+        <?php if(session('success')): ?>
             <div class="container mt-3">
                 <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-4" style="background:#DCFCE7;color:#16A34A;">
                     <div class="d-flex align-items-center gap-2">
                         <i class="bi bi-check-circle-fill fs-5"></i>
-                        <span>{{ session('success') }}</span>
+                        <span><?php echo e(session('success')); ?></span>
                         <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
                     </div>
                 </div>
             </div>
-        @endif
-        @if(session('error'))
+        <?php endif; ?>
+        <?php if(session('error')): ?>
             <div class="container mt-3">
                 <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm rounded-4" style="background:#FEE2E2;color:#DC2626;">
                     <div class="d-flex align-items-center gap-2">
                         <i class="bi bi-exclamation-circle-fill fs-5"></i>
-                        <span>{{ session('error') }}</span>
+                        <span><?php echo e(session('error')); ?></span>
                         <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
                     </div>
                 </div>
             </div>
-        @endif
-        @if(session('info'))
+        <?php endif; ?>
+        <?php if(session('info')): ?>
             <div class="container mt-3">
                 <div class="alert alert-info alert-dismissible fade show border-0 shadow-sm rounded-4" style="background:#EFF6FF;color:#1D4ED8;">
                     <div class="d-flex align-items-center gap-2">
                         <i class="bi bi-info-circle-fill fs-5"></i>
-                        <span>{{ session('info') }}</span>
+                        <span><?php echo e(session('info')); ?></span>
                         <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
                     </div>
                 </div>
             </div>
-        @endif
+        <?php endif; ?>
 
-        @yield('content')
+        <?php echo $__env->yieldContent('content'); ?>
     </main>
 
-    {{-- ─── FOOTER (only shown on public pages via @push('footer')) ─── --}}
-    @stack('footer')
+    
+    <?php echo $__env->yieldPushContent('footer'); ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    {{-- Midtrans Snap JS --}}
-    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('services.midtrans.client_key') }}"></script>
+    
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<?php echo e(config('services.midtrans.client_key')); ?>"></script>
 
-    {{-- end of scripts --}}
-    @stack('scripts')
+    
+    <?php echo $__env->yieldPushContent('scripts'); ?>
 </body>
 </html>
+<?php /**PATH C:\laragon\www\ukk-hotel-management\resources\views/customer/layouts/app.blade.php ENDPATH**/ ?>

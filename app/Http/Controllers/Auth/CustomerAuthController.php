@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Auth\Events\Registered;
+use Anhskohbo\NoCaptcha\Facades\NoCaptcha;
 
 class CustomerAuthController extends Controller
 {
@@ -25,10 +26,13 @@ class CustomerAuthController extends Controller
         ]);
 
         // Captcha hanya diverifikasi jika diisi (tidak wajib) - untuk kompatibilitas Docker/production
-        if ($request->has('g-recaptcha-response') && !empty($request->g-recaptcha-response)) {
-            $validator->addRules([
-                'g-recaptcha-response' => 'captcha',
-            ]);
+        if ($request->has('g-recaptcha-response') && !empty($request->input('g-recaptcha-response'))) {
+            $validator->after(function ($validator) use ($request) {
+                $noCaptcha = app('captcha');
+                if (!$noCaptcha->verifyResponse($request->input('g-recaptcha-response'))) {
+                    $validator->errors()->add('g-recaptcha-response', 'Verifikasi captcha gagal. Silakan coba lagi.');
+                }
+            });
         }
 
         if ($validator->fails()) {
@@ -75,10 +79,13 @@ class CustomerAuthController extends Controller
         ]);
 
         // Captcha hanya diverifikasi jika diisi (tidak wajib) - untuk kompatibilitas Docker/production
-        if ($request->has('g-recaptcha-response') && !empty($request->g-recaptcha-response)) {
-            $validator->addRules([
-                'g-recaptcha-response' => 'captcha',
-            ]);
+        if ($request->has('g-recaptcha-response') && !empty($request->input('g-recaptcha-response'))) {
+            $validator->after(function ($validator) use ($request) {
+                $noCaptcha = app('captcha');
+                if (!$noCaptcha->verifyResponse($request->input('g-recaptcha-response'))) {
+                    $validator->errors()->add('g-recaptcha-response', 'Verifikasi captcha gagal. Silakan coba lagi.');
+                }
+            });
         }
 
         if ($validator->fails()) {

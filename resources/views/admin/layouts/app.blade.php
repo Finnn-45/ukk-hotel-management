@@ -12,7 +12,8 @@
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#0284C7">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.svg">
     <style>
         :root {
             --sidebar-width: 260px;
@@ -498,29 +499,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @stack('scripts')
 
-    {{-- PWA: Service Worker + Update --}}
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').then((reg) => {
-                    console.log('StayEase Admin: SW registered');
-                    reg.addEventListener('updatefound', () => {
-                        const sw = reg.installing;
-                        sw.addEventListener('statechange', () => {
-                            if (sw.state === 'installed' && navigator.serviceWorker.controller) {
-                                if (confirm('Versi baru StayEase tersedia. Muat ulang?')) window.location.reload();
-                            }
-                        });
-                    });
-                }).catch((err) => console.log('StayEase Admin: SW failed:', err));
-            });
-            let refreshing = false;
-            navigator.serviceWorker.addEventListener('controllerchange', () => {
-                if (refreshing) return;
-                refreshing = true;
-                window.location.reload();
-            });
-        }
-    </script>
+    {{-- end of scripts --}}
 </body>
 </html>
