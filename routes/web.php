@@ -191,6 +191,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/process-booking', [CustomerController::class, 'processBooking'])->name('customer.process-booking');
     Route::get('/booking-sukses/{booking}', [CustomerController::class, 'bookingSuccess'])->name('customer.booking.success');
     Route::get('/booking-saya', [CustomerController::class, 'myBookings'])->name('customer.bookings');
+    Route::get('/booking/{booking}', [CustomerController::class, 'bookingDetail'])->name('customer.booking.detail');
     Route::post('/booking/{booking}/cancel', [CustomerController::class, 'cancelBooking'])->name('customer.booking.cancel');
     Route::post('/booking/{booking}/checkout', [CustomerController::class, 'customerCheckOut'])->name('customer.booking.checkout');
     Route::get('/booking/{booking}/review', [CustomerController::class, 'reviewForm'])->name('customer.booking.review');

@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+ternya@extends('admin.layouts.app')
 
 @section('title', 'Review Pelanggan')
 
@@ -103,7 +103,7 @@
 
 @if($reviews->hasPages())
 <div class="d-flex justify-content-center mt-4">
-    {{ $reviews->links() }}
+    {{ $reviews->links('vendor.pagination.admin-pagination') }}
 </div>
 @endif
 @endsection

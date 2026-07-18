@@ -1285,4 +1285,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 @endpush
+@include('customer.partials.footer')
 @endsection

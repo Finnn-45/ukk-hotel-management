@@ -120,7 +120,7 @@
             {{-- Pagination --}}
             @if($users->hasPages())
                 <div class="mt-4">
-                    {{ $users->links() }}
+                    {{ $users->links('vendor.pagination.admin-pagination') }}
                 </div>
             @endif
         </div>

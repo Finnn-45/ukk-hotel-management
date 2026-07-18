@@ -130,7 +130,7 @@
 
         {{-- Pagination --}}
         <div class="mt-4">
-            {{ $rooms->links() }}
+            {{ $rooms->links('vendor.pagination.admin-pagination') }}
         </div>
     </div>
 </div>

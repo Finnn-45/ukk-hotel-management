@@ -217,9 +217,9 @@
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    .social-btn:hover { 
-        transform: translateY(-4px); 
-        color: #fff; 
+    .social-btn:hover {
+        transform: translateY(-4px);
+        color: #fff;
         box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
     .social-instagram { background: linear-gradient(135deg, #833AB4 0%, #C13584 50%, #E1306C 100%); }
@@ -302,7 +302,7 @@
         letter-spacing: 0.5px;
     }
     .access-table tbody tr:last-child td { border-bottom: none; }
-    .access-table tbody tr:hover { 
+    .access-table tbody tr:hover {
         background: linear-gradient(to right, rgba(2,132,199,0.04), rgba(2,132,199,0.02));
         transition: all 0.2s;
     }
@@ -423,9 +423,9 @@
                         <div id="googleMap" class="map-container"></div>
                     @else
                         <div class="map-container">
-                            <iframe 
+                            <iframe
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.283456789!2d{{ $longitude }}!3d{{ $latitude }}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDA0JzM2LjQiTiAxMDbCsDI5JzM4LjQiRQ!5e0!3m2!1sid!2sid!4v1234567890"
-                                allowfullscreen="" 
+                                allowfullscreen=""
                                 loading="lazy"
                                 referrerpolicy="no-referrer-when-downgrade">
                             </iframe>
@@ -609,7 +609,7 @@
 <script>
     function initMap() {
         const hotelLocation = { lat: {{ $latitude }}, lng: {{ $longitude }} };
-        
+
         const map = new google.maps.Map(document.getElementById("googleMap"), {
             zoom: 15,
             center: hotelLocation,
@@ -640,7 +640,7 @@
         marker.addListener("click", () => {
             infoWindow.open(map, marker);
         });
-        
+
         // Open by default
         infoWindow.open(map, marker);
     }
@@ -648,4 +648,5 @@
 <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ $mapsApiKey }}&callback=initMap"></script>
 @endpush
 @endif
+@include('customer.partials.footer')
 @endsection

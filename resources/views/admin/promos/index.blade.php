@@ -118,7 +118,7 @@
         Menampilkan {{ $promos->firstItem() }} - {{ $promos->lastItem() }} dari {{ $promos->total() }} promo
     </div>
     <div>
-        {{ $promos->links() }}
+        {{ $promos->links('vendor.pagination.admin-pagination') }}
     </div>
 </div>
 @endif

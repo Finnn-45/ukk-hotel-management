@@ -231,6 +231,20 @@ class CustomerController extends Controller
         return view('customer.booking-success', compact('booking'));
     }
 
+    public function bookingDetail(Booking $booking)
+    {
+        $user = Auth::user();
+        $guest = Guest::where('user_id', $user->id)->firstOrFail();
+
+        if ($booking->guest_id !== $guest->id) {
+            abort(403);
+        }
+
+        $booking->load(['room.roomType', 'guest', 'payment']);
+
+        return view('customer.booking-detail', compact('booking'));
+    }
+
     public function myBookings()
     {
         $user = Auth::user();

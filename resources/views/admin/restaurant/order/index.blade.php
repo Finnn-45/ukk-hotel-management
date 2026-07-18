@@ -158,7 +158,7 @@
     </div>
     @if($orders->hasPages())
         <div class="card-footer bg-white">
-            {{ $orders->links() }}
+            {{ $orders->links('vendor.pagination.admin-pagination') }}
         </div>
     @endif
 </div>

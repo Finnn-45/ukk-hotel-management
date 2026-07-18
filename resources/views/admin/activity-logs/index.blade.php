@@ -40,7 +40,7 @@
             </table>
         </div>
         <div class="d-flex justify-content-center mt-3">
-            {{ $logs->links() }}
+            {{ $logs->links('vendor.pagination.admin-pagination') }}
         </div>
     </div>
 </div>

@@ -368,4 +368,5 @@ function closeLightbox(e) {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 </script>
 @endpush
+@include('customer.partials.footer')
 @endsection

@@ -50,7 +50,7 @@
 </div>
 
 <div class="d-flex justify-content-center mt-3">
-    {{ $notifications->links() }}
+    {{ $notifications->links('vendor.pagination.admin-pagination') }}
 </div>
 @endsection
 

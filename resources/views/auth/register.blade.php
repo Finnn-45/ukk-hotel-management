@@ -334,34 +334,53 @@
 
         /* ─── RESPONSIVE ─── */
         @media (max-width: 768px) {
-            body { padding: 0; background: #fff; }
+            body { padding: 0; background: #F0F5FF; align-items: flex-start; }
             .auth-container {
                 border-radius: 0;
-                min-height: auto;
+                min-height: 100vh;
                 flex-direction: column;
                 box-shadow: none;
             }
-            .auth-hero {
-                padding: 28px 24px 24px;
-                border-radius: 0 0 24px 24px;
-                flex: none;
-            }
-            .auth-hero h1 { font-size: 1.5rem; }
-            .auth-hero > p { font-size: 0.82rem; margin-bottom: 20px; }
-            .hero-steps { gap: 12px; }
+            .auth-hero { display: none; }
             .auth-form {
                 width: 100%;
-                padding: 24px 20px 20px;
+                padding: 32px 24px;
+                flex: 1;
+                justify-content: flex-start;
             }
-            .back-home { top: 12px; left: 16px; }
-            .form-header h2 { font-size: 1.2rem; }
+            .back-home {
+                position: static;
+                margin-bottom: 20px;
+                display: inline-flex;
+                font-size: 0.78rem;
+            }
+            .form-header { margin-bottom: 20px; }
+            .form-header .logo-row { margin-bottom: 12px; }
+            .logo-icon { width: 32px; height: 32px; font-size: 0.85rem; }
+            .logo-text { font-size: 0.95rem; }
+            .form-header h2 { font-size: 1.25rem; }
+            .form-header p { font-size: 0.82rem; }
+            .form-group { margin-bottom: 12px; }
+            .form-group label { font-size: 0.8rem; }
+            .form-control-custom { padding: 11px 14px; font-size: 0.85rem; border-radius: 11px; }
+            .captcha-wrap { padding: 8px; margin-bottom: 12px; }
+            .info-box { font-size: 0.78rem; padding: 10px 12px; }
+            .btn-register { padding: 12px; font-size: 0.88rem; border-radius: 11px; }
+            .form-footer { margin-top: 14px; padding-top: 14px; font-size: 0.82rem; }
         }
         @media (max-width: 480px) {
-            .auth-hero { padding: 24px 20px 20px; }
-            .auth-form { padding: 20px 16px 16px; }
-            .auth-hero h1 { font-size: 1.3rem; }
-            .hero-badge { font-size: 0.7rem; padding: 4px 12px; }
+            .auth-form { padding: 24px 18px; }
+            .back-home { margin-bottom: 16px; }
+            .form-header { margin-bottom: 16px; }
+            .form-header .logo-row { margin-bottom: 10px; }
+            .logo-icon { width: 28px; height: 28px; font-size: 0.75rem; }
+            .logo-text { font-size: 0.85rem; }
             .form-header h2 { font-size: 1.1rem; }
+            .form-header p { font-size: 0.78rem; }
+            .form-group { margin-bottom: 10px; }
+            .form-control-custom { padding: 10px 12px; font-size: 0.82rem; border-radius: 10px; }
+            .btn-register { padding: 11px; font-size: 0.85rem; border-radius: 10px; }
+            .form-footer { margin-top: 12px; padding-top: 12px; font-size: 0.78rem; }
         }
     </style>
 </head>

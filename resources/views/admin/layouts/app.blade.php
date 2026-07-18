@@ -190,6 +190,41 @@
         .badge-premium-danger { background: #FEE2E2; color: #DC2626; }
         .badge-premium-info { background: #E0F2FE; color: #0284C7; }
         .badge-premium-secondary { background: #F1F5F9; color: #64748B; }
+        /* Premium Pagination */
+        .pagination-premium .page-link {
+            border: none;
+            padding: 6px 14px;
+            margin: 0 3px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #475569;
+            background: #F1F5F9;
+            transition: all 0.2s ease;
+        }
+        .pagination-premium .page-link:hover {
+            background: #E2E8F0;
+            color: #334155;
+            transform: translateY(-1px);
+        }
+        .pagination-premium .page-item.active .page-link {
+            background: linear-gradient(135deg, #0284C7, #0369A1);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(2,132,199,0.3);
+        }
+        .pagination-premium .page-item.disabled .page-link {
+            background: #F8FAFC;
+            color: #CBD5E1;
+        }
+        .pagination-premium .page-item:first-child .page-link,
+        .pagination-premium .page-item:last-child .page-link {
+            padding: 6px 12px;
+        }
+        .pagination-premium .page-link.dots {
+            background: transparent;
+            color: #94A3B8;
+        }
+
         .table-custom th {
             font-size: 0.72rem;
             font-weight: 700;

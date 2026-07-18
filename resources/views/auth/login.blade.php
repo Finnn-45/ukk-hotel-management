@@ -7,28 +7,46 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
-        body { 
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
-            min-height: 100vh; 
+        body {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            min-height: 100vh;
             display: flex;
             align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
-        .login-card { 
-            background: white; 
-            border-radius: 15px; 
+        .login-card {
+            background: white;
+            border-radius: 15px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.3);
             max-width: 420px;
-            margin: 0 auto;
             width: 100%;
+            margin: 0 auto;
         }
         .login-card .card-body { padding: 40px; }
-        .admin-badge { 
-            background: #1e293b; 
-            color: white; 
-            padding: 5px 15px; 
-            border-radius: 20px; 
-            font-size: 12px; 
-            display: inline-block; 
+        .admin-badge {
+            background: #1e293b;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+        }
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                background: #0f172a;
+                padding: 10px;
+                align-items: flex-start;
+            }
+            .login-card {
+                max-width: 100%;
+                margin: 0;
+                box-shadow: none;
+            }
+            .login-card .card-body {
+                padding: 20px;
+            }
         }
     </style>
 </head>

@@ -117,10 +117,13 @@
 
                             {{-- Actions --}}
                             <div class="d-flex gap-2 mt-3 pt-3 border-top" style="border-color:var(--border) !important;">
+                                <a href="{{ route('customer.booking.detail', $booking) }}" class="btn-se btn-se-outline flex-grow-1" style="padding:8px 14px;font-size:0.78rem;">
+                                    <i class="bi bi-eye"></i> Detail
+                                </a>
                                 @if(in_array($booking->status, ['pending', 'confirmed']))
                                     @if(!$booking->payment || $booking->payment->payment_status !== 'paid')
                                         <button id="payButton-{{ $booking->id }}" class="btn-se btn-se-primary flex-grow-1" style="padding:8px 14px;font-size:0.78rem;">
-                                            <i class="bi bi-credit-card"></i> Bayar Sekarang
+                                            <i class="bi bi-credit-card"></i> Bayar
                                         </button>
                                     @endif
                                     <form action="{{ route('customer.booking.cancel', $booking) }}" method="POST" onsubmit="return confirm('Yakin ingin membatalkan booking ini?')" class="flex-grow-1">

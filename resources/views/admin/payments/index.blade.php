@@ -57,7 +57,7 @@
             </table>
         </div>
 
-        {{ $payments->links() }}
+        {{ $payments->links('vendor.pagination.admin-pagination') }}
     </div>
 </div>
 @endsection

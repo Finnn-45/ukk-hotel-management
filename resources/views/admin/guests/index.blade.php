@@ -54,7 +54,7 @@
             </table>
         </div>
 
-        {{ $guests->links() }}
+        {{ $guests->links('vendor.pagination.admin-pagination') }}
     </div>
 </div>
 @endsection

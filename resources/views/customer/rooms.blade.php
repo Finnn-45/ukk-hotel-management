@@ -302,18 +302,18 @@
         .se-search-header { position: static !important; box-shadow: none !important; }
     }
     @media (max-width: 768px) {
-        .se-hotel-list-card { 
-            flex-direction: column; 
+        .se-hotel-list-card {
+            flex-direction: column;
             margin-bottom: 20px;
         }
-        .se-hotel-list-img { 
-            flex: none; 
-            max-width: 100%; 
-            height: 220px; 
+        .se-hotel-list-img {
+            flex: none;
+            max-width: 100%;
+            height: 220px;
             min-height: 220px;
         }
-        .se-hotel-list-info { 
-            padding: 16px; 
+        .se-hotel-list-info {
+            padding: 16px;
         }
         .se-hotel-list-price {
             flex: none;
@@ -339,12 +339,12 @@
     }
 
     @media (max-width: 576px) {
-        .se-hotel-list-img { 
-            height: 180px; 
+        .se-hotel-list-img {
+            height: 180px;
             min-height: 180px;
         }
-        .se-hotel-list-info { 
-            padding: 12px; 
+        .se-hotel-list-info {
+            padding: 12px;
         }
         .se-hotel-list-price {
             padding: 12px 16px;
@@ -626,4 +626,5 @@
     });
 </script>
 @endpush
+@include('customer.partials.footer')
 @endsection

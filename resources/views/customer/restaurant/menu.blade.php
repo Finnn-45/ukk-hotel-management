@@ -913,3 +913,4 @@ categoryFilter.addEventListener('change', filterAndSortMenus);
 sortFilter.addEventListener('change', filterAndSortMenus);
 </script>
 @endpush
+@include('customer.partials.footer')

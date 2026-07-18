@@ -647,22 +647,22 @@
     }
 
     @media (max-width: 768px) {
-        .se-hero { 
-            padding: 24px 0 80px; 
+        .se-hero {
+            padding: 24px 0 80px;
             min-height: auto;
         }
-        .se-hero h1 { 
+        .se-hero h1 {
             font-size: clamp(1.6rem, 6vw, 2.2rem);
             margin-bottom: 16px;
         }
-        .se-hero-desc { 
-            font-size: 0.88rem; 
+        .se-hero-desc {
+            font-size: 0.88rem;
             max-width: 100%;
             margin-bottom: 24px;
         }
-        .se-hero-stats { 
-            gap: 20px; 
-            flex-wrap: wrap; 
+        .se-hero-stats {
+            gap: 20px;
+            flex-wrap: wrap;
             margin-top: 24px;
             padding: 16px;
             background: rgba(255,255,255,0.05);
@@ -672,18 +672,18 @@
         .se-hero-stat h3 { font-size: 1.1rem; }
         .se-hero-stat p { font-size: 0.72rem; }
         .se-floating-search { margin-top: -40px; }
-        .se-search-card { 
-            padding: 20px; 
+        .se-search-card {
+            padding: 20px;
             border-radius: var(--radius-sm);
         }
         .se-section { padding: 40px 0; }
         .se-section-header { margin-bottom: 20px; }
-        .se-featured-banner { 
-            padding: 24px; 
+        .se-featured-banner {
+            padding: 24px;
             border-radius: var(--radius-sm);
             text-align: center;
         }
-        .se-featured-banner h2 { 
+        .se-featured-banner h2 {
             font-size: 1.3rem;
             margin-bottom: 12px;
         }
@@ -694,8 +694,8 @@
         .se-featured-banner-img {
             margin-top: 24px;
         }
-        .se-newsletter { 
-            padding: 32px 20px; 
+        .se-newsletter {
+            padding: 32px 20px;
         }
         .se-chips {
             gap: 6px;
@@ -708,37 +708,37 @@
     }
 
     @media (max-width: 576px) {
-        .se-hero { 
-            padding: 20px 0 60px; 
+        .se-hero {
+            padding: 20px 0 60px;
         }
-        .se-hero h1 { 
+        .se-hero h1 {
             font-size: 1.5rem;
             margin-bottom: 12px;
         }
-        .se-hero-desc { 
+        .se-hero-desc {
             font-size: 0.85rem;
             margin-bottom: 20px;
         }
-        .se-hero-stats { 
-            gap: 16px; 
+        .se-hero-stats {
+            gap: 16px;
             padding: 12px;
         }
         .se-hero-stat h3 { font-size: 1rem; }
         .se-hero-stat p { font-size: 0.7rem; }
         .se-floating-search { margin-top: -32px; }
-        .se-search-card { 
+        .se-search-card {
             padding: 16px;
         }
         .se-section { padding: 32px 0; }
-        .se-section-header { 
+        .se-section-header {
             margin-bottom: 16px;
             flex-direction: column;
             align-items: flex-start;
         }
-        .se-featured-banner { 
-            padding: 20px; 
+        .se-featured-banner {
+            padding: 20px;
         }
-        .se-featured-banner h2 { 
+        .se-featured-banner h2 {
             font-size: 1.15rem;
             margin-bottom: 10px;
         }
@@ -746,8 +746,8 @@
             font-size: 0.82rem;
             margin-bottom: 16px;
         }
-        .se-newsletter { 
-            padding: 24px 16px; 
+        .se-newsletter {
+            padding: 24px 16px;
         }
         .se-newsletter h3 {
             font-size: 1.2rem;
@@ -1141,4 +1141,5 @@
     </div>
 </section>
 
+@include('customer.partials.footer')
 @endsection

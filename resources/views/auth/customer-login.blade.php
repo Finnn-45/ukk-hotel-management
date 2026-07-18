@@ -357,38 +357,58 @@
 
         /* ─── RESPONSIVE ─── */
         @media (max-width: 768px) {
-            body { padding: 0; background: #fff; }
+            body {
+                padding: 0;
+                background: #F0F5FF;
+                align-items: flex-start;
+            }
             .auth-container {
                 border-radius: 0;
                 min-height: auto;
                 flex-direction: column;
                 box-shadow: none;
+                min-height: 100vh;
             }
-            .auth-hero {
-                padding: 32px 24px 28px;
-                border-radius: 0 0 24px 24px;
-                flex: none;
-            }
-            .auth-hero h1 { font-size: 1.5rem; }
-            .auth-hero > p { font-size: 0.82rem; margin-bottom: 20px; }
-            .hero-features { gap: 10px; }
-            .hero-feature { font-size: 0.8rem; }
-            .hero-feature-icon { width: 28px; height: 28px; font-size: 0.8rem; }
+            .auth-hero { display: none; }
             .auth-form {
                 width: 100%;
-                padding: 28px 20px 24px;
+                padding: 32px 24px;
+                justify-content: flex-start;
             }
-            .back-home { top: 16px; left: 16px; }
-            .form-header .logo-row { margin-bottom: 16px; }
-            .form-header h2 { font-size: 1.2rem; }
-            .form-options { flex-wrap: wrap; gap: 8px; }
+            .back-home {
+                position: static;
+                margin-bottom: 20px;
+                font-size: 0.78rem;
+            }
+            .form-header { margin-bottom: 20px; }
+            .form-header .logo-row { margin-bottom: 12px; }
+            .logo-icon { width: 32px; height: 32px; font-size: 0.85rem; }
+            .logo-text { font-size: 0.95rem; }
+            .form-header h2 { font-size: 1.25rem; }
+            .form-header p { font-size: 0.82rem; }
+            .form-group { margin-bottom: 14px; }
+            .form-group label { font-size: 0.8rem; }
+            .form-control-custom { padding: 11px 14px; font-size: 0.85rem; border-radius: 11px; }
+            .form-options { gap: 6px; margin-bottom: 14px; }
+            .remember-check { font-size: 0.8rem; }
+            .forgot-link { font-size: 0.8rem; }
+            .captcha-wrap { padding: 8px; margin-bottom: 14px; }
+            .btn-login { padding: 12px; font-size: 0.88rem; border-radius: 11px; }
+            .form-footer { margin-top: 18px; padding-top: 16px; font-size: 0.82rem; }
         }
         @media (max-width: 480px) {
-            .auth-hero { padding: 24px 20px 20px; }
-            .auth-form { padding: 20px 16px 20px; }
-            .auth-hero h1 { font-size: 1.3rem; }
-            .hero-badge { font-size: 0.7rem; padding: 4px 12px; }
+            .auth-form { padding: 24px 18px; }
+            .back-home { margin-bottom: 16px; }
+            .form-header { margin-bottom: 16px; }
+            .form-header .logo-row { margin-bottom: 10px; }
+            .logo-icon { width: 28px; height: 28px; font-size: 0.75rem; }
+            .logo-text { font-size: 0.85rem; }
             .form-header h2 { font-size: 1.1rem; }
+            .form-header p { font-size: 0.78rem; }
+            .form-group { margin-bottom: 12px; }
+            .form-control-custom { padding: 10px 12px; font-size: 0.82rem; border-radius: 10px; }
+            .btn-login { padding: 11px; font-size: 0.85rem; border-radius: 10px; }
+            .form-footer { margin-top: 14px; padding-top: 14px; font-size: 0.78rem; }
         }
     </style>
 </head>
