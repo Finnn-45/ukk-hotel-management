@@ -496,12 +496,14 @@
                     </div>
                 </div>
 
+                @if(config('captcha.sitekey'))
                 <div class="captcha-wrap">
                     {!! NoCaptcha::display() !!}
                     @error('g-recaptcha-response')
                         <div style="color:#DC2626;font-size:0.78rem;margin-top:6px;">{{ $message }}</div>
                     @enderror
                 </div>
+                @endif
 
                 <button type="submit" class="btn-register" id="submitBtn">
                     <span class="spinner" id="spinner">
