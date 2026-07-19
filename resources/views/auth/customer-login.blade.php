@@ -514,14 +514,12 @@
                     </div>
                 </div>
 
-                @if(config('captcha.sitekey'))
                 <div class="captcha-wrap">
                     {!! NoCaptcha::display() !!}
                     @error('g-recaptcha-response')
                         <div style="color:#DC2626;font-size:0.78rem;margin-top:6px;">{{ $message }}</div>
                     @enderror
                 </div>
-                @endif
 
                 <div class="form-options">
                     <label class="remember-check">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Guest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -23,17 +24,8 @@ class CustomerAuthController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
+            'g-recaptcha-response' => 'required|captcha',
         ]);
-
-        // Captcha hanya diverifikasi jika diisi (tidak wajib) - untuk kompatibilitas Docker/production
-        if ($request->has('g-recaptcha-response') && !empty($request->input('g-recaptcha-response'))) {
-            $validator->after(function ($validator) use ($request) {
-                $noCaptcha = app('captcha');
-                if (!$noCaptcha->verifyResponse($request->input('g-recaptcha-response'))) {
-                    $validator->errors()->add('g-recaptcha-response', 'Verifikasi captcha gagal. Silakan coba lagi.');
-                }
-            });
-        }
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
@@ -76,17 +68,8 @@ class CustomerAuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
+            'g-recaptcha-response' => 'required|captcha',
         ]);
-
-        // Captcha hanya diverifikasi jika diisi (tidak wajib) - untuk kompatibilitas Docker/production
-        if ($request->has('g-recaptcha-response') && !empty($request->input('g-recaptcha-response'))) {
-            $validator->after(function ($validator) use ($request) {
-                $noCaptcha = app('captcha');
-                if (!$noCaptcha->verifyResponse($request->input('g-recaptcha-response'))) {
-                    $validator->errors()->add('g-recaptcha-response', 'Verifikasi captcha gagal. Silakan coba lagi.');
-                }
-            });
-        }
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
@@ -99,6 +82,21 @@ class CustomerAuthController extends Controller
             'role' => 'customer',
         ]);
         event(new Registered($user));
+
+        // Buat/update Guest agar data di halaman Pelanggan selalu pakai nama baru
+        $guest = Guest::where('email', $request->email)->first();
+        if ($guest) {
+            $guest->update([
+                'user_id'   => $user->id,
+                'full_name' => $request->name,
+            ]);
+        } else {
+            Guest::create([
+                'user_id'   => $user->id,
+                'email'     => $request->email,
+                'full_name' => $request->name,
+            ]);
+        }
 
         return redirect()
             ->route('customer.login')

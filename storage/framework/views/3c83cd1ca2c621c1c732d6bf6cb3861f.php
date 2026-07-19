@@ -3,25 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Daftar - {{ config('app.name', 'StayEase Hotel') }}</title>
-    <meta name="description" content="Buat akun baru untuk booking hotel, restoran, dan layanan eksklusif.">
+    <title>Masuk - <?php echo e(config('app.name', 'StayEase Hotel')); ?></title>
+    <meta name="description" content="Login ke akun StayEase Hotel untuk booking kamar dan layanan eksklusif.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    {!! NoCaptcha::renderJs() !!}
+    <?php echo NoCaptcha::renderJs(); ?>
+
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
             --primary: #0284C7;
             --primary-dark: #0369A1;
+            --primary-light: #E0F2FE;
             --accent: #FBBF24;
             --text: #0F172A;
             --text-muted: #64748B;
             --border: #E2E8F0;
             --font: 'Inter', sans-serif;
+            --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
             --shadow-lg: 0 10px 40px rgba(0,0,0,0.08);
         }
 
@@ -38,8 +41,8 @@
         .auth-container {
             display: flex;
             width: 100%;
-            max-width: 950px;
-            min-height: 600px;
+            max-width: 900px;
+            min-height: 580px;
             background: #fff;
             border-radius: 24px;
             box-shadow: var(--shadow-lg);
@@ -105,54 +108,44 @@
             margin-bottom: 32px;
             max-width: 320px;
         }
-        .hero-steps {
+        .hero-features {
             display: flex;
             flex-direction: column;
-            gap: 16px;
-        }
-        .hero-step {
-            display: flex;
-            align-items: flex-start;
             gap: 14px;
         }
-        .step-num {
-            width: 30px; height: 30px;
+        .hero-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255,255,255,0.85);
+            font-size: 0.85rem;
+        }
+        .hero-feature-icon {
+            width: 32px; height: 32px;
             background: rgba(255,255,255,0.12);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 50%;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 0.9rem;
             color: #fff;
-            font-size: 0.78rem;
-            font-weight: 700;
             flex-shrink: 0;
-        }
-        .step-text strong {
-            display: block;
-            color: #fff;
-            font-size: 0.85rem;
-            margin-bottom: 2px;
-        }
-        .step-text span {
-            color: rgba(255,255,255,0.65);
-            font-size: 0.8rem;
         }
 
         /* ─── RIGHT FORM ─── */
         .auth-form {
-            width: 440px;
+            width: 420px;
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 32px 40px;
+            padding: 40px 40px;
             position: relative;
         }
 
         .back-home {
             position: absolute;
-            top: 16px; left: 24px;
+            top: 20px; left: 24px;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -165,13 +158,13 @@
         .back-home:hover { color: var(--primary); }
 
         .form-header {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
         .form-header .logo-row {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
         .logo-icon {
             width: 36px; height: 36px;
@@ -206,26 +199,36 @@
             display: flex;
             align-items: flex-start;
             gap: 8px;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
-        .alert-danger { background: #FEE2E2; color: #DC2626; border: 1px solid #FECACA; }
         .alert-success { background: #DCFCE7; color: #16A34A; border: 1px solid #BBF7D0; }
+        .alert-info { background: #E0F2FE; color: #0369A1; border: 1px solid #BAE6FD; }
+        .alert-danger { background: #FEE2E2; color: #DC2626; border: 1px solid #FECACA; }
 
         /* ─── FORM ELEMENTS ─── */
-        .form-group { margin-bottom: 14px; }
+        .form-group { margin-bottom: 16px; }
         .form-group label {
             display: block;
             font-size: 0.82rem;
             font-weight: 600;
             color: var(--text);
-            margin-bottom: 5px;
+            margin-bottom: 6px;
         }
         .input-wrap {
             position: relative;
         }
+        .input-icon {
+            position: absolute;
+            left: 13px; top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            pointer-events: none;
+            z-index: 2;
+        }
         .form-control-custom {
             width: 100%;
-            padding: 10px 14px;
+            padding: 11px 16px;
             border: 1.5px solid var(--border);
             border-radius: 12px;
             font-size: 0.87rem;
@@ -259,18 +262,33 @@
         }
         .password-toggle:hover { color: var(--primary); }
 
-        .info-box {
-            background: #EFF6FF;
-            border: 1px solid #BFDBFE;
-            border-radius: 10px;
-            padding: 10px 14px;
-            font-size: 0.8rem;
-            color: #0369A1;
+        .form-options {
             display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            margin-bottom: 14px;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
         }
+        .remember-check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            font-family: var(--font);
+        }
+        .remember-check input[type="checkbox"] {
+            width: 15px; height: 15px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+        .forgot-link {
+            font-size: 0.83rem;
+            color: var(--primary);
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .forgot-link:hover { text-decoration: underline; }
 
         /* ─── CAPTCHA ─── */
         .captcha-wrap {
@@ -278,13 +296,13 @@
             border: 1.5px solid var(--border);
             border-radius: 12px;
             padding: 10px;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         /* ─── BUTTON ─── */
-        .btn-register {
+        .btn-login {
             width: 100%;
-            padding: 12px;
+            padding: 13px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: #fff;
             border: none;
@@ -300,12 +318,12 @@
             justify-content: center;
             gap: 8px;
         }
-        .btn-register:hover {
+        .btn-login:hover {
             transform: translateY(-1px);
             box-shadow: 0 6px 20px rgba(2,132,199,0.4);
         }
-        .btn-register:active { transform: translateY(0); }
-        .btn-register:disabled {
+        .btn-login:active { transform: translateY(0); }
+        .btn-login:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
@@ -314,8 +332,8 @@
         /* ─── FOOTER ─── */
         .form-footer {
             text-align: center;
-            margin-top: 16px;
-            padding-top: 16px;
+            margin-top: 20px;
+            padding-top: 20px;
             border-top: 1px solid var(--border);
             font-size: 0.84rem;
             color: var(--text-muted);
@@ -327,6 +345,12 @@
             text-decoration: none;
         }
         .form-footer a:hover { text-decoration: underline; }
+        .form-footer .admin-link {
+            display: block;
+            margin-top: 8px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
 
         /* ─── SPINNER ─── */
         .spinner { display: none; }
@@ -334,24 +358,27 @@
 
         /* ─── RESPONSIVE ─── */
         @media (max-width: 768px) {
-            body { padding: 0; background: #F0F5FF; align-items: flex-start; }
+            body {
+                padding: 0;
+                background: #F0F5FF;
+                align-items: flex-start;
+            }
             .auth-container {
                 border-radius: 0;
-                min-height: 100vh;
+                min-height: auto;
                 flex-direction: column;
                 box-shadow: none;
+                min-height: 100vh;
             }
             .auth-hero { display: none; }
             .auth-form {
                 width: 100%;
                 padding: 32px 24px;
-                flex: 1;
                 justify-content: flex-start;
             }
             .back-home {
                 position: static;
                 margin-bottom: 20px;
-                display: inline-flex;
                 font-size: 0.78rem;
             }
             .form-header { margin-bottom: 20px; }
@@ -360,13 +387,15 @@
             .logo-text { font-size: 0.95rem; }
             .form-header h2 { font-size: 1.25rem; }
             .form-header p { font-size: 0.82rem; }
-            .form-group { margin-bottom: 12px; }
+            .form-group { margin-bottom: 14px; }
             .form-group label { font-size: 0.8rem; }
             .form-control-custom { padding: 11px 14px; font-size: 0.85rem; border-radius: 11px; }
-            .captcha-wrap { padding: 8px; margin-bottom: 12px; }
-            .info-box { font-size: 0.78rem; padding: 10px 12px; }
-            .btn-register { padding: 12px; font-size: 0.88rem; border-radius: 11px; }
-            .form-footer { margin-top: 14px; padding-top: 14px; font-size: 0.82rem; }
+            .form-options { gap: 6px; margin-bottom: 14px; }
+            .remember-check { font-size: 0.8rem; }
+            .forgot-link { font-size: 0.8rem; }
+            .captcha-wrap { padding: 8px; margin-bottom: 14px; }
+            .btn-login { padding: 12px; font-size: 0.88rem; border-radius: 11px; }
+            .form-footer { margin-top: 18px; padding-top: 16px; font-size: 0.82rem; }
         }
         @media (max-width: 480px) {
             .auth-form { padding: 24px 18px; }
@@ -377,52 +406,43 @@
             .logo-text { font-size: 0.85rem; }
             .form-header h2 { font-size: 1.1rem; }
             .form-header p { font-size: 0.78rem; }
-            .form-group { margin-bottom: 10px; }
+            .form-group { margin-bottom: 12px; }
             .form-control-custom { padding: 10px 12px; font-size: 0.82rem; border-radius: 10px; }
-            .btn-register { padding: 11px; font-size: 0.85rem; border-radius: 10px; }
-            .form-footer { margin-top: 12px; padding-top: 12px; font-size: 0.78rem; }
+            .btn-login { padding: 11px; font-size: 0.85rem; border-radius: 10px; }
+            .form-footer { margin-top: 14px; padding-top: 14px; font-size: 0.78rem; }
         }
     </style>
 </head>
 <body>
     <div class="auth-container">
 
-        {{-- LEFT HERO --}}
+        
         <div class="auth-hero">
             <div class="hero-badge">
-                <i class="bi bi-person-plus-fill" style="font-size:0.7rem;"></i>
-                Bergabung Sekarang
+                <i class="bi bi-star-fill" style="font-size:0.7rem;color:#FBBF24;"></i>
+                Hotel & Restaurant Booking
             </div>
-            <h1>Mulai Perjalanan<br>Anda Bersama <span>Kami</span></h1>
-            <p>Daftar dan nikmati kemudahan booking kamar hotel premium, restoran eksklusif, dan berbagai layanan unggulan lainnya.</p>
-            <div class="hero-steps">
-                <div class="hero-step">
-                    <div class="step-num">1</div>
-                    <div class="step-text">
-                        <strong>Buat akun gratis</strong>
-                        <span>Hanya memerlukan email & password</span>
-                    </div>
+            <h1>Selamat Datang<br>di <span>StayEase</span></h1>
+            <p>Temukan pengalaman menginap terbaik dengan layanan premium dan kemudahan booking 24/7.</p>
+            <div class="hero-features">
+                <div class="hero-feature">
+                    <div class="hero-feature-icon"><i class="bi bi-building-fill"></i></div>
+                    Pilihan kamar hotel bintang 5 eksklusif
                 </div>
-                <div class="hero-step">
-                    <div class="step-num">2</div>
-                    <div class="step-text">
-                        <strong>Verifikasi email</strong>
-                        <span>Konfirmasi melalui email yang dikirimkan</span>
-                    </div>
+                <div class="hero-feature">
+                    <div class="hero-feature-icon"><i class="bi bi-fork-knife"></i></div>
+                    Restoran mewah dari kamar Anda
                 </div>
-                <div class="hero-step">
-                    <div class="step-num">3</div>
-                    <div class="step-text">
-                        <strong>Mulai booking</strong>
-                        <span>Nikmati semua fasilitas hotel bintang 5</span>
-                    </div>
+                <div class="hero-feature">
+                    <div class="hero-feature-icon"><i class="bi bi-shield-fill-check"></i></div>
+                    Pembayaran aman & terpercaya
                 </div>
             </div>
         </div>
 
-        {{-- RIGHT FORM --}}
+        
         <div class="auth-form">
-            <a href="{{ route('home') }}" class="back-home">
+            <a href="<?php echo e(route('home')); ?>" class="back-home">
                 <i class="bi bi-arrow-left"></i> Beranda
             </a>
 
@@ -431,45 +451,62 @@
                     <div class="logo-icon">S</div>
                     <div class="logo-text">Stay<span>Ease</span></div>
                 </div>
-                <h2>Buat Akun Baru</h2>
-                <p>Isi formulir di bawah untuk mendaftar</p>
+                <h2>Masuk ke Akun</h2>
+                <p>Silakan masukkan email dan password Anda</p>
             </div>
 
-            {{-- Validation Errors --}}
-            @if($errors->any())
+            
+            <?php if(session('success')): ?>
+                <div class="alert-custom alert-success">
+                    <i class="bi bi-check-circle-fill" style="flex-shrink:0;margin-top:1px;"></i>
+                    <span><?php echo e(session('success')); ?></span>
+                </div>
+            <?php endif; ?>
+
+            
+            <?php if(session('status')): ?>
+                <div class="alert-custom alert-info">
+                    <i class="bi bi-info-circle-fill" style="flex-shrink:0;margin-top:1px;"></i>
+                    <span><?php echo e(session('status')); ?></span>
+                </div>
+            <?php endif; ?>
+
+            
+            <?php if(session('error')): ?>
+                <div class="alert-custom alert-danger">
+                    <i class="bi bi-exclamation-circle-fill" style="flex-shrink:0;margin-top:1px;"></i>
+                    <span><?php echo e(session('error')); ?></span>
+                </div>
+            <?php endif; ?>
+
+            
+            <?php if($errors->any()): ?>
                 <div class="alert-custom alert-danger">
                     <i class="bi bi-exclamation-circle-fill" style="flex-shrink:0;margin-top:1px;"></i>
                     <div>
-                        @foreach($errors->all() as $error)
-                            <div>{{ $error }}</div>
-                        @endforeach
+                        <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div><?php echo e($error); ?></div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
                 </div>
-            @endif
+            <?php endif; ?>
 
-            <div class="info-box">
-                <i class="bi bi-info-circle-fill" style="flex-shrink:0;margin-top:2px;"></i>
-                <span>Setelah registrasi, cek email Anda untuk melakukan verifikasi akun sebelum bisa login.</span>
-            </div>
-
-            <form method="POST" action="{{ route('customer.register') }}" id="registerForm">
-                @csrf
-
-                <div class="form-group">
-                    <label for="name">Nama Lengkap</label>
-                    <div class="input-wrap">
-                        <input type="text" id="name" name="name"
-                               class="form-control-custom @error('name') is-invalid @enderror"
-                               placeholder="Nama lengkap Anda" value="{{ old('name') }}" required autofocus>
-                    </div>
-                </div>
+            <form method="POST" action="<?php echo e(route('customer.login')); ?>" id="loginForm">
+                <?php echo csrf_field(); ?>
 
                 <div class="form-group">
                     <label for="email">Email</label>
                     <div class="input-wrap">
                         <input type="email" id="email" name="email"
-                               class="form-control-custom @error('email') is-invalid @enderror"
-                               placeholder="nama@email.com" value="{{ old('email') }}" required>
+                               class="form-control-custom <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
+                               placeholder="nama@email.com" value="<?php echo e(old('email')); ?>" required autofocus>
                     </div>
                 </div>
 
@@ -477,42 +514,56 @@
                     <label for="password">Password</label>
                     <div class="input-wrap">
                         <input type="password" id="password" name="password"
-                               class="form-control-custom @error('password') is-invalid @enderror"
-                               placeholder="Minimal 6 karakter" required>
+                               class="form-control-custom <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
+                               placeholder="Masukkan password" required>
                         <button type="button" class="password-toggle" onclick="togglePass('password', this)" tabindex="-1">
                             <i class="bi bi-eye"></i>
                         </button>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="password_confirmation">Konfirmasi Password</label>
-                    <div class="input-wrap">
-                        <input type="password" id="password_confirmation" name="password_confirmation"
-                               class="form-control-custom" placeholder="Ulangi password" required>
-                        <button type="button" class="password-toggle" onclick="togglePass('password_confirmation', this)" tabindex="-1">
-                            <i class="bi bi-eye"></i>
-                        </button>
-                    </div>
-                </div>
-
+                <?php if(config('captcha.sitekey')): ?>
                 <div class="captcha-wrap">
-                    {!! NoCaptcha::display() !!}
-                    @error('g-recaptcha-response')
-                        <div style="color:#DC2626;font-size:0.78rem;margin-top:6px;">{{ $message }}</div>
-                    @enderror
+                    <?php echo NoCaptcha::display(); ?>
+
+                    <?php $__errorArgs = ['g-recaptcha-response'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <div style="color:#DC2626;font-size:0.78rem;margin-top:6px;"><?php echo e($message); ?></div>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                </div>
+                <?php endif; ?>
+
+                <div class="form-options">
+                    <label class="remember-check">
+                        <input type="checkbox" name="remember" id="remember">
+                        <span>Ingat saya</span>
+                    </label>
+                    <a href="<?php echo e(route('password.request')); ?>" class="forgot-link">Lupa password?</a>
                 </div>
 
-                <button type="submit" class="btn-register" id="submitBtn">
+                <button type="submit" class="btn-login" id="submitBtn">
                     <span class="spinner" id="spinner">
                         <span class="spinner-border spinner-border-sm" role="status"></span>
                     </span>
-                    <span id="btnText"><i class="bi bi-person-plus-fill"></i> Daftar Sekarang</span>
+                    <span id="btnText"><i class="bi bi-box-arrow-in-right"></i> Masuk</span>
                 </button>
             </form>
 
             <div class="form-footer">
-                Sudah punya akun? <a href="{{ route('customer.login') }}">Masuk di sini</a>
+                Belum punya akun? <a href="<?php echo e(route('customer.register')); ?>">Daftar sekarang</a>
             </div>
         </div>
     </div>
@@ -532,14 +583,15 @@
     }
 
     // Loading state on submit
-    document.getElementById('registerForm')?.addEventListener('submit', function(e) {
+    document.getElementById('loginForm')?.addEventListener('submit', function(e) {
         const btn = document.getElementById('submitBtn');
         const spinner = document.getElementById('spinner');
         const btnText = document.getElementById('btnText');
         btn.disabled = true;
         spinner.classList.add('show');
-        btnText.textContent = '  Mendaftarkan...';
+        btnText.textContent = '  Memproses...';
     });
     </script>
 </body>
 </html>
+<?php /**PATH C:\laragon\www\ukk-hotel-management\resources\views/auth/customer-login.blade.php ENDPATH**/ ?>

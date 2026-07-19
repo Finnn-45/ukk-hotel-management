@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Daftar - {{ config('app.name', 'StayEase Hotel') }}</title>
+    <title>Daftar - <?php echo e(config('app.name', 'StayEase Hotel')); ?></title>
     <meta name="description" content="Buat akun baru untuk booking hotel, restoran, dan layanan eksklusif.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    {!! NoCaptcha::renderJs() !!}
+    <?php echo NoCaptcha::renderJs(); ?>
+
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -387,7 +388,7 @@
 <body>
     <div class="auth-container">
 
-        {{-- LEFT HERO --}}
+        
         <div class="auth-hero">
             <div class="hero-badge">
                 <i class="bi bi-person-plus-fill" style="font-size:0.7rem;"></i>
@@ -420,9 +421,9 @@
             </div>
         </div>
 
-        {{-- RIGHT FORM --}}
+        
         <div class="auth-form">
-            <a href="{{ route('home') }}" class="back-home">
+            <a href="<?php echo e(route('home')); ?>" class="back-home">
                 <i class="bi bi-arrow-left"></i> Beranda
             </a>
 
@@ -435,32 +436,39 @@
                 <p>Isi formulir di bawah untuk mendaftar</p>
             </div>
 
-            {{-- Validation Errors --}}
-            @if($errors->any())
+            
+            <?php if($errors->any()): ?>
                 <div class="alert-custom alert-danger">
                     <i class="bi bi-exclamation-circle-fill" style="flex-shrink:0;margin-top:1px;"></i>
                     <div>
-                        @foreach($errors->all() as $error)
-                            <div>{{ $error }}</div>
-                        @endforeach
+                        <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div><?php echo e($error); ?></div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
                 </div>
-            @endif
+            <?php endif; ?>
 
             <div class="info-box">
                 <i class="bi bi-info-circle-fill" style="flex-shrink:0;margin-top:2px;"></i>
                 <span>Setelah registrasi, cek email Anda untuk melakukan verifikasi akun sebelum bisa login.</span>
             </div>
 
-            <form method="POST" action="{{ route('customer.register') }}" id="registerForm">
-                @csrf
+            <form method="POST" action="<?php echo e(route('customer.register')); ?>" id="registerForm">
+                <?php echo csrf_field(); ?>
 
                 <div class="form-group">
                     <label for="name">Nama Lengkap</label>
                     <div class="input-wrap">
                         <input type="text" id="name" name="name"
-                               class="form-control-custom @error('name') is-invalid @enderror"
-                               placeholder="Nama lengkap Anda" value="{{ old('name') }}" required autofocus>
+                               class="form-control-custom <?php $__errorArgs = ['name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
+                               placeholder="Nama lengkap Anda" value="<?php echo e(old('name')); ?>" required autofocus>
                     </div>
                 </div>
 
@@ -468,8 +476,15 @@
                     <label for="email">Email</label>
                     <div class="input-wrap">
                         <input type="email" id="email" name="email"
-                               class="form-control-custom @error('email') is-invalid @enderror"
-                               placeholder="nama@email.com" value="{{ old('email') }}" required>
+                               class="form-control-custom <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
+                               placeholder="nama@email.com" value="<?php echo e(old('email')); ?>" required>
                     </div>
                 </div>
 
@@ -477,7 +492,14 @@
                     <label for="password">Password</label>
                     <div class="input-wrap">
                         <input type="password" id="password" name="password"
-                               class="form-control-custom @error('password') is-invalid @enderror"
+                               class="form-control-custom <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
                                placeholder="Minimal 6 karakter" required>
                         <button type="button" class="password-toggle" onclick="togglePass('password', this)" tabindex="-1">
                             <i class="bi bi-eye"></i>
@@ -496,12 +518,22 @@
                     </div>
                 </div>
 
+                <?php if(config('captcha.sitekey')): ?>
                 <div class="captcha-wrap">
-                    {!! NoCaptcha::display() !!}
-                    @error('g-recaptcha-response')
-                        <div style="color:#DC2626;font-size:0.78rem;margin-top:6px;">{{ $message }}</div>
-                    @enderror
+                    <?php echo NoCaptcha::display(); ?>
+
+                    <?php $__errorArgs = ['g-recaptcha-response'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <div style="color:#DC2626;font-size:0.78rem;margin-top:6px;"><?php echo e($message); ?></div>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 </div>
+                <?php endif; ?>
 
                 <button type="submit" class="btn-register" id="submitBtn">
                     <span class="spinner" id="spinner">
@@ -512,7 +544,7 @@
             </form>
 
             <div class="form-footer">
-                Sudah punya akun? <a href="{{ route('customer.login') }}">Masuk di sini</a>
+                Sudah punya akun? <a href="<?php echo e(route('customer.login')); ?>">Masuk di sini</a>
             </div>
         </div>
     </div>
@@ -543,3 +575,4 @@
     </script>
 </body>
 </html>
+<?php /**PATH C:\laragon\www\ukk-hotel-management\resources\views/auth/register.blade.php ENDPATH**/ ?>

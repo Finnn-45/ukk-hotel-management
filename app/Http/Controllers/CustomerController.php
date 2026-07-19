@@ -165,17 +165,23 @@ class CustomerController extends Controller
 
         if (!$guest) {
             // Try to find by email and claim ownership
-            $guest = Guest::firstOrCreate(
-                ['email' => $request->email],
-                [
+            $guest = Guest::where('email', $request->email)->first();
+
+            if ($guest) {
+                // Guest found by email — update with new name & assign user
+                $guest->update([
                     'user_id'   => $user->id,
                     'full_name' => $request->full_name,
                     'phone'     => $request->phone,
-                ]
-            );
-            // If guest existed by email but had no user_id, assign this user
-            if (!$guest->user_id) {
-                $guest->update(['user_id' => $user->id]);
+                ]);
+            } else {
+                // No existing guest — create new one
+                $guest = Guest::create([
+                    'user_id'   => $user->id,
+                    'email'     => $request->email,
+                    'full_name' => $request->full_name,
+                    'phone'     => $request->phone,
+                ]);
             }
         } else {
             // Update guest info from form
